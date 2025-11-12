@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Task Assistant</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 1s linear infinite; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function App() {
+            const [tasks, setTasks] = useState([]);
+            const [recurringTasks, setRecurringTasks] = useState([]);
+            const [projects, setProjects] = useState(['Personal', 'Work', 'Health', 'Home']);
+            const [themes, setThemes] = useState({
+                'Work': ['Q4 Goals', 'Client Projects'],
+                'Personal': ['Self Improvement', 'Hobbies'],
+                'Health': ['Fitness', 'Nutrition'],
+                'Home': ['Maintenance', 'Organization']
+            });
+            const [input, setInput] = useState('');
+            const [view, setView] = useState('all');
+            const [mainView, setMainView] = useState('tasks');
+            const [showCompleted, setShowCompleted] = useState(false);
+            const [priorityFilter, setPriorityFilter] = useState('all');
+            const [projectFilter, setProjectFilter] = useState('all');
+            const [recurringProjectFilter, setRecurringProjectFilter] = useState('all');
+            const [sidebarOpen, setSidebarOpen] = useState(false);
+            const [isRecording, setIsRecording] = useState(false);
+            const [expandedProjects, setExpandedProjects] = useState({});
+            const [editingProject, setEditingProject] = useState(null);
+            const [editingThemes, setEditingThemes] = useState(null);
+            const [editingPriority, setEditingPriority] = useState(null);
+            const [editingDate, setEditingDate] = useState(null);
+            const [newTheme, setNewTheme] = useState('');
+            const [addingThemeTo, setAddingThemeTo] = useState(null);
+            const [deleteConfirm, setDeleteConfirm] = useState(null);
+
+            useEffect(() => {
+                const saved = localStorage.getItem('tasks');
+                const savedRecurring = localStorage.getItem('recurringTasks');
+                const savedProjects = localStorage.getItem('projects');
+                const savedThemes = localStorage.getItem('themes');
+                if (saved) setTasks(JSON.parse(saved));
+                if (savedRecurring) setRecurringTasks(JSON.parse(savedRecurring));
+                if (savedProjects) setProjects(JSON.parse(savedProjects));
+                if (savedThemes) setThemes(JSON.parse(savedThemes));
+            }, []);
+
+            const save = (newTasks) => {
+                localStorage.setItem('tasks', JSON.stringify(newTasks));
+                setTasks(newTasks);
+            };
+
+            const saveRecurring = (newRecurring) => {
+                localStorage.setItem('recurringTasks', JSON.stringify(newRecurring));
+                setRecurringTasks(newRecurring);
+            };
+
+            const saveProjects = (p) => {
+                localStorage.setItem('projects', JSON.stringify(p));
+                setProjects(p);
+            };
+
+            const saveThemes = (t) => {
+                localStorage.setItem('themes', JSON.stringify(t));
+                setThemes(t);
+            };
+
+            const addTask = () => {
+                if (!input.trim()) return;
+                const task = {
+                    id: Date.now(),
+                    title: input,
+                    priority: 'P1',
+                    completed: false,
+                    completedAt: null,
+                    project: null,
+                    themes: [],
+                    dueDate: null,
+                    created: new Date().toISOString()
+                };
+                save([...tasks, task]);
+                setInput('');
+            };
+
+            const addRecurringTask = () => {
+                if (!input.trim()) return;
+                const task = {
+                    id: Date.now(),
+                    title: input,
+                    project: null,
+                    frequency: 'daily',
+                    completions: [],
+                    created: new Date().toISOString()
+                };
+                saveRecurring([...recurringTasks, task]);
+                setInput('');
+            };
+
+            const updateRecurringFrequency = (id, freq) => {
+                saveRecurring(recurringTasks.map(t => t.id === id ? {...t, frequency: freq} : t));
+                setEditingProject(null);
+            };
+
+            const toggleComplete = (id) => {
+                save(tasks.map(t => t.id === id ? {
+                    ...t, 
+                    completed: !t.completed,
+                    completedAt: !t.completed ? new Date().toISOString() : null
+                } : t));
+            };
+
+            const toggleRecurringComplete = (id) => {
+                const today = new Date().toISOString().split('T')[0];
+                saveRecurring(recurringTasks.map(t => {
+                    if (t.id === id) {
+                        const completions = t.completions || [];
+                        if (completions.includes(today)) {
+                            return {...t, completions: completions.filter(d => d !== today)};
+                        } else {
+                            return {...t, completions: [...completions, today]};
+                        }
+                    }
+                    return t;
+                }));
+            };
+
+            const deleteTask = (id) => {
+                if (confirm('Delete this task?')) save(tasks.filter(t => t.id !== id));
+            };
+
+            const deleteRecurringTask = (id) => {
+                if (confirm('Delete this recurring task?')) saveRecurring(recurringTasks.filter(t => t.id !== id));
+            };
+
+            const updateProject = (id, proj) => {
+                save(tasks.map(t => t.id === id ? {...t, project: proj || null, themes: []} : t));
+                setEditingProject(null);
+            };
+
+            const updateRecurringProject = (id, proj) => {
+                saveRecurring(recurringTasks.map(t => t.id === id ? {...t, project: proj || null} : t));
+                setEditingProject(null);
+            };
+
+            const updatePriority = (id, pri) => {
+                save(tasks.map(t => t.id === id ? {...t, priority: pri} : t));
+                setEditingPriority(null);
+            };
+
+            const updateDate = (id, date) => {
+                save(tasks.map(t => t.id === id ? {...t, dueDate: date || null} : t));
+                setEditingDate(null);
+            };
+
+            const toggleTheme = (id, theme) => {
+                save(tasks.map(t => {
+                    if (t.id === id) {
+                        const curr = t.themes || [];
+                        return {...t, themes: curr.includes(theme) ? curr.filter(x => x !== theme) : [...curr, theme]};
+                    }
+                    return t;
+                }));
+            };
+
+            const addProject = (name) => {
+                if (name && !projects.includes(name)) {
+                    saveProjects([...projects, name]);
+                    saveThemes({...themes, [name]: []});
+                }
+            };
+
+            const deleteProject = (proj) => {
+                setDeleteConfirm({
+                    type: 'project',
+                    name: proj,
+                    action: () => {
+                        saveProjects(projects.filter(p => p !== proj));
+                        const updatedThemes = {...themes};
+                        delete updatedThemes[proj];
+                        saveThemes(updatedThemes);
+                        save(tasks.map(t => t.project === proj ? {...t, project: null, themes: []} : t));
+                        saveRecurring(recurringTasks.map(t => t.project === proj ? {...t, project: null} : t));
+                        setDeleteConfirm(null);
+                    }
+                });
+            };
+
+            const deleteTheme = (proj, theme) => {
+                setDeleteConfirm({
+                    type: 'theme',
+                    name: theme,
+                    action: () => {
+                        const updated = {...themes};
+                        updated[proj] = updated[proj].filter(t => t !== theme);
+                        saveThemes(updated);
+                        save(tasks.map(t => ({...t, themes: (t.themes || []).filter(th => th !== theme)})));
+                        setDeleteConfirm(null);
+                    }
+                });
+            };
+
+            const addThemeToProject = (proj, theme) => {
+                if (!theme.trim()) return;
+                const updated = {...themes};
+                if (!updated[proj]) updated[proj] = [];
+                if (!updated[proj].includes(theme)) {
+                    updated[proj] = [...updated[proj], theme];
+                    saveThemes(updated);
+                }
+                setNewTheme('');
+                setAddingThemeTo(null);
+            };
+
+            const startVoice = () => {
+                try {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    if (!SpeechRecognition) {
+                        alert('Voice input not supported in this browser. Please use Chrome, Edge, or Safari.');
+                        return;
+                    }
+                    const recognition = new SpeechRecognition();
+                    recognition.continuous = false;
+                    recognition.interimResults = false;
+                    recognition.lang = 'en-US';
+                    
+                    recognition.onstart = () => setIsRecording(true);
+                    recognition.onresult = (e) => {
+                        setInput(e.results[0][0].transcript);
+                        setIsRecording(false);
+                    };
+                    recognition.onerror = (e) => {
+                        alert('Voice error: ' + e.error);
+                        setIsRecording(false);
+                    };
+                    recognition.onend = () => setIsRecording(false);
+                    recognition.start();
+                } catch (err) {
+                    alert('Voice input failed: ' + err.message);
+                    setIsRecording(false);
+                }
+            };
+
+            const exportCSV = () => {
+                const csv = [
+                    ['ID','Title','Priority','DueDate','Project','Themes','Completed','CompletedAt','Created'],
+                    ...tasks.map(t => [
+                        t.id,
+                        `"${(t.title || '').replace(/"/g, '""')}"`,
+                        t.priority,
+                        t.dueDate || '',
+                        t.project || '',
+                        `"${(t.themes || []).join(';')}"`,
+                        t.completed,
+                        t.completedAt || '',
+                        t.created
+                    ])
+                ].map(r => r.join(',')).join('\n');
+                
+                const blob = new Blob([csv], {type: 'text/csv'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `tasks-${new Date().toISOString().split('T')[0]}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+            };
+
+            const importCSV = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    try {
+                        const lines = ev.target.result.split('\n').slice(1);
+                        const imported = lines.filter(l => l.trim()).map(line => {
+                            const parts = line.match(/(".*?"|[^,]+)/g);
+                            return {
+                                id: parseInt(parts[0]),
+                                title: parts[1].replace(/^"|"$/g, '').replace(/""/g, '"'),
+                                priority: parts[2],
+                                dueDate: parts[3] || null,
+                                project: parts[4] || null,
+                                themes: parts[5] ? parts[5].replace(/^"|"$/g, '').split(';').filter(x => x) : [],
+                                completed: parts[6] === 'true',
+                                completedAt: parts[7] || null,
+                                created: parts[8]
+                            };
+                        });
+                        if (confirm(`Import ${imported.length} tasks? This will replace existing tasks.`)) {
+                            save(imported);
+                        }
+                    } catch (err) {
+                        alert('Import failed: ' + err.message);
+                    }
+                };
+                reader.readAsText(file);
+                e.target.value = '';
+            };
+
+            const getLast7Days = () => {
+                const days = [];
+                for (let i = 6; i >= 0; i--) {
+                    const d = new Date();
+                    d.setDate(d.getDate() - i);
+                    days.push(d.toISOString().split('T')[0]);
+                }
+                return days;
+            };
+
+            const getCompletionScore = (completions, frequency) => {
+                if (frequency === 'daily') {
+                    const last7Days = getLast7Days();
+                    const score = last7Days.filter(day => completions.includes(day)).length;
+                    return score;
+                } else {
+                    // Weekly - check last 4 weeks
+                    const weeks = [];
+                    for (let i = 0; i < 4; i++) {
+                        const startOfWeek = new Date();
+                        startOfWeek.setDate(startOfWeek.getDate() - (7 * i) - startOfWeek.getDay());
+                        startOfWeek.setHours(0, 0, 0, 0);
+                        
+                        const endOfWeek = new Date(startOfWeek);
+                        endOfWeek.setDate(endOfWeek.getDate() + 6);
+                        endOfWeek.setHours(23, 59, 59, 999);
+                        
+                        const weekCompleted = completions.some(date => {
+                            const d = new Date(date);
+                            return d >= startOfWeek && d <= endOfWeek;
+                        });
+                        
+                        if (weekCompleted) weeks.push(true);
+                    }
+                    return weeks.length;
+                }
+            };
+
+            let filtered = showCompleted ? tasks : tasks.filter(t => !t.completed);
+            if (priorityFilter !== 'all') filtered = filtered.filter(t => t.priority === priorityFilter);
+            if (projectFilter !== 'all') filtered = filtered.filter(t => t.project === projectFilter);
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const todayStr = today.toISOString().split('T')[0];
+
+            switch(view) {
+                case 'today':
+                    filtered = filtered.filter(t => {
+                        if (!t.dueDate) return false;
+                        const taskDate = new Date(t.dueDate);
+                        taskDate.setHours(0, 0, 0, 0);
+                        return taskDate.getTime() === today.getTime();
+                    });
+                    break;
+                case 'update-eta':
+                    filtered = filtered.filter(t => {
+                        if (!t.dueDate) return true;
+                        const taskDate = new Date(t.dueDate);
+                        taskDate.setHours(0, 0, 0, 0);
+                        return taskDate.getTime() < today.getTime();
+                    });
+                    break;
+                case 'unassigned':
+                    filtered = filtered.filter(t => !t.project || !t.themes || t.themes.length === 0);
+                    break;
+                case 'summary':
+                    const dueToday = tasks.filter(t => {
+                        if (!t.dueDate) return false;
+                        const taskDate = new Date(t.dueDate);
+                        taskDate.setHours(0, 0, 0, 0);
+                        return taskDate.getTime() === today.getTime();
+                    });
+                    const completedToday = dueToday.filter(t => {
+                        if (!t.completed || !t.completedAt) return false;
+                        const completedDate = new Date(t.completedAt);
+                        completedDate.setHours(0, 0, 0, 0);
+                        return completedDate.getTime() === today.getTime();
+                    });
+                    
+                    filtered = completedToday;
+                    break;
+            }
+
+            let recurringFiltered = recurringTasks;
+            if (recurringProjectFilter !== 'all') {
+                recurringFiltered = recurringFiltered.filter(t => t.project === recurringProjectFilter);
+            }
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+                    
+                    {deleteConfirm && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                            <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-2xl">
+                                        ⚠️
+                                    </div>
+                                    <h2 className="text-xl font-bold">Delete {deleteConfirm.type}?</h2>
+                                </div>
+                                <p className="text-gray-600 mb-4">
+                                    Are you sure you want to delete <strong>"{deleteConfirm.name}"</strong>?
+                                    {deleteConfirm.type === 'project' && ' All tasks in this project will be unassigned.'}
+                                </p>
+                                <div className="flex gap-3">
+                                    <button onClick={() => setDeleteConfirm(null)} className="flex-1 px-4 py-3 bg-gray-200 rounded-lg font-medium">
+                                        Cancel
+                                    </button>
+                                    <button onClick={deleteConfirm.action} className="flex-1 px-4 py-3 bg-red-500 text-white rounded-lg font-medium">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className={`fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-2xl transform transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} overflow-y-auto`}>
+                        <div className="p-4">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-bold">Projects & Themes</h2>
+                                <button onClick={() => setSidebarOpen(false)} className="text-2xl">×</button>
+                            </div>
+
+                            <div className="space-y-2 mb-4">
+                                <button onClick={exportCSV} className="w-full px-4 py-2 bg-green-500 text-white rounded-lg">
+                                    📥 Export CSV
+                                </button>
+                                <label className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer block text-center">
+                                    📤 Import CSV
+                                    <input type="file" accept=".csv" onChange={importCSV} className="hidden"/>
+                                </label>
+                            </div>
+
+                            <div className="space-y-2">
+                                {projects.map(proj => (
+                                    <div key={proj} className="border rounded-lg">
+                                        <div className="flex items-center p-3 gap-2">
+                                            <button onClick={() => setExpandedProjects({...expandedProjects, [proj]: !expandedProjects[proj]})}>
+                                                {expandedProjects[proj] ? '▼' : '▶'}
+                                            </button>
+                                            <span className="flex-1 font-medium">📁 {proj}</span>
+                                            <button onClick={() => deleteProject(proj)} className="text-red-500 text-sm">
+                                                🗑️
+                                            </button>
+                                        </div>
+                                        {expandedProjects[proj] && (
+                                            <div className="px-3 pb-3">
+                                                <div className="text-xs font-semibold mb-1">Themes:</div>
+                                                {(themes[proj] || []).map(t => (
+                                                    <div key={t} className="flex items-center justify-between pl-4 text-sm py-1">
+                                                        <span>🏷️ {t}</span>
+                                                        <button onClick={() => deleteTheme(proj, t)} className="text-red-500 text-xs">
+                                                            🗑️
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                                {addingThemeTo === proj ? (
+                                                    <div className="flex gap-1 mt-2 pl-4">
+                                                        <input
+                                                            value={newTheme}
+                                                            onChange={(e) => setNewTheme(e.target.value)}
+                                                            onKeyPress={(e) => e.key === 'Enter' && addThemeToProject(proj, newTheme)}
+                                                            placeholder="Theme..."
+                                                            className="flex-1 px-2 py-1 text-xs border rounded"
+                                                        />
+                                                        <button onClick={() => addThemeToProject(proj, newTheme)} className="px-2 py-1 bg-indigo-500 text-white rounded text-xs">
+                                                            Add
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <button onClick={() => setAddingThemeTo(proj)} className="pl-4 mt-1 text-xs text-indigo-600">
+                                                        + Add theme
+                                                    </button>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="mt-4 pt-4 border-t">
+                                <input
+                                    placeholder="New project..."
+                                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter' && e.target.value.trim()) {
+                                            addProject(e.target.value.trim());
+                                            e.target.value = '';
+                                        }
+                                    }}
+                                />
+                                <p className="text-xs text-gray-500 mt-1">Press Enter to add</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {sidebarOpen && <div className="fixed inset-0 bg-black bg-opacity-30 z-40" onClick={() => setSidebarOpen(false)} />}
+
+                    <div className="p-4 max-w-4xl mx-auto">
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-3">
+                                <button onClick={() => setSidebarOpen(true)} className="px-3 py-2 bg-white rounded-lg shadow">
+                                    ☰
+                                </button>
+                                <h1 className="text-2xl font-bold text-gray-800">Tasks</h1>
+                            </div>
+                        </div>
+
+                        <div className="flex gap-2 mb-4">
+                            <button
+                                onClick={() => setMainView('tasks')}
+                                className={`flex-1 px-4 py-3 rounded-lg font-medium ${mainView === 'tasks' ? 'bg-indigo-500 text-white' : 'bg-white'}`}>
+                                📋 Tasks
+                            </button>
+                            <button
+                                onClick={() => setMainView('recurring')}
+                                className={`flex-1 px-4 py-3 rounded-lg font-medium ${mainView === 'recurring' ? 'bg-indigo-500 text-white' : 'bg-white'}`}>
+                                🔄 Recurring
+                            </button>
+                        </div>
+
+                        {mainView === 'tasks' ? (
+                            <>
+                                <div className="flex gap-2 mb-4">
+                                    <select value={projectFilter} onChange={(e) => setProjectFilter(e.target.value)} 
+                                        className="px-3 py-2 bg-white rounded-lg border text-sm">
+                                        <option value="all">All Projects</option>
+                                        {projects.map(p => <option key={p} value={p}>{p}</option>)}
+                                    </select>
+                                    <select value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value)} 
+                                        className="px-3 py-2 bg-white rounded-lg border text-sm">
+                                        <option value="all">All Priority</option>
+                                        <option value="P0">P0</option>
+                                        <option value="P1">P1</option>
+                                    </select>
+                                    <button onClick={() => setShowCompleted(!showCompleted)}
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium ${showCompleted ? 'bg-indigo-500 text-white' : 'bg-white'}`}>
+                                        {showCompleted ? '👁️ All' : '📋 Open'}
+                                    </button>
+                                </div>
+
+                                <div className="bg-white rounded-xl shadow-lg p-4 mb-4">
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            value={input}
+                                            onChange={(e) => setInput(e.target.value)}
+                                            onKeyPress={(e) => e.key === 'Enter' && addTask()}
+                                            placeholder="Add a task..."
+                                            className="flex-1 px-4 py-3 border rounded-lg"
+                                        />
+                                        <button onClick={startVoice} className={`px-4 py-3 rounded-lg text-white ${isRecording ? 'bg-red-500 animate-pulse' : 'bg-indigo-500'}`}>
+                                            🎤
+                                        </button>
+                                        <button onClick={addTask} className="px-6 py-3 bg-green-500 text-white rounded-lg font-medium">
+                                            +
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+                                    {[
+                                        ['all', '📋 All'],
+                                        ['today', '📅 Today'],
+                                        ['update-eta', '⏰ Update ETA'],
+                                        ['unassigned', '📥 Unassigned'],
+                                        ['summary', '📊 Today\'s Summary']
+                                    ].map(([v, label]) => (
+                                        <button
+                                            key={v}
+                                            onClick={() => setView(v)}
+                                            className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap ${view === v ? 'bg-indigo-500 text-white' : 'bg-white'}`}
+                                        >
+                                            {label} {v !== 'summary' && <span className="text-xs">({
+                                                v === 'all' ? filtered.length :
+                                                v === 'today' ? tasks.filter(t => {
+                                                    if (!t.dueDate || t.completed) return false;
+                                                    const td = new Date(t.dueDate);
+                                                    td.setHours(0,0,0,0);
+                                                    return td.getTime() === today.getTime();
+                                                }).length :
+                                                v === 'update-eta' ? tasks.filter(t => {
+                                                    if (t.completed) return false;
+                                                    if (!t.dueDate) return true;
+                                                    const td = new Date(t.dueDate);
+                                                    td.setHours(0,0,0,0);
+                                                    return td.getTime() < today.getTime();
+                                                }).length :
+                                                tasks.filter(t => (!t.project || !t.themes || t.themes.length === 0) && !t.completed).length
+                                            })</span>}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {view === 'summary' ? (
+                                    <div className="space-y-4">
+                                        <div className="bg-white rounded-xl p-6 shadow-lg">
+                                            <h3 className="text-lg font-bold mb-4">📊 Today's Performance</h3>
+                                            {(() => {
+                                                const dueToday = tasks.filter(t => {
+                                                    if (!t.dueDate) return false;
+                                                    const taskDate = new Date(t.dueDate);
+                                                    taskDate.setHours(0, 0, 0, 0);
+                                                    return taskDate.getTime() === today.getTime();
+                                                });
+                                                const completedToday = dueToday.filter(t => {
+                                                    if (!t.completed || !t.completedAt) return false;
+                                                    const completedDate = new Date(t.completedAt);
+                                                    completedDate.setHours(0, 0, 0, 0);
+                                                    return completedDate.getTime() === today.getTime();
+                                                });
+                                                const rate = dueToday.length > 0 ? Math.round((completedToday.length / dueToday.length) * 100) : 0;
+                                                
+                                                return (
+                                                    <>
+                                                        <div className="grid grid-cols-3 gap-4 mb-4">
+                                                            <div className="text-center p-4 bg-blue-50 rounded-lg">
+                                                                <div className="text-2xl font-bold text-blue-600">{dueToday.length}</div>
+                                                                <div className="text-xs text-gray-600">Due Today</div>
+                                                            </div>
+                                                            <div className="text-center p-4 bg-green-50 rounded-lg">
+                                                                <div className="text-2xl font-bold text-green-600">{completedToday.length}</div>
+                                                                <div className="text-xs text-gray-600">Completed</div>
+                                                            </div>
+                                                            <div className="text-center p-4 bg-purple-50 rounded-lg">
+                                                                <div className="text-2xl font-bold text-purple-600">{rate}%</div>
+                                                                <div className="text-xs text-gray-600">Success Rate</div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="w-full bg-gray-200 rounded-full h-4 mb-4">
+                                                            <div className={`h-4 rounded-full ${rate >= 80 ? 'bg-green-500' : rate >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`} 
+                                                                style={{width: `${rate}%`}}></div>
+                                                        </div>
+                                                    </>
+                                                );
+                                            })()}
+                                        </div>
+                                        
+                                        <div className="bg-white rounded-xl p-4 shadow">
+                                            <h4 className="font-bold mb-2">✅ Completed Today:</h4>
+                                            {filtered.length === 0 ? (
+                                                <p className="text-gray-500 text-sm">No tasks completed today</p>
+                                            ) : (
+                                                <div className="space-y-2">
+                                                    {filtered.map(task => (
+                                                        <div key={task.id} className="p-3 bg-green-50 rounded-lg">
+                                                            <div className="font-medium">{task.title}</div>
+                                                            <div className="text-xs text-gray-600 mt-1">
+                                                                Completed at {new Date(task.completedAt).toLocaleTimeString()}
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-2">
+                                        {filtered.length === 0 ? (
+                                            <div className="bg-white rounded-xl p-8 text-center text-gray-500">
+                                                <p className="text-4xl mb-2">📭</p>
+                                                <p>No tasks</p>
+                                            </div>
+                                        ) : (
+                                            filtered.map(task => (
+                                                <div key={task.id} className={`bg-white rounded-lg p-4 shadow ${task.completed ? 'opacity-60' : ''}`}>
+                                                    <div className="flex items-start gap-3">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={task.completed}
+                                                            onChange={() => toggleComplete(task.id)}
+                                                            className="mt-1 w-5 h-5"
+                                                        />
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className={`font-medium ${task.completed ? 'line-through text-gray-500' : ''}`}>
+                                                                {task.title}
+                                                            </div>
+                                                            <div className="flex flex-wrap gap-1 mt-2">
+                                                                {editingPriority === task.id ? (
+                                                                    <div className="flex gap-1">
+                                                                        <select value={task.priority} onChange={(e) => updatePriority(task.id, e.target.value)}
+                                                                            className="text-xs px-2 py-1 border rounded">
+                                                                            <option value="P0">P0</option>
+                                                                            <option value="P1">P1</option>
+                                                                        </select>
+                                                                        <button onClick={() => setEditingPriority(null)} className="text-xs px-2 py-1 bg-gray-200 rounded">
+                                                                            Done
+                                                                        </button>
+                                                                    </div>
+                                                                ) : (
+                                                                    <button onClick={() => setEditingPriority(task.id)}
+                                                                        className={`text-xs px-2 py-1 rounded font-bold ${task.priority === 'P0' ? 'bg-red-500 text-white' : 'bg-yellow-500 text-white'}`}>
+                                                                        {task.priority}
+                                                                    </button>
+                                                                )}
+
+                                                                {editingProject === task.id ? (
+                                                                    <div className="flex gap-1">
+                                                                        <select value={task.project || ''} onChange={(e) => updateProject(task.id, e.target.value)}
+                                                                            className="text-xs px-2 py-1 border rounded">
+                                                                            <option value="">None</option>
+                                                                            {projects.map(p => <option key={p} value={p}>{p}</option>)}
+                                                                        </select>
+                                                                        <button onClick={() => setEditingProject(null)} className="text-xs px-2 py-1 bg-gray-200 rounded">
+                                                                            Done
+                                                                        </button>
+                                                                    </div>
+                                                                ) : (
+                                                                    <button onClick={() => setEditingProject(task.id)}
+                                                                        className="text-xs px-2 py-1 rounded bg-blue-100 text-blue-700">
+                                                                        📁 {task.project || 'Set project'}
+                                                                    </button>
+                                                                )}
+
+                                                                {editingDate === task.id ? (
+                                                                    <div className="flex gap-1">
+                                                                        <input
+                                                                            type="date"
+                                                                            value={task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : ''}
+                                                                            onChange={(e) => updateDate(task.id, e.target.value ? new Date(e.target.value).toISOString() : null)}
+                                                                            className="text-xs px-2 py-1 border rounded"
+                                                                        />
+                                                                        <button onClick={() => setEditingDate(null)} className="text-xs px-2 py-1 bg-gray-200 rounded">
+                                                                            Done
+                                                                        </button>
+                                                                    </div>
+                                                                ) : (
+                                                                    <button onClick={() => setEditingDate(task.id)}
+                                                                        className={`text-xs px-2 py-1 rounded ${
+                                                                            task.dueDate && new Date(task.dueDate) < today && !task.completed
+                                                                                ? 'bg-red-100 text-red-700 font-bold'
+                                                                                : 'bg-indigo-100 text-indigo-700'
+                                                                        }`}>
+                                                                        📅 {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Set date'}
+                                                                        {task.dueDate && new Date(task.dueDate) < today && !task.completed && ' ⚠️'}
+                                                                    </button>
+                                                                )}
+                                                            </div>
+
+                                                            {editingThemes === task.id ? (
+                                                                <div className="mt-2 p-2 bg-gray-50 rounded">
+                                                                    <div className="text-xs font-semibold mb-1">Themes:</div>
+                                                                    <div className="flex flex-wrap gap-1">
+                                                                        {task.project && (themes[task.project] || []).map(t => {
+                                                                            const selected = (task.themes || []).includes(t);
+                                                                            return (
+                                                                                <button key={t} onClick={() => toggleTheme(task.id, t)}
+                                                                                    className={`text-xs px-2 py-1 rounded-full ${selected ? 'bg-indigo-500 text-white' : 'bg-white border'}`}>
+                                                                                    {t}
+                                                                                </button>
+                                                                            );
+                                                                        })}
+                                                                    </div>
+                                                                    <button onClick={() => setEditingThemes(null)} className="mt-1 text-xs px-2 py-1 bg-gray-200 rounded">
+                                                                        Done
+                                                                    </button>
+                                                                </div>
+                                                            ) : (
+                                                                <div className="mt-1 flex flex-wrap gap-1">
+                                                                    {(task.themes || []).map(t => (
+                                                                        <span key={t} className="text-xs px-2 py-1 bg-indigo-50 text-indigo-700 rounded-full">
+                                                                            🏷️ {t}
+                                                                        </span>
+                                                                    ))}
+                                                                    {task.project && (
+                                                                        <button onClick={() => setEditingThemes(task.id)} className="text-xs text-gray-500">
+                                                                            {(task.themes || []).length === 0 ? '+ themes' : 'edit'}
+                                                                        </button>
+                                                                    )}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <button onClick={() => deleteTask(task.id)} className="text-red-500 text-sm">
+                                                            🗑️
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                )}
+
+                                <div className="mt-6 p-4 bg-white rounded-xl shadow text-xs text-gray-600 space-y-1">
+                                    <p>🎤 <strong>Voice:</strong> Click mic to speak (Chrome/Edge/Safari)</p>
+                                    <p>📱 <strong>Install:</strong> Add to Home Screen for app-like experience</p>
+                                    <p>💾 <strong>Backup:</strong> Export/Import CSV from sidebar</p>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="flex gap-2 mb-4">
+                                    <select value={recurringProjectFilter} onChange={(e) => setRecurringProjectFilter(e.target.value)} 
+                                        className="flex-1 px-3 py-2 bg-white rounded-lg border text-sm">
+                                        <option value="all">All Projects</option>
+                                        {projects.map(p => <option key={p} value={p}>{p}</option>)}
+                                    </select>
+                                </div>
+
+                                <div className="bg-white rounded-xl shadow-lg p-4 mb-4">
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            value={input}
+                                            onChange={(e) => setInput(e.target.value)}
+                                            onKeyPress={(e) => e.key === 'Enter' && addRecurringTask()}
+                                            placeholder="Add a recurring task..."
+                                            className="flex-1 px-4 py-3 border rounded-lg"
+                                        />
+                                        <button onClick={startVoice} className={`px-4 py-3 rounded-lg text-white ${isRecording ? 'bg-red-500 animate-pulse' : 'bg-indigo-500'}`}>
+                                            🎤
+                                        </button>
+                                        <button onClick={addRecurringTask} className="px-6 py-3 bg-green-500 text-white rounded-lg font-medium">
+                                            +
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-3">
+                                    {recurringFiltered.length === 0 ? (
+                                        <div className="bg-white rounded-xl p-8 text-center text-gray-500">
+                                            <p className="text-4xl mb-2">🔄</p>
+                                            <p>No recurring tasks</p>
+                                        </div>
+                                    ) : (
+                                        recurringFiltered.map(task => {
+                                            const last7Days = getLast7Days();
+                                            const completions = task.completions || [];
+                                            const frequency = task.frequency || 'daily';
+                                            const score = getCompletionScore(completions, frequency);
+                                            const todayCompleted = completions.includes(todayStr);
+                                            const maxScore = frequency === 'daily' ? 7 : 4;
+                                            
+                                            return (
+                                                <div key={task.id} className="bg-white rounded-lg p-4 shadow">
+                                                    <div className="flex items-start gap-3">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={todayCompleted}
+                                                            onChange={() => toggleRecurringComplete(task.id)}
+                                                            className="mt-1 w-5 h-5"
+                                                        />
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="font-medium mb-2">{task.title}</div>
+                                                            
+                                                            <div className="flex flex-wrap gap-1 mb-2">
+                                                                {editingProject === task.id ? (
+                                                                    <div className="flex gap-1 flex-wrap">
+                                                                        <select value={task.project || ''} onChange={(e) => updateRecurringProject(task.id, e.target.value)}
+                                                                            className="text-xs px-2 py-1 border rounded">
+                                                                            <option value="">None</option>
+                                                                            {projects.map(p => <option key={p} value={p}>{p}</option>)}
+                                                                        </select>
+                                                                        <select value={frequency} onChange={(e) => updateRecurringFrequency(task.id, e.target.value)}
+                                                                            className="text-xs px-2 py-1 border rounded">
+                                                                            <option value="daily">Daily</option>
+                                                                            <option value="weekly">Weekly</option>
+                                                                        </select>
+                                                                        <button onClick={() => setEditingProject(null)} className="text-xs px-2 py-1 bg-gray-200 rounded">
+                                                                            Done
+                                                                        </button>
+                                                                    </div>
+                                                                ) : (
+                                                                    <>
+                                                                        <button onClick={() => setEditingProject(task.id)}
+                                                                            className="text-xs px-2 py-1 rounded bg-blue-100 text-blue-700">
+                                                                            📁 {task.project || 'Set project'}
+                                                                        </button>
+                                                                        <button onClick={() => setEditingProject(task.id)}
+                                                                            className={`text-xs px-2 py-1 rounded ${frequency === 'daily' ? 'bg-purple-100 text-purple-700' : 'bg-teal-100 text-teal-700'}`}>
+                                                                            {frequency === 'daily' ? '📅 Daily' : '📆 Weekly'}
+                                                                        </button>
+                                                                    </>
+                                                                )}
+                                                            </div>
+
+                                                            <div className="flex items-center gap-2 mb-2">
+                                                                <span className="text-xs font-semibold">
+                                                                    {frequency === 'daily' ? '7-Day Score:' : '4-Week Score:'}
+                                                                </span>
+                                                                <span className={`text-sm font-bold px-2 py-1 rounded ${
+                                                                    score >= maxScore * 0.7 ? 'bg-green-100 text-green-700' :
+                                                                    score >= maxScore * 0.4 ? 'bg-yellow-100 text-yellow-700' :
+                                                                    'bg-red-100 text-red-700'
+                                                                }`}>
+                                                                    {score}/{maxScore}
+                                                                </span>
+                                                            </div>
+
+                                                            {frequency === 'daily' ? (
+                                                                <div className="flex gap-1">
+                                                                    {last7Days.map(day => {
+                                                                        const isCompleted = completions.includes(day);
+                                                                        const dayName = new Date(day).toLocaleDateString('en-US', {weekday: 'short'});
+                                                                        const isToday = day === todayStr;
+                                                                        
+                                                                        return (
+                                                                            <div key={day} className="flex flex-col items-center">
+                                                                                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs ${
+                                                                                    isCompleted ? 'bg-green-500 text-white' : 'bg-gray-200'
+                                                                                } ${isToday ? 'ring-2 ring-indigo-500' : ''}`}>
+                                                                                    {isCompleted ? '✓' : '·'}
+                                                                                </div>
+                                                                                <span className="text-xs mt-1">{dayName}</span>
+                                                                            </div>
+                                                                        );
+                                                                    })}
+                                                                </div>
+                                                            ) : (
+                                                                <div className="flex gap-1">
+                                                                    {[0, 1, 2, 3].map(weekIndex => {
+                                                                        const startOfWeek = new Date();
+                                                                        startOfWeek.setDate(startOfWeek.getDate() - (7 * weekIndex) - startOfWeek.getDay());
+                                                                        startOfWeek.setHours(0, 0, 0, 0);
+                                                                        
+                                                                        const endOfWeek = new Date(startOfWeek);
+                                                                        endOfWeek.setDate(endOfWeek.getDate() + 6);
+                                                                        endOfWeek.setHours(23, 59, 59, 999);
+                                                                        
+                                                                        const weekCompleted = completions.some(date => {
+                                                                            const d = new Date(date);
+                                                                            return d >= startOfWeek && d <= endOfWeek;
+                                                                        });
+                                                                        
+                                                                        const isCurrentWeek = weekIndex === 0;
+                                                                        const weekLabel = `W${4 - weekIndex}`;
+                                                                        
+                                                                        return (
+                                                                            <div key={weekIndex} className="flex flex-col items-center flex-1">
+                                                                                <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-xs font-bold ${
+                                                                                    weekCompleted ? 'bg-green-500 text-white' : 'bg-gray-200'
+                                                                                } ${isCurrentWeek ? 'ring-2 ring-indigo-500' : ''}`}>
+                                                                                    {weekCompleted ? '✓' : '·'}
+                                                                                </div>
+                                                                                <span className="text-xs mt-1">{weekLabel}</span>
+                                                                            </div>
+                                                                        );
+                                                                    })}
+                                                                </div>
+                                                            )}
+                                                            </div>
+                                                        </div>
+                                                        <button onClick={() => deleteRecurringTask(task.id)} className="text-red-500 text-sm">
+                                                            🗑️
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })
+                                    )}
+                                </div>
+
+                                <div className="mt-6 p-4 bg-white rounded-xl shadow text-xs text-gray-600 space-y-1">
+                                    <p>🔄 <strong>Recurring Tasks:</strong> Check off each day you complete the task</p>
+                                    <p>📊 <strong>Daily Score:</strong> Shows completions in the last 7 days</p>
+                                    <p>📆 <strong>Weekly Score:</strong> Shows completions in the last 4 weeks</p>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
