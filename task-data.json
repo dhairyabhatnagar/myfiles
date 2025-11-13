@@ -1,11 +1,30 @@
 {
   "tasks": [],
   "recurringTasks": [],
-  "projects": ["Personal", "Work", "Health", "Home"],
+  "projects": [
+    "Personal",
+    "Work",
+    "Health",
+    "Home",
+    "INC11"
+  ],
   "themes": {
-    "Work": ["Q4 Goals", "Client Projects"],
-    "Personal": ["Self Improvement", "Hobbies"],
-    "Health": ["Fitness", "Nutrition"],
-    "Home": ["Maintenance", "Organization"]
+    "Work": [
+      "Q4 Goals",
+      "Client Projects"
+    ],
+    "Personal": [
+      "Self Improvement",
+      "Hobbies"
+    ],
+    "Health": [
+      "Fitness",
+      "Nutrition"
+    ],
+    "Home": [
+      "Maintenance",
+      "Organization"
+    ],
+    "INC11": []
   }
 }
