@@ -32,6 +32,8 @@
       "SKU expansion",
       "HTP improvement "
     ],
-    "TW Inv Losses": []
+    "TW Inv Losses": [
+      "Scrap Weight"
+    ]
   }
 }
