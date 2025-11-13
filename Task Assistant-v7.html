@@ -109,11 +109,6 @@
                 setInput('');
             };
 
-            const updateRecurringFrequency = (id, freq) => {
-                saveRecurring(recurringTasks.map(t => t.id === id ? {...t, frequency: freq} : t));
-                setEditingProject(null);
-            };
-
             const toggleComplete = (id) => {
                 save(tasks.map(t => t.id === id ? {
                     ...t, 
@@ -153,6 +148,10 @@
             const updateRecurringProject = (id, proj) => {
                 saveRecurring(recurringTasks.map(t => t.id === id ? {...t, project: proj || null} : t));
                 setEditingProject(null);
+            };
+
+            const updateRecurringFrequency = (id, freq) => {
+                saveRecurring(recurringTasks.map(t => t.id === id ? {...t, frequency: freq} : t));
             };
 
             const updatePriority = (id, pri) => {
@@ -326,7 +325,6 @@
                     const score = last7Days.filter(day => completions.includes(day)).length;
                     return score;
                 } else {
-                    // Weekly - check last 4 weeks
                     const weeks = [];
                     for (let i = 0; i < 4; i++) {
                         const startOfWeek = new Date();
@@ -950,7 +948,6 @@
                                                                     })}
                                                                 </div>
                                                             )}
-                                                            </div>
                                                         </div>
                                                         <button onClick={() => deleteRecurringTask(task.id)} className="text-red-500 text-sm">
                                                             🗑️
