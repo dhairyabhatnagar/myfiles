@@ -1,0 +1,11 @@
+{
+  "tasks": [],
+  "recurringTasks": [],
+  "projects": ["Personal", "Work", "Health", "Home"],
+  "themes": {
+    "Work": ["Q4 Goals", "Client Projects"],
+    "Personal": ["Self Improvement", "Hobbies"],
+    "Health": ["Fitness", "Nutrition"],
+    "Home": ["Maintenance", "Organization"]
+  }
+}
