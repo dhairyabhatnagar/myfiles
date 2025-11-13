@@ -35,7 +35,8 @@
     "TW Inv Losses": [
       "Scrap Weight",
       "Expiry",
-      "Liquidation"
+      "Liquidation",
+      "Damage"
     ]
   }
 }
