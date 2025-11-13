@@ -7,7 +7,8 @@
     "Health",
     "Home",
     "INC11",
-    "TW Inv Losses"
+    "TW Inv Losses",
+    "KR ARC"
   ],
   "themes": {
     "Work": [
@@ -38,6 +39,7 @@
       "Liquidation",
       "Damage",
       "ARC"
-    ]
+    ],
+    "KR ARC": []
   }
 }
