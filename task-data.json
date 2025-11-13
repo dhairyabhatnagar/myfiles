@@ -27,7 +27,9 @@
       "Maintenance",
       "Organization"
     ],
-    "INC11": [],
+    "INC11": [
+      "SKU optimization"
+    ],
     "TW Inv Losses": []
   }
 }
