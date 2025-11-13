@@ -33,7 +33,8 @@
       "HTP improvement "
     ],
     "TW Inv Losses": [
-      "Scrap Weight"
+      "Scrap Weight",
+      "Expiry"
     ]
   }
 }
