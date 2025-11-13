@@ -36,7 +36,8 @@
       "Scrap Weight",
       "Expiry",
       "Liquidation",
-      "Damage"
+      "Damage",
+      "ARC"
     ]
   }
 }
