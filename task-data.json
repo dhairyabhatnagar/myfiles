@@ -1,5 +1,435 @@
 {
-  "tasks": [],
+  "tasks": [
+    {
+      "id": 1762700491067,
+      "title": "Complete OB HTP analysis for INC11",
+      "priority": "P0",
+      "completed": false,
+      "completedAt": null,
+      "project": "INC11",
+      "themes": ["HTP improvement"],
+      "dueDate": "2025-11-12T00:00:00.000Z",
+      "created": "2025-11-09T15:01:31.067Z"
+    },
+    {
+      "id": 1762700776722,
+      "title": "Provide Estimate of CBM and Conveyor capacity for 6th floor to 4th floor",
+      "priority": "P0",
+      "completed": false,
+      "completedAt": null,
+      "project": "INC11",
+      "themes": ["SKU expansion"],
+      "dueDate": "2025-11-12T00:00:00.000Z",
+      "created": "2025-11-09T15:06:16.722Z"
+    },
+    {
+      "id": 1762700826365,
+      "title": "Finalize overall plan and timeline for FD project work",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "INC11",
+      "themes": ["HTP improvement", "SKU expansion"],
+      "dueDate": "2025-11-12T00:00:00.000Z",
+      "created": "2025-11-09T15:07:06.365Z"
+    },
+    {
+      "id": 1762700871442,
+      "title": "Finalize Template for monthly SkU swap",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "INC11",
+      "themes": ["SKU optimization"],
+      "dueDate": "2025-11-13T00:00:00.000Z",
+      "created": "2025-11-09T15:07:51.442Z"
+    },
+    {
+      "id": 1762700888757,
+      "title": "Finalise Nov25 SKU swap list",
+      "priority": "P0",
+      "completed": false,
+      "completedAt": null,
+      "project": "INC11",
+      "themes": ["SKU optimization"],
+      "dueDate": "2025-11-13T00:00:00.000Z",
+      "created": "2025-11-09T15:08:08.757Z"
+    },
+    {
+      "id": 1762700947087,
+      "title": "Plan Rebin pilot for SD cutoff mail Jake marking Sharath",
+      "priority": "P0",
+      "completed": false,
+      "completedAt": null,
+      "project": "INC11",
+      "themes": ["HTP improvement"],
+      "dueDate": "2025-11-10T00:00:00.000Z",
+      "created": "2025-11-09T15:09:07.087Z"
+    },
+    {
+      "id": 1762701694991,
+      "title": "Raise claims for Tw visit",
+      "priority": "P0",
+      "completed": false,
+      "completedAt": null,
+      "project": "Personal",
+      "themes": ["Finances"],
+      "dueDate": "2025-11-10T00:00:00.000Z",
+      "created": "2025-11-09T15:21:34.991Z"
+    },
+    {
+      "id": 1762701710780,
+      "title": "Fix the NRO <> NRE transfer method",
+      "priority": "P0",
+      "completed": false,
+      "completedAt": null,
+      "project": "Personal",
+      "themes": ["Finances"],
+      "dueDate": "2025-11-10T00:00:00.000Z",
+      "created": "2025-11-09T15:21:50.780Z"
+    },
+    {
+      "id": 1762701731166,
+      "title": "Regularise SIP investment for Nov",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "Personal",
+      "themes": ["Finances"],
+      "dueDate": "2025-11-10T00:00:00.000Z",
+      "created": "2025-11-09T15:22:11.166Z"
+    },
+    {
+      "id": 1762701737682,
+      "title": "Buy a toothbrush",
+      "priority": "P0",
+      "completed": false,
+      "completedAt": null,
+      "project": "Personal",
+      "themes": ["Self Improvement"],
+      "dueDate": "2025-11-10T00:00:00.000Z",
+      "created": "2025-11-09T15:22:17.682Z"
+    },
+    {
+      "id": 1762701828287,
+      "title": "Reshu Resume to be shared with Vikram",
+      "priority": "P1",
+      "completed": true,
+      "completedAt": "2025-11-12T01:21:51.955Z",
+      "project": "Home",
+      "themes": ["Family"],
+      "dueDate": "2025-11-10T00:00:00.000Z",
+      "created": "2025-11-09T15:23:48.289Z"
+    },
+    {
+      "id": 1762701859783,
+      "title": "Reshu SIP configure and start paying",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "Personal",
+      "themes": ["Finances"],
+      "dueDate": "2025-11-11T00:00:00.000Z",
+      "created": "2025-11-09T15:24:19.783Z"
+    },
+    {
+      "id": 1762703163714,
+      "title": "Review investment terms with Reminiscent",
+      "priority": "P0",
+      "completed": false,
+      "completedAt": null,
+      "project": "Personal",
+      "themes": ["Finances"],
+      "dueDate": "2025-11-11T00:00:00.000Z",
+      "created": "2025-11-09T15:46:03.714Z"
+    },
+    {
+      "id": 1762735142656,
+      "title": "Rebalance stock Portfolio",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "Personal",
+      "themes": ["Finances"],
+      "dueDate": "2025-11-10T00:00:00.000Z",
+      "created": "2025-11-10T00:39:02.656Z"
+    },
+    {
+      "id": 1762736933077,
+      "title": "Unpack and arrange plants",
+      "priority": "P1",
+      "completed": true,
+      "completedAt": "2025-11-12T01:22:00.695Z",
+      "project": "Personal",
+      "themes": ["Hobbies"],
+      "dueDate": "2025-11-10T00:00:00.000Z",
+      "created": "2025-11-10T01:08:53.077Z"
+    },
+    {
+      "id": 1762737100519,
+      "title": "Charge watch",
+      "priority": "P1",
+      "completed": true,
+      "completedAt": null,
+      "project": "Personal",
+      "themes": ["Self Improvement"],
+      "dueDate": "2025-11-10T00:00:00.000Z",
+      "created": "2025-11-10T01:11:40.519Z"
+    },
+    {
+      "id": 1762740609228,
+      "title": "Deepdive why even after SKU mapping leakage happening",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "INC11",
+      "themes": ["SKU optimization"],
+      "dueDate": "2025-11-11T00:00:00.000Z",
+      "created": "2025-11-10T02:10:09.228Z"
+    },
+    {
+      "id": 1762744416050,
+      "title": "Slotting logic for miniload vs shuttle",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "INC11",
+      "themes": ["HTP improvement"],
+      "dueDate": "2025-11-11T00:00:00.000Z",
+      "created": "2025-11-10T03:13:36.050Z"
+    },
+    {
+      "id": 1762764746834,
+      "title": "Slotting algorithm deepdive - set meeting with Xiufang",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "INC11",
+      "themes": ["SKU optimization"],
+      "dueDate": "2025-11-11T00:00:00.000Z",
+      "created": "2025-11-10T08:52:26.834Z"
+    },
+    {
+      "id": 1762880491330,
+      "title": "customer fraud policy review ARCs",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "KR ARC",
+      "themes": ["Vendor Repair"],
+      "dueDate": null,
+      "created": "2025-11-11T17:01:31.330Z"
+    },
+    {
+      "id": 1762880961113,
+      "title": "find my credit card",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "Personal",
+      "themes": ["Finances"],
+      "dueDate": null,
+      "created": "2025-11-11T17:09:21.113Z"
+    },
+    {
+      "id": 1762881000136,
+      "title": "weekly Taiwan ICQA report",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "TW Inv Losses",
+      "themes": ["Damages"],
+      "dueDate": "2025-11-13T00:00:00.000Z",
+      "created": "2025-11-11T17:10:00.136Z"
+    },
+    {
+      "id": 1762881057660,
+      "title": "template for TW ARC ROR blip calculation",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "TW Inv Losses",
+      "themes": ["ARC"],
+      "dueDate": null,
+      "created": "2025-11-11T17:10:57.660Z"
+    },
+    {
+      "id": 1762881096783,
+      "title": "TW- ARC ROWH Metric fix - Sean",
+      "priority": "P1",
+      "completed": true,
+      "completedAt": "2025-11-13T03:48:50.288Z",
+      "project": "TW Inv Losses",
+      "themes": ["ARC"],
+      "dueDate": "2025-11-13T00:00:00.000Z",
+      "created": "2025-11-11T17:11:36.783Z"
+    },
+    {
+      "id": 1762881120854,
+      "title": "HTP review INC11 with Rahul B",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "INC11",
+      "themes": ["HTP improvement"],
+      "dueDate": "2025-11-13T00:00:00.000Z",
+      "created": "2025-11-11T17:12:00.854Z"
+    },
+    {
+      "id": 1762881164966,
+      "title": "buy sweatshirt x 2",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "Personal",
+      "themes": ["Self Improvement"],
+      "dueDate": null,
+      "created": "2025-11-11T17:12:44.966Z"
+    },
+    {
+      "id": 1762881170904,
+      "title": "buy backpack",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "Personal",
+      "themes": ["Self Improvement"],
+      "dueDate": null,
+      "created": "2025-11-11T17:12:50.904Z"
+    },
+    {
+      "id": 1762881174042,
+      "title": "buy sunglasses",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "Personal",
+      "themes": ["Self Improvement"],
+      "dueDate": null,
+      "created": "2025-11-11T17:12:54.042Z"
+    },
+    {
+      "id": 1762881277628,
+      "title": "Repair vendor returns normalized",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "KR ARC",
+      "themes": ["Vendor Repair"],
+      "dueDate": null,
+      "created": "2025-11-11T17:14:37.628Z"
+    },
+    {
+      "id": 1762881287259,
+      "title": "Inc11 - miniload breaks",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "INC11",
+      "themes": ["SKU optimization"],
+      "dueDate": null,
+      "created": "2025-11-11T17:14:47.259Z"
+    },
+    {
+      "id": 1762881296114,
+      "title": "inc11- manual inbound decant tote utilization",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "INC11",
+      "themes": ["SKU optimization"],
+      "dueDate": null,
+      "created": "2025-11-11T17:14:56.114Z"
+    },
+    {
+      "id": 1762881323140,
+      "title": "inc11- inbound tech product to suggest qty per Tote",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "INC11",
+      "themes": ["SKU optimization"],
+      "dueDate": null,
+      "created": "2025-11-11T17:15:23.140Z"
+    },
+    {
+      "id": 1762881362149,
+      "title": "wholesale deal tw core - Expiry liquidation",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "TW Inv Losses",
+      "themes": ["Expiry"],
+      "dueDate": null,
+      "created": "2025-11-11T17:16:02.149Z"
+    },
+    {
+      "id": 1762881398727,
+      "title": "inc11 - inbound cross dock splits reduction",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "INC11",
+      "themes": ["SKU optimization"],
+      "dueDate": null,
+      "created": "2025-11-11T17:16:38.727Z"
+    },
+    {
+      "id": 1763005055889,
+      "title": "Beauty DT review for TW/KR",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "KR ARC",
+      "themes": ["CX"],
+      "dueDate": null,
+      "created": "2025-11-13T03:37:35.889Z"
+    },
+    {
+      "id": 1763005071936,
+      "title": "CPMU data for KR and TW",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "KR ARC",
+      "themes": ["CX"],
+      "dueDate": null,
+      "created": "2025-11-13T03:37:51.936Z"
+    },
+    {
+      "id": 1763005105023,
+      "title": "WH Deal rollout in TW",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "TW Inv Losses",
+      "themes": ["ARC"],
+      "dueDate": "2025-11-13T00:00:00.000Z",
+      "created": "2025-11-13T03:38:25.023Z"
+    },
+    {
+      "id": 1763005116969,
+      "title": "Faster liquidation cycle in TW",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "TW Inv Losses",
+      "themes": ["Liquidation"],
+      "dueDate": "2025-11-13T00:00:00.000Z",
+      "created": "2025-11-13T03:38:36.969Z"
+    },
+    {
+      "id": 1763005997099,
+      "title": "Start RM pilot with 6th floor",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": null,
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-11-13T03:53:17.099Z"
+    }
+  ],
   "recurringTasks": [],
   "projects": [
     "Personal",
@@ -7,43 +437,16 @@
     "Health",
     "Home",
     "INC11",
-    "TW Inv Losses",
-    "KR ARC"
+    "KR ARC",
+    "TW Inv Losses"
   ],
   "themes": {
-    "Work": [
-      "Q4 Goals",
-      "Client Projects"
-    ],
-    "Personal": [
-      "Self Improvement",
-      "Hobbies",
-      "Finances"
-    ],
-    "Health": [
-      "Fitness",
-      "Nutrition"
-    ],
-    "Home": [
-      "Maintenance",
-      "Organization"
-    ],
-    "INC11": [
-      "SKU optimization",
-      "SKU expansion",
-      "HTP improvement "
-    ],
-    "TW Inv Losses": [
-      "Scrap Weight",
-      "Expiry",
-      "Liquidation",
-      "Damage",
-      "ARC"
-    ],
-    "KR ARC": [
-      "Vendor Repair",
-      "CX",
-      "Yield"
-    ]
+    "Work": ["Q4 Goals", "Client Projects"],
+    "Personal": ["Self Improvement", "Hobbies", "Finances"],
+    "Health": ["Fitness", "Nutrition"],
+    "Home": ["Maintenance", "Organization", "Family"],
+    "INC11": ["HTP improvement", "SKU expansion", "SKU optimization"],
+    "KR ARC": ["Vendor Repair", "CX"],
+    "TW Inv Losses": ["Damages", "ARC", "Expiry", "Liquidation"]
   }
 }
