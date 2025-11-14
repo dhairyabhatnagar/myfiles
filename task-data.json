@@ -515,7 +515,9 @@
       "completed": false,
       "completedAt": null,
       "project": "INC11",
-      "themes": [],
+      "themes": [
+        "SKU optimization"
+      ],
       "dueDate": "2025-11-20T00:00:00.000Z",
       "created": "2025-11-14T04:30:05.440Z"
     }
