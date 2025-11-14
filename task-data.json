@@ -586,6 +586,17 @@
       "themes": [],
       "dueDate": null,
       "created": "2025-11-14T08:11:15.218Z"
+    },
+    {
+      "id": 1763107974103,
+      "title": "Delivered - No question for sealed / unsealed in Beauty - Fix",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": null,
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-11-14T08:12:54.103Z"
     }
   ],
   "recurringTasks": [],
