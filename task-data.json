@@ -527,7 +527,7 @@
       "priority": "P1",
       "completed": false,
       "completedAt": null,
-      "project": null,
+      "project": "Personal",
       "themes": [],
       "dueDate": null,
       "created": "2025-11-14T05:59:14.120Z"
