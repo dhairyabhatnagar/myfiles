@@ -644,6 +644,8 @@
       "Expiry",
       "Liquidation"
     ],
-    "Task Assistant": []
+    "Task Assistant": [
+      "Ideas"
+    ]
   }
 }
