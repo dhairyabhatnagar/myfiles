@@ -122,8 +122,8 @@
       "id": 1762701737682,
       "title": "Buy a toothbrush",
       "priority": "P0",
-      "completed": false,
-      "completedAt": null,
+      "completed": true,
+      "completedAt": "2025-11-14T05:46:00.649Z",
       "project": "Personal",
       "themes": [
         "Self Improvement"
