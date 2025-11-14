@@ -44,8 +44,8 @@
       "id": 1762700871442,
       "title": "Finalize Template for monthly SkU swap",
       "priority": "P1",
-      "completed": false,
-      "completedAt": null,
+      "completed": true,
+      "completedAt": "2025-11-14T05:43:31.485Z",
       "project": "INC11",
       "themes": [
         "SKU optimization"
