@@ -553,6 +553,17 @@
       "themes": [],
       "dueDate": "2025-11-17T00:00:00.000Z",
       "created": "2025-11-14T07:00:10.793Z"
+    },
+    {
+      "id": 1763104315296,
+      "title": "Yield savings - Story future ",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": null,
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-11-14T07:11:55.296Z"
     }
   ],
   "recurringTasks": [],
