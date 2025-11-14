@@ -696,6 +696,17 @@
       "themes": [],
       "dueDate": null,
       "created": "2025-11-14T21:01:01.202Z"
+    },
+    {
+      "id": 1763154099499,
+      "title": "how to reduce friction to capture To-dos ",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": null,
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-11-14T21:01:39.499Z"
     }
   ],
   "recurringTasks": [
