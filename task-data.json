@@ -520,6 +520,17 @@
       ],
       "dueDate": "2025-11-20T00:00:00.000Z",
       "created": "2025-11-14T04:30:05.440Z"
+    },
+    {
+      "id": 1763099954119,
+      "title": "Buy a Mask for winters ( in case you get Cold)",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": null,
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-11-14T05:59:14.120Z"
     }
   ],
   "recurringTasks": [],
