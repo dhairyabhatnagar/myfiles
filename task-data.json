@@ -641,6 +641,17 @@
       "themes": [],
       "dueDate": null,
       "created": "2025-11-14T20:53:21.674Z"
+    },
+    {
+      "id": 1763153704009,
+      "title": "eisenhower matrix view to plan your day ",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": null,
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-11-14T20:55:04.009Z"
     }
   ],
   "recurringTasks": [
