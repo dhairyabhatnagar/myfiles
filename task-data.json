@@ -539,7 +539,9 @@
       "completed": false,
       "completedAt": null,
       "project": "KR ARC",
-      "themes": [],
+      "themes": [
+        "CX"
+      ],
       "dueDate": "2025-11-14T00:00:00.000Z",
       "created": "2025-11-14T06:30:16.741Z"
     },
