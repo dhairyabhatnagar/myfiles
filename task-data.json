@@ -599,7 +599,16 @@
       "created": "2025-11-14T08:12:54.103Z"
     }
   ],
-  "recurringTasks": [],
+  "recurringTasks": [
+    {
+      "id": 1763153062460,
+      "title": "Walk 10K",
+      "project": null,
+      "frequency": "daily",
+      "completions": [],
+      "created": "2025-11-14T20:44:22.460Z"
+    }
+  ],
   "projects": [
     "Personal",
     "Work",
