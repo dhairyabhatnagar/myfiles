@@ -607,7 +607,8 @@
     "Home",
     "INC11",
     "KR ARC",
-    "TW Inv Losses"
+    "TW Inv Losses",
+    "Task Assistant"
   ],
   "themes": {
     "Work": [
@@ -642,6 +643,7 @@
       "ARC",
       "Expiry",
       "Liquidation"
-    ]
+    ],
+    "Task Assistant": []
   }
 }
