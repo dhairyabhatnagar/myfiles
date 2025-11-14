@@ -57,8 +57,8 @@
       "id": 1762700888757,
       "title": "Finalise Nov25 SKU swap list",
       "priority": "P0",
-      "completed": false,
-      "completedAt": null,
+      "completed": true,
+      "completedAt": "2025-11-14T04:29:29.438Z",
       "project": "INC11",
       "themes": [
         "SKU optimization"
