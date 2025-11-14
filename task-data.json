@@ -291,8 +291,8 @@
       "id": 1762881057660,
       "title": "template for TW ARC ROR blip calculation",
       "priority": "P1",
-      "completed": false,
-      "completedAt": null,
+      "completed": true,
+      "completedAt": "2025-11-14T07:05:29.541Z",
       "project": "TW Inv Losses",
       "themes": [
         "ARC"
