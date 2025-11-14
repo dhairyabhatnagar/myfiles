@@ -619,6 +619,17 @@
       "themes": [],
       "dueDate": null,
       "created": "2025-11-14T20:46:37.838Z"
+    },
+    {
+      "id": 1763153235721,
+      "title": "Do Self vs Follow-up ",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": null,
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-11-14T20:47:15.721Z"
     }
   ],
   "recurringTasks": [
