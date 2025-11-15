@@ -2,7 +2,7 @@
 // Update these values for your GitHub setup
 
 const CONFIG = {
-    GITHUB_USERNAME: 'YOUR_GITHUB_USERNAME',  // Change this!
+    GITHUB_USERNAME: 'dhairyabhatnagar',  // Change this!
     REPO_NAME: 'myfiles',
     FILE_PATH: 'task-data.json',
     BRANCH: 'main',
