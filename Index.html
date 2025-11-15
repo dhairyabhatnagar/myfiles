@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Task Assistant v7</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 1s linear infinite; }
+        @keyframes celebrate { 
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .celebrate { animation: celebrate 0.3s ease-in-out; }
+        
+        /* Dark mode styles */
+        .dark {
+            color-scheme: dark;
+        }
+        .dark .bg-gradient { background: linear-gradient(to br, #1e293b, #0f172a); }
+        .dark .bg-white { background: #1e293b; color: #f1f5f9; }
+        .dark .text-gray-800 { color: #f1f5f9; }
+        .dark .text-gray-600 { color: #94a3b8; }
+        .dark .text-gray-500 { color: #64748b; }
+        .dark .border { border-color: #334155; }
+        .dark input, .dark select, .dark textarea { 
+            background: #0f172a; 
+            color: #f1f5f9; 
+            border-color: #334155;
+        }
+        .dark .bg-gray-50 { background: #0f172a; }
+        .dark .bg-gray-200 { background: #334155; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <!-- Load all JavaScript modules in order -->
+    <script src="./js/config.js"></script>
+    <script src="./js/parser.js"></script>
+    <script src="./js/gamification.js"></script>
+    <script src="./js/sync.js"></script>
+    <script src="./js/task-operations.js"></script>
+    <script type="text/babel" src="./js/app.js"></script>
+</body>
+</html>
