@@ -685,7 +685,7 @@
       "priority": "P1",
       "completed": false,
       "completedAt": null,
-      "project": null,
+      "project": "Task Assistant",
       "themes": [],
       "dueDate": null,
       "created": "2025-11-14T21:00:52.793Z"
