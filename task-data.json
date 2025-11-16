@@ -733,6 +733,17 @@
       "themes": [],
       "dueDate": null,
       "created": "2025-11-16T16:37:18.161Z"
+    },
+    {
+      "id": 1763311092404,
+      "title": "When creating task while a project selected it should inherit the project name",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": null,
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-11-16T16:38:12.404Z"
     }
   ],
   "recurringTasks": [
