@@ -719,7 +719,9 @@
       "title": "Walk 10K",
       "project": "Health",
       "frequency": "daily",
-      "completions": [],
+      "completions": [
+        "2025-11-16"
+      ],
       "created": "2025-11-14T20:44:22.460Z"
     },
     {
