@@ -711,6 +711,17 @@
       "themes": [],
       "dueDate": null,
       "created": "2025-11-14T21:01:39.499Z"
+    },
+    {
+      "id": 1763310996212,
+      "title": "How to make login based tasks ",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": null,
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-11-16T16:36:36.212Z"
     }
   ],
   "recurringTasks": [
