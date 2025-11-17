@@ -554,7 +554,9 @@
       "completed": false,
       "completedAt": null,
       "project": "KR ARC",
-      "themes": [],
+      "themes": [
+        "Fashion Yield"
+      ],
       "dueDate": "2025-11-17T00:00:00.000Z",
       "created": "2025-11-14T07:00:10.793Z"
     },
