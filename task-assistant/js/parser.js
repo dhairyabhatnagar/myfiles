@@ -3,7 +3,7 @@
 /**
  * Parse natural language input to extract task properties
  * Examples:
- *   "Buy milk tomorrow #Personal pts:5"
+ *   "Buy milk tomorrow #Personal"
  *   "Meeting p0 12/25 #Work @Goals"
  *   "Exercise today @Fitness"
  */
@@ -13,8 +13,7 @@ function parseNaturalLanguage(text, projects, themes) {
         priority: 'P1',
         project: null,
         themes: [],
-        dueDate: null,
-        points: CONFIG.DEFAULT_POINTS
+        dueDate: null
     };
 
     // Extract priority (p0 or p1)
@@ -22,13 +21,6 @@ function parseNaturalLanguage(text, projects, themes) {
     if (priorityMatch) {
         parsedTask.priority = priorityMatch[0].toUpperCase();
         text = text.replace(priorityMatch[0], '').trim();
-    }
-
-    // Extract points (pts:5 or points:10)
-    const pointsMatch = text.match(/(?:pts?|points?):\s*(\d+)/i);
-    if (pointsMatch) {
-        parsedTask.points = parseInt(pointsMatch[1]);
-        text = text.replace(pointsMatch[0], '').trim();
     }
 
     // Extract project (#ProjectName)
