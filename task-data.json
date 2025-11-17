@@ -803,6 +803,17 @@
       "themes": [],
       "dueDate": null,
       "created": "2025-11-17T07:24:00.447Z"
+    },
+    {
+      "id": 1763364393673,
+      "title": "Set-up vendor level allocation and performance tracking in Tableau ",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": null,
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-11-17T07:26:33.673Z"
     }
   ],
   "recurringTasks": [
