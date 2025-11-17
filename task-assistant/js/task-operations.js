@@ -20,7 +20,6 @@ const TaskOperations = {
             project: parsed.project,
             themes: parsed.themes,
             dueDate: parsed.dueDate,
-            points: parsed.points,
             created: new Date().toISOString()
         };
     },
