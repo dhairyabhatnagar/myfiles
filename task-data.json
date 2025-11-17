@@ -800,7 +800,9 @@
       "completed": false,
       "completedAt": null,
       "project": "KR ARC",
-      "themes": [],
+      "themes": [
+        "Vendor Repair"
+      ],
       "dueDate": null,
       "created": "2025-11-17T07:24:00.447Z"
     },
