@@ -759,6 +759,17 @@
       "themes": [],
       "dueDate": null,
       "created": "2025-11-17T01:13:45.926Z"
+    },
+    {
+      "id": 1763342258900,
+      "title": "Fashion CPMO Deepdive",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": null,
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-11-17T01:17:38.900Z"
     }
   ],
   "recurringTasks": [
