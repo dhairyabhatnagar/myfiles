@@ -1,39 +1,38 @@
-// ==================== GAMIFICATION ====================
+// ==================== GAMIFICATION (RECURRING TASKS ONLY) ====================
 
 /**
- * Calculate today's game statistics
- * Returns points earned vs total points for tasks due today/overdue
+ * Calculate recurring tasks statistics
+ * Returns completion rates for all recurring tasks
  */
-function calculateGameStats(tasks) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const todayStr = today.toISOString().split('T')[0];
+function calculateRecurringStats(recurringTasks) {
+    const today = new Date().toISOString().split('T')[0];
+    
+    let totalScore = 0;
+    let maxScore = 0;
+    let completedToday = 0;
 
-    // Tasks due today or overdue (not completed)
-    const dueTodayOrPast = tasks.filter(t => {
-        if (!t.dueDate || t.completed) return false;
-        const dueDate = new Date(t.dueDate);
-        dueDate.setHours(0, 0, 0, 0);
-        return dueDate <= today;
+    recurringTasks.forEach(task => {
+        const completions = task.completions || [];
+        const frequency = task.frequency || 'daily';
+        const score = getCompletionScore(completions, frequency);
+        const max = frequency === 'daily' ? 7 : 4;
+        
+        totalScore += score;
+        maxScore += max;
+        
+        if (completions.includes(today)) {
+            completedToday++;
+        }
     });
 
-    // Tasks completed today
-    const completedToday = tasks.filter(t => {
-        if (!t.completed || !t.completedAt) return false;
-        const completedDate = new Date(t.completedAt).toISOString().split('T')[0];
-        return completedDate === todayStr;
-    });
-
-    const totalPoints = dueTodayOrPast.reduce((sum, t) => sum + (t.points || CONFIG.DEFAULT_POINTS), 0);
-    const earnedPoints = completedToday.reduce((sum, t) => sum + (t.points || CONFIG.DEFAULT_POINTS), 0);
-    const percentage = totalPoints > 0 ? Math.round((earnedPoints / totalPoints) * 100) : 0;
+    const percentage = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
 
     return { 
-        totalPoints, 
-        earnedPoints, 
-        percentage, 
-        completedCount: completedToday.length,
-        dueCount: dueTodayOrPast.length
+        totalScore, 
+        maxScore, 
+        percentage,
+        completedToday,
+        totalTasks: recurringTasks.length
     };
 }
 
