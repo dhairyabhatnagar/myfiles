@@ -1,5 +1,5 @@
-// ==================== MAIN APP - COMPLETE FILE ====================
-// Copy this ENTIRE file as js/app.js (replaces Part 1)
+// ==================== MAIN APP - NO POINTS IN TASKS ====================
+// Gamification only for Recurring Tasks
 
 const { useState, useEffect } = React;
 
@@ -23,7 +23,6 @@ function App() {
     const [editingThemes, setEditingThemes] = useState(null);
     const [editingPriority, setEditingPriority] = useState(null);
     const [editingDate, setEditingDate] = useState(null);
-    const [editingPoints, setEditingPoints] = useState(null);
     const [newTheme, setNewTheme] = useState('');
     const [addingThemeTo, setAddingThemeTo] = useState(null);
     const [deleteConfirm, setDeleteConfirm] = useState(null);
@@ -264,7 +263,7 @@ function App() {
     };
 
     // ========== COMPUTED VALUES ==========
-    const gameStats = calculateGameStats(tasks);
+    const recurringStats = calculateRecurringStats(recurringTasks);
     const filtered = TaskOperations.filterTasks(tasks, view, showCompleted, priorityFilter, projectFilter);
     const recurringFiltered = TaskOperations.filterRecurringTasks(recurringTasks, recurringProjectFilter);
     const today = new Date();
@@ -328,33 +327,35 @@ function App() {
                 </div>
             )}
 
-            {/* Gamification Score Bar */}
-            <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-40 bg-white rounded-full px-6 py-3 shadow-lg flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                    <span className="text-2xl">🏆</span>
-                    <div>
-                        <div className="text-xs text-gray-600">Today's Score</div>
-                        <div className="font-bold">{gameStats.earnedPoints} / {gameStats.totalPoints} pts</div>
+            {/* Recurring Tasks Gamification Score Bar - Only show when on recurring tab */}
+            {mainView === 'recurring' && recurringTasks.length > 0 && (
+                <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-40 bg-white rounded-full px-6 py-3 shadow-lg flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                        <span className="text-2xl">🏆</span>
+                        <div>
+                            <div className="text-xs text-gray-600">Habits Score</div>
+                            <div className="font-bold">{recurringStats.totalScore} / {recurringStats.maxScore}</div>
+                        </div>
                     </div>
+                    <div className="w-32 h-3 bg-gray-200 rounded-full overflow-hidden">
+                        <div 
+                            className={`h-full transition-all duration-500 ${
+                                recurringStats.percentage >= 100 ? 'bg-green-500' :
+                                recurringStats.percentage >= 60 ? 'bg-yellow-500' :
+                                'bg-red-500'
+                            }`}
+                            style={{width: `${Math.min(recurringStats.percentage, 100)}%`}}
+                        ></div>
+                    </div>
+                    <span className={`font-bold text-lg ${
+                        recurringStats.percentage >= 100 ? 'text-green-600' :
+                        recurringStats.percentage >= 60 ? 'text-yellow-600' :
+                        'text-red-600'
+                    }`}>
+                        {recurringStats.percentage}%
+                    </span>
                 </div>
-                <div className="w-32 h-3 bg-gray-200 rounded-full overflow-hidden">
-                    <div 
-                        className={`h-full transition-all duration-500 ${
-                            gameStats.percentage >= 100 ? 'bg-green-500' :
-                            gameStats.percentage >= 60 ? 'bg-yellow-500' :
-                            'bg-red-500'
-                        }`}
-                        style={{width: `${Math.min(gameStats.percentage, 100)}%`}}
-                    ></div>
-                </div>
-                <span className={`font-bold text-lg ${
-                    gameStats.percentage >= 100 ? 'text-green-600' :
-                    gameStats.percentage >= 60 ? 'text-yellow-600' :
-                    'text-red-600'
-                }`}>
-                    {gameStats.percentage}%
-                </span>
-            </div>
+            )}
 
             {/* Delete Confirm Modal */}
             {deleteConfirm && (
@@ -486,10 +487,9 @@ function App() {
                         <div className="text-xs text-gray-600 space-y-2">
                             <p><strong>Natural Language:</strong></p>
                             <p>• "Buy milk tomorrow #Personal"</p>
-                            <p>• "Meeting p0 12/25 #Work pts:20"</p>
+                            <p>• "Meeting p0 12/25 #Work"</p>
                             <p>• "Exercise today @Fitness"</p>
-                            <p className="mt-2"><strong>Points:</strong> Add pts:X</p>
-                            <p><strong>Project:</strong> Use #ProjectName</p>
+                            <p className="mt-2"><strong>Project:</strong> Use #ProjectName</p>
                             <p><strong>Theme:</strong> Use @ThemeName</p>
                         </div>
                     </div>
@@ -499,7 +499,7 @@ function App() {
             {sidebarOpen && <div className="fixed inset-0 bg-black bg-opacity-30 z-40" onClick={() => setSidebarOpen(false)} />}
 
             {/* Main Content */}
-            <div className="p-4 max-w-4xl mx-auto pt-24">
+            <div className={`p-4 max-w-4xl mx-auto ${mainView === 'recurring' && recurringTasks.length > 0 ? 'pt-24' : 'pt-8'}`}>
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
                         <button onClick={() => setSidebarOpen(true)} className="px-3 py-2 bg-white rounded-lg shadow">☰</button>
@@ -547,7 +547,7 @@ function App() {
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
                                     onKeyPress={(e) => e.key === 'Enter' && addTask()}
-                                    placeholder="Add task: 'Buy milk tomorrow #Personal pts:10'"
+                                    placeholder="Add task: 'Buy milk tomorrow #Personal'"
                                     className="flex-1 px-4 py-3 border rounded-lg"
                                 />
                                 <button onClick={startVoice} className={`px-4 py-3 rounded-lg text-white ${isRecording ? 'bg-red-500 animate-pulse' : 'bg-indigo-500'}`}>
@@ -612,26 +612,6 @@ function App() {
                                                         <button onClick={() => setEditingPriority(task.id)}
                                                             className={`text-xs px-2 py-1 rounded font-bold ${task.priority === 'P0' ? 'bg-red-500 text-white' : 'bg-yellow-500 text-white'}`}>
                                                             {task.priority}
-                                                        </button>
-                                                    )}
-
-                                                    {editingPoints === task.id ? (
-                                                        <div className="flex gap-1">
-                                                            <input
-                                                                type="number"
-                                                                value={task.points || 10}
-                                                                onChange={(e) => {
-                                                                    updateTask(task.id, {points: parseInt(e.target.value) || 10});
-                                                                    setEditingPoints(null);
-                                                                }}
-                                                                className="text-xs px-2 py-1 border rounded w-16"
-                                                                min="1"
-                                                            />
-                                                        </div>
-                                                    ) : (
-                                                        <button onClick={() => setEditingPoints(task.id)}
-                                                            className="text-xs px-2 py-1 rounded bg-purple-100 text-purple-700 font-semibold">
-                                                            🏆 {task.points || 10}pts
                                                         </button>
                                                     )}
 
