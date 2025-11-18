@@ -83,8 +83,8 @@
       "id": 1762701694991,
       "title": "Raise claims for Tw visit",
       "priority": "P0",
-      "completed": false,
-      "completedAt": null,
+      "completed": true,
+      "completedAt": "2025-11-18T17:37:21.934Z",
       "project": "Personal",
       "themes": [
         "Finances"
