@@ -925,7 +925,6 @@
   ],
   "projects": [
     "Personal",
-    "Work",
     "Health",
     "Home",
     "INC11",
@@ -934,10 +933,6 @@
     "Task Assistant"
   ],
   "themes": {
-    "Work": [
-      "Q4 Goals",
-      "Client Projects"
-    ],
     "Personal": [
       "Self Improvement",
       "Hobbies",
