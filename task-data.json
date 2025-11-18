@@ -137,10 +137,8 @@
       "priority": "P1",
       "completed": true,
       "completedAt": "2025-11-12T01:21:51.955Z",
-      "project": "Home",
-      "themes": [
-        "Family"
-      ],
+      "project": null,
+      "themes": [],
       "dueDate": "2025-11-10T00:00:00.000Z",
       "created": "2025-11-09T15:23:48.289Z"
     },
@@ -926,7 +924,6 @@
   "projects": [
     "Personal",
     "Health",
-    "Home",
     "INC11",
     "KR ARC",
     "TW Inv Losses",
@@ -941,11 +938,6 @@
     "Health": [
       "Fitness",
       "Nutrition"
-    ],
-    "Home": [
-      "Maintenance",
-      "Organization",
-      "Family"
     ],
     "INC11": [
       "HTP improvement",
