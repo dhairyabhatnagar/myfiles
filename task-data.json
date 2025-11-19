@@ -254,7 +254,8 @@
       "completedAt": null,
       "project": "KR ARC",
       "themes": [
-        "Vendor Repair"
+        "Vendor Repair",
+        "CX"
       ],
       "dueDate": "2025-11-21T00:00:00.000Z",
       "created": "2025-11-11T17:01:31.330Z"
