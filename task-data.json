@@ -866,6 +866,17 @@
       "themes": [],
       "dueDate": null,
       "created": "2025-11-17T17:37:42.088Z"
+    },
+    {
+      "id": 1763531945483,
+      "title": "Fashion Deepdive into ARC ROR and ROWH by ARC and by RTO date ",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": null,
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-11-19T05:59:05.483Z"
     }
   ],
   "recurringTasks": [
