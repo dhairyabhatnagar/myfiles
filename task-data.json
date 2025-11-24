@@ -263,8 +263,8 @@
       "id": 1762880961113,
       "title": "find my credit card",
       "priority": "P1",
-      "completed": false,
-      "completedAt": null,
+      "completed": true,
+      "completedAt": "2025-11-24T01:52:48.404Z",
       "project": "Personal",
       "themes": [
         "Finances"
