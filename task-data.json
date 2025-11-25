@@ -907,7 +907,9 @@
       "completed": false,
       "completedAt": null,
       "project": "KR ARC",
-      "themes": [],
+      "themes": [
+        "TW ARC"
+      ],
       "dueDate": null,
       "created": "2025-11-25T03:59:46.382Z"
     }
