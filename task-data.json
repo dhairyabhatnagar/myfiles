@@ -762,7 +762,7 @@
       "priority": "P1",
       "completed": false,
       "completedAt": null,
-      "project": null,
+      "project": "KR ARC",
       "themes": [],
       "dueDate": null,
       "created": "2025-11-17T01:17:38.900Z"
