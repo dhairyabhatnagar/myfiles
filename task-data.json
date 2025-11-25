@@ -474,7 +474,9 @@
       "completed": false,
       "completedAt": null,
       "project": "TW ARC",
-      "themes": [],
+      "themes": [
+        "Yield"
+      ],
       "dueDate": "2025-12-12T00:00:00.000Z",
       "created": "2025-11-13T03:38:25.023Z"
     },
