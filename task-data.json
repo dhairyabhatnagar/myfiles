@@ -666,7 +666,9 @@
       "completed": false,
       "completedAt": null,
       "project": "Task Assistant",
-      "themes": [],
+      "themes": [
+        "Ideas"
+      ],
       "dueDate": null,
       "created": "2025-11-14T20:55:29.202Z"
     },
