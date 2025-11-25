@@ -773,7 +773,7 @@
       "priority": "P1",
       "completed": false,
       "completedAt": null,
-      "project": null,
+      "project": "TW ARC",
       "themes": [],
       "dueDate": null,
       "created": "2025-11-17T01:18:13.118Z"
