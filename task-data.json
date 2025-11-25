@@ -461,7 +461,9 @@
       "completed": false,
       "completedAt": null,
       "project": "TW ARC",
-      "themes": [],
+      "themes": [
+        "CX"
+      ],
       "dueDate": "2025-11-26T00:00:00.000Z",
       "created": "2025-11-13T03:37:51.936Z"
     },
