@@ -927,6 +927,17 @@
       "themes": [],
       "dueDate": null,
       "created": "2025-11-25T04:51:24.088Z"
+    },
+    {
+      "id": 1764310173104,
+      "title": "Power cut issue due to load management in KR ARCs",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": null,
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-11-28T06:09:33.104Z"
     }
   ],
   "recurringTasks": [
