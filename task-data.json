@@ -938,6 +938,17 @@
       "themes": [],
       "dueDate": null,
       "created": "2025-11-28T06:09:33.104Z"
+    },
+    {
+      "id": 1764779603269,
+      "title": "learn about how to run Gemini in Google docs",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": null,
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-12-03T16:33:23.269Z"
     }
   ],
   "recurringTasks": [
