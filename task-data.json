@@ -456,6 +456,15 @@
           "order": 0,
           "createdAt": "2025-12-06T22:00:33.351Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765058454810_foha9c0az",
+          "title": "inc11- inbound tech product to suggest qty per Tote",
+          "completed": false,
+          "notes": "",
+          "order": 1,
+          "createdAt": "2025-12-06T22:00:54.810Z",
+          "completedAt": null
         }
       ]
     },
