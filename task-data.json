@@ -11,7 +11,8 @@
         "HTP improvement"
       ],
       "dueDate": "2025-11-12T00:00:00.000Z",
-      "created": "2025-11-09T15:01:31.067Z"
+      "created": "2025-11-09T15:01:31.067Z",
+      "subtasks": []
     },
     {
       "id": 1762700776722,
@@ -24,7 +25,8 @@
         "SKU expansion"
       ],
       "dueDate": "2025-11-12T00:00:00.000Z",
-      "created": "2025-11-09T15:06:16.722Z"
+      "created": "2025-11-09T15:06:16.722Z",
+      "subtasks": []
     },
     {
       "id": 1762700826365,
@@ -38,7 +40,8 @@
         "SKU expansion"
       ],
       "dueDate": "2025-11-12T00:00:00.000Z",
-      "created": "2025-11-09T15:07:06.365Z"
+      "created": "2025-11-09T15:07:06.365Z",
+      "subtasks": []
     },
     {
       "id": 1762700871442,
@@ -77,7 +80,8 @@
         "HTP improvement"
       ],
       "dueDate": "2025-11-18T00:00:00.000Z",
-      "created": "2025-11-09T15:09:07.087Z"
+      "created": "2025-11-09T15:09:07.087Z",
+      "subtasks": []
     },
     {
       "id": 1762701694991,
@@ -103,7 +107,8 @@
         "Finances"
       ],
       "dueDate": "2025-11-10T00:00:00.000Z",
-      "created": "2025-11-09T15:21:50.780Z"
+      "created": "2025-11-09T15:21:50.780Z",
+      "subtasks": []
     },
     {
       "id": 1762701731166,
@@ -116,7 +121,8 @@
         "Finances"
       ],
       "dueDate": "2025-11-10T00:00:00.000Z",
-      "created": "2025-11-09T15:22:11.166Z"
+      "created": "2025-11-09T15:22:11.166Z",
+      "subtasks": []
     },
     {
       "id": 1762701737682,
@@ -153,7 +159,8 @@
         "Finances"
       ],
       "dueDate": "2025-11-11T00:00:00.000Z",
-      "created": "2025-11-09T15:24:19.783Z"
+      "created": "2025-11-09T15:24:19.783Z",
+      "subtasks": []
     },
     {
       "id": 1762703163714,
@@ -166,7 +173,8 @@
         "Finances"
       ],
       "dueDate": "2025-11-15T00:00:00.000Z",
-      "created": "2025-11-09T15:46:03.714Z"
+      "created": "2025-11-09T15:46:03.714Z",
+      "subtasks": []
     },
     {
       "id": 1762735142656,
@@ -179,7 +187,8 @@
         "Finances"
       ],
       "dueDate": "2025-11-14T00:00:00.000Z",
-      "created": "2025-11-10T00:39:02.656Z"
+      "created": "2025-11-10T00:39:02.656Z",
+      "subtasks": []
     },
     {
       "id": 1762736933077,
@@ -218,7 +227,8 @@
         "SKU optimization"
       ],
       "dueDate": "2025-11-11T00:00:00.000Z",
-      "created": "2025-11-10T02:10:09.228Z"
+      "created": "2025-11-10T02:10:09.228Z",
+      "subtasks": []
     },
     {
       "id": 1762744416050,
@@ -231,7 +241,8 @@
         "HTP improvement"
       ],
       "dueDate": "2025-11-11T00:00:00.000Z",
-      "created": "2025-11-10T03:13:36.050Z"
+      "created": "2025-11-10T03:13:36.050Z",
+      "subtasks": []
     },
     {
       "id": 1762764746834,
@@ -244,7 +255,8 @@
         "SKU optimization"
       ],
       "dueDate": "2025-11-11T00:00:00.000Z",
-      "created": "2025-11-10T08:52:26.834Z"
+      "created": "2025-11-10T08:52:26.834Z",
+      "subtasks": []
     },
     {
       "id": 1762880491330,
@@ -257,7 +269,8 @@
         "CX"
       ],
       "dueDate": "2025-11-27T00:00:00.000Z",
-      "created": "2025-11-11T17:01:31.330Z"
+      "created": "2025-11-11T17:01:31.330Z",
+      "subtasks": []
     },
     {
       "id": 1762880961113,
@@ -283,7 +296,8 @@
         "Damages"
       ],
       "dueDate": "2025-11-25T00:00:00.000Z",
-      "created": "2025-11-11T17:10:00.136Z"
+      "created": "2025-11-11T17:10:00.136Z",
+      "subtasks": []
     },
     {
       "id": 1762881057660,
@@ -335,7 +349,8 @@
         "Self Improvement"
       ],
       "dueDate": null,
-      "created": "2025-11-11T17:12:44.966Z"
+      "created": "2025-11-11T17:12:44.966Z",
+      "subtasks": []
     },
     {
       "id": 1762881170904,
@@ -361,7 +376,8 @@
         "Self Improvement"
       ],
       "dueDate": null,
-      "created": "2025-11-11T17:12:54.042Z"
+      "created": "2025-11-11T17:12:54.042Z",
+      "subtasks": []
     },
     {
       "id": 1762881277628,
@@ -374,7 +390,8 @@
         "Vendor Repair"
       ],
       "dueDate": "2025-11-19T00:00:00.000Z",
-      "created": "2025-11-11T17:14:37.628Z"
+      "created": "2025-11-11T17:14:37.628Z",
+      "subtasks": []
     },
     {
       "id": 1762881287259,
@@ -387,7 +404,8 @@
         "SKU optimization"
       ],
       "dueDate": null,
-      "created": "2025-11-11T17:14:47.259Z"
+      "created": "2025-11-11T17:14:47.259Z",
+      "subtasks": []
     },
     {
       "id": 1762881296114,
@@ -400,7 +418,8 @@
         "SKU optimization"
       ],
       "dueDate": null,
-      "created": "2025-11-11T17:14:56.114Z"
+      "created": "2025-11-11T17:14:56.114Z",
+      "subtasks": []
     },
     {
       "id": 1762881323140,
@@ -413,7 +432,8 @@
         "SKU optimization"
       ],
       "dueDate": null,
-      "created": "2025-11-11T17:15:23.140Z"
+      "created": "2025-11-11T17:15:23.140Z",
+      "subtasks": []
     },
     {
       "id": 1762881362149,
@@ -426,7 +446,8 @@
         "Expiry"
       ],
       "dueDate": null,
-      "created": "2025-11-11T17:16:02.149Z"
+      "created": "2025-11-11T17:16:02.149Z",
+      "subtasks": []
     },
     {
       "id": 1762881398727,
@@ -439,7 +460,8 @@
         "SKU optimization"
       ],
       "dueDate": null,
-      "created": "2025-11-11T17:16:38.727Z"
+      "created": "2025-11-11T17:16:38.727Z",
+      "subtasks": []
     },
     {
       "id": 1763005055889,
@@ -452,7 +474,8 @@
         "CX"
       ],
       "dueDate": null,
-      "created": "2025-11-13T03:37:35.889Z"
+      "created": "2025-11-13T03:37:35.889Z",
+      "subtasks": []
     },
     {
       "id": 1763005071936,
@@ -465,7 +488,8 @@
         "CX"
       ],
       "dueDate": "2025-11-26T00:00:00.000Z",
-      "created": "2025-11-13T03:37:51.936Z"
+      "created": "2025-11-13T03:37:51.936Z",
+      "subtasks": []
     },
     {
       "id": 1763005105023,
@@ -478,7 +502,8 @@
         "Yield"
       ],
       "dueDate": "2025-12-12T00:00:00.000Z",
-      "created": "2025-11-13T03:38:25.023Z"
+      "created": "2025-11-13T03:38:25.023Z",
+      "subtasks": []
     },
     {
       "id": 1763005116969,
@@ -491,7 +516,8 @@
         "Liquidation"
       ],
       "dueDate": "2025-11-13T00:00:00.000Z",
-      "created": "2025-11-13T03:38:36.969Z"
+      "created": "2025-11-13T03:38:36.969Z",
+      "subtasks": []
     },
     {
       "id": 1763005997099,
@@ -504,7 +530,8 @@
         "SKU expansion"
       ],
       "dueDate": "2025-11-18T00:00:00.000Z",
-      "created": "2025-11-13T03:53:17.099Z"
+      "created": "2025-11-13T03:53:17.099Z",
+      "subtasks": []
     },
     {
       "id": 1763094605440,
@@ -517,7 +544,8 @@
         "SKU optimization"
       ],
       "dueDate": "2025-11-20T00:00:00.000Z",
-      "created": "2025-11-14T04:30:05.440Z"
+      "created": "2025-11-14T04:30:05.440Z",
+      "subtasks": []
     },
     {
       "id": 1763099954119,
@@ -530,7 +558,8 @@
         "Self Improvement"
       ],
       "dueDate": "2025-11-15T00:00:00.000Z",
-      "created": "2025-11-14T05:59:14.120Z"
+      "created": "2025-11-14T05:59:14.120Z",
+      "subtasks": []
     },
     {
       "id": 1763101816741,
@@ -543,7 +572,8 @@
         "CX"
       ],
       "dueDate": "2025-11-19T00:00:00.000Z",
-      "created": "2025-11-14T06:30:16.741Z"
+      "created": "2025-11-14T06:30:16.741Z",
+      "subtasks": []
     },
     {
       "id": 1763103610793,
@@ -556,7 +586,8 @@
         "Fashion Yield"
       ],
       "dueDate": "2025-11-17T00:00:00.000Z",
-      "created": "2025-11-14T07:00:10.793Z"
+      "created": "2025-11-14T07:00:10.793Z",
+      "subtasks": []
     },
     {
       "id": 1763104315296,
@@ -569,7 +600,8 @@
         "Fashion Yield"
       ],
       "dueDate": "2025-11-19T00:00:00.000Z",
-      "created": "2025-11-14T07:11:55.296Z"
+      "created": "2025-11-14T07:11:55.296Z",
+      "subtasks": []
     },
     {
       "id": 1763107858708,
@@ -582,7 +614,8 @@
         "Fashion Yield"
       ],
       "dueDate": "2025-11-21T00:00:00.000Z",
-      "created": "2025-11-14T08:10:58.708Z"
+      "created": "2025-11-14T08:10:58.708Z",
+      "subtasks": []
     },
     {
       "id": 1763107875218,
@@ -593,7 +626,8 @@
       "project": "KR ARC",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-14T08:11:15.218Z"
+      "created": "2025-11-14T08:11:15.218Z",
+      "subtasks": []
     },
     {
       "id": 1763107974103,
@@ -604,7 +638,8 @@
       "project": "KR ARC",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-14T08:12:54.103Z"
+      "created": "2025-11-14T08:12:54.103Z",
+      "subtasks": []
     },
     {
       "id": 1763153176609,
@@ -615,7 +650,8 @@
       "project": "Task Assistant",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-14T20:46:16.609Z"
+      "created": "2025-11-14T20:46:16.609Z",
+      "subtasks": []
     },
     {
       "id": 1763153197838,
@@ -626,7 +662,8 @@
       "project": "Task Assistant",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-14T20:46:37.838Z"
+      "created": "2025-11-14T20:46:37.838Z",
+      "subtasks": []
     },
     {
       "id": 1763153235721,
@@ -637,7 +674,8 @@
       "project": "Task Assistant",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-14T20:47:15.721Z"
+      "created": "2025-11-14T20:47:15.721Z",
+      "subtasks": []
     },
     {
       "id": 1763153601674,
@@ -659,7 +697,8 @@
       "project": "Task Assistant",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-14T20:55:04.009Z"
+      "created": "2025-11-14T20:55:04.009Z",
+      "subtasks": []
     },
     {
       "id": 1763153729202,
@@ -672,7 +711,8 @@
         "Ideas"
       ],
       "dueDate": null,
-      "created": "2025-11-14T20:55:29.202Z"
+      "created": "2025-11-14T20:55:29.202Z",
+      "subtasks": []
     },
     {
       "id": 1763153747440,
@@ -683,7 +723,8 @@
       "project": "Task Assistant",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-14T20:55:47.440Z"
+      "created": "2025-11-14T20:55:47.440Z",
+      "subtasks": []
     },
     {
       "id": 1763154052793,
@@ -694,7 +735,8 @@
       "project": "Task Assistant",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-14T21:00:52.793Z"
+      "created": "2025-11-14T21:00:52.793Z",
+      "subtasks": []
     },
     {
       "id": 1763154061202,
@@ -705,7 +747,8 @@
       "project": "Task Assistant",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-14T21:01:01.202Z"
+      "created": "2025-11-14T21:01:01.202Z",
+      "subtasks": []
     },
     {
       "id": 1763154099499,
@@ -716,7 +759,8 @@
       "project": "Task Assistant",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-14T21:01:39.499Z"
+      "created": "2025-11-14T21:01:39.499Z",
+      "subtasks": []
     },
     {
       "id": 1763310996212,
@@ -727,7 +771,8 @@
       "project": "Task Assistant",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-16T16:36:36.212Z"
+      "created": "2025-11-16T16:36:36.212Z",
+      "subtasks": []
     },
     {
       "id": 1763311038161,
@@ -738,7 +783,8 @@
       "project": "Task Assistant",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-16T16:37:18.161Z"
+      "created": "2025-11-16T16:37:18.161Z",
+      "subtasks": []
     },
     {
       "id": 1763311092404,
@@ -749,7 +795,8 @@
       "project": "Task Assistant",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-16T16:38:12.404Z"
+      "created": "2025-11-16T16:38:12.404Z",
+      "subtasks": []
     },
     {
       "id": 1763342025926,
@@ -760,7 +807,8 @@
       "project": "Task Assistant",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-17T01:13:45.926Z"
+      "created": "2025-11-17T01:13:45.926Z",
+      "subtasks": []
     },
     {
       "id": 1763342258900,
@@ -771,7 +819,8 @@
       "project": "KR ARC",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-17T01:17:38.900Z"
+      "created": "2025-11-17T01:17:38.900Z",
+      "subtasks": []
     },
     {
       "id": 1763342293118,
@@ -782,7 +831,8 @@
       "project": "TW ARC",
       "themes": [],
       "dueDate": "2025-11-25T00:00:00.000Z",
-      "created": "2025-11-17T01:18:13.118Z"
+      "created": "2025-11-17T01:18:13.118Z",
+      "subtasks": []
     },
     {
       "id": 1763342737352,
@@ -793,7 +843,8 @@
       "project": "INC11",
       "themes": [],
       "dueDate": "2025-11-18T00:00:00.000Z",
-      "created": "2025-11-17T01:25:37.352Z"
+      "created": "2025-11-17T01:25:37.352Z",
+      "subtasks": []
     },
     {
       "id": 1763364240447,
@@ -806,7 +857,8 @@
         "Vendor Repair"
       ],
       "dueDate": null,
-      "created": "2025-11-17T07:24:00.447Z"
+      "created": "2025-11-17T07:24:00.447Z",
+      "subtasks": []
     },
     {
       "id": 1763364393673,
@@ -819,7 +871,8 @@
         "Vendor Repair"
       ],
       "dueDate": null,
-      "created": "2025-11-17T07:26:33.673Z"
+      "created": "2025-11-17T07:26:33.673Z",
+      "subtasks": []
     },
     {
       "id": 1763364477307,
@@ -832,7 +885,8 @@
         "Vendor Repair"
       ],
       "dueDate": null,
-      "created": "2025-11-17T07:27:57.307Z"
+      "created": "2025-11-17T07:27:57.307Z",
+      "subtasks": []
     },
     {
       "id": 1763364509321,
@@ -845,7 +899,8 @@
         "Vendor Repair"
       ],
       "dueDate": null,
-      "created": "2025-11-17T07:28:29.321Z"
+      "created": "2025-11-17T07:28:29.321Z",
+      "subtasks": []
     },
     {
       "id": 1763364662160,
@@ -858,7 +913,8 @@
         "Vendor Repair"
       ],
       "dueDate": null,
-      "created": "2025-11-17T07:31:02.160Z"
+      "created": "2025-11-17T07:31:02.160Z",
+      "subtasks": []
     },
     {
       "id": 1763401062088,
@@ -869,7 +925,8 @@
       "project": "Task Assistant",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-17T17:37:42.088Z"
+      "created": "2025-11-17T17:37:42.088Z",
+      "subtasks": []
     },
     {
       "id": 1763531945483,
@@ -880,7 +937,8 @@
       "project": "KR ARC",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-19T05:59:05.483Z"
+      "created": "2025-11-19T05:59:05.483Z",
+      "subtasks": []
     },
     {
       "id": 1763949358412,
@@ -891,7 +949,8 @@
       "project": "Personal",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-24T01:55:58.412Z"
+      "created": "2025-11-24T01:55:58.412Z",
+      "subtasks": []
     },
     {
       "id": 1764043180683,
@@ -902,7 +961,8 @@
       "project": "KR ARC",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-25T03:59:40.683Z"
+      "created": "2025-11-25T03:59:40.683Z",
+      "subtasks": []
     },
     {
       "id": 1764043186382,
@@ -915,7 +975,8 @@
         "TW ARC"
       ],
       "dueDate": null,
-      "created": "2025-11-25T03:59:46.382Z"
+      "created": "2025-11-25T03:59:46.382Z",
+      "subtasks": []
     },
     {
       "id": 1764046284088,
@@ -926,7 +987,8 @@
       "project": "TW ARC",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-25T04:51:24.088Z"
+      "created": "2025-11-25T04:51:24.088Z",
+      "subtasks": []
     },
     {
       "id": 1764310173104,
@@ -934,10 +996,11 @@
       "priority": "P1",
       "completed": false,
       "completedAt": null,
-      "project": null,
+      "project": "KR ARC",
       "themes": [],
       "dueDate": null,
-      "created": "2025-11-28T06:09:33.104Z"
+      "created": "2025-11-28T06:09:33.104Z",
+      "subtasks": []
     },
     {
       "id": 1764779603269,
@@ -948,7 +1011,8 @@
       "project": null,
       "themes": [],
       "dueDate": null,
-      "created": "2025-12-03T16:33:23.269Z"
+      "created": "2025-12-03T16:33:23.269Z",
+      "subtasks": []
     }
   ],
   "recurringTasks": [
