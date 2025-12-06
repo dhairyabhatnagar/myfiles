@@ -892,14 +892,10 @@ function TaskItemWithSubtasks({
     // ← NEW: If subtask page is open, show ONLY that page
     if (isPageOpen) {
         return (
-            <SubtaskPageView    // ← CHANGED from SubtaskModal
+            <SubtaskPageView
                 task={task}
                 onClose={closePage}
                 onUpdateSubtasks={updateSubtasks}
-                onCompleteMainTask={() => {
-                    onToggleComplete(task.id);
-                    closePage();
-                }}
             />
         );
     }
