@@ -856,6 +856,39 @@ function TaskItemWithSubtasks({
         githubConfig
     });
 
+    // ========== SWIPE GESTURE HANDLING ==========
+    const [touchStart, setTouchStart] = useState(null);
+    const [touchEnd, setTouchEnd] = useState(null);
+
+    // Minimum swipe distance (in px)
+    const minSwipeDistance = 50;
+
+    const onTouchStart = (e) => {
+        setTouchEnd(null); // Reset
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const onTouchMove = (e) => {
+        setTouchEnd(e.targetTouches[0].clientX);
+    };
+
+    const onTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > minSwipeDistance;
+        const isRightSwipe = distance < -minSwipeDistance;
+        
+        // Right swipe opens subtasks
+        if (isRightSwipe) {
+            openPage();
+        }
+        
+        // Reset
+        setTouchStart(null);
+        setTouchEnd(null);
+    };
+
     // ← NEW: If subtask page is open, show ONLY that page
     if (isPageOpen) {
         return (
@@ -876,7 +909,10 @@ function TaskItemWithSubtasks({
         <div 
             key={task.id} 
             className={`bg-white rounded-lg p-4 shadow ${task.completed ? 'opacity-60' : ''} ${celebrateTask === task.id ? 'celebrate' : ''}`}
-            onDoubleClick={openPage}    // ← CHANGED from openModal
+            onDoubleClick={openPage}           // Desktop: double-click
+            onTouchStart={onTouchStart}        // Mobile: swipe right
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
         >
             <div className="flex items-start gap-3">
                 <input
