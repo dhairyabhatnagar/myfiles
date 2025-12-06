@@ -1,5 +1,5 @@
 // ==================== COMPLETE SUBTASKS FUNCTIONALITY ====================
-// All subtask code in one file - no imports/exports needed
+// Updated to use page view instead of modal popup
 
 // ==================== SUBTASK TYPES ====================
 
@@ -287,8 +287,8 @@ function SubtaskItem({
   );
 }
 
-// SubtaskModal Component
-function SubtaskModal({ isOpen, onClose, task, onUpdateSubtasks, onCompleteMainTask }) {
+// SubtaskPageView Component - FULL PAGE instead of modal
+function SubtaskPageView({ task, onClose, onUpdateSubtasks, onCompleteMainTask }) {
   const [subtasks, setSubtasks] = useSubtaskState(task?.subtasks || []);
   const [newSubtaskTitle, setNewSubtaskTitle] = useSubtaskState('');
   const [editingId, setEditingId] = useSubtaskState(null);
@@ -304,10 +304,10 @@ function SubtaskModal({ isOpen, onClose, task, onUpdateSubtasks, onCompleteMainT
   }, [task]);
 
   useSubtaskEffect(() => {
-    if (isOpen && inputRef.current) {
+    if (inputRef.current) {
       setTimeout(() => inputRef.current?.focus(), 100);
     }
-  }, [isOpen]);
+  }, []);
 
   const progress = calculateSubtaskProgress(subtasks);
 
@@ -418,81 +418,45 @@ function SubtaskModal({ isOpen, onClose, task, onUpdateSubtasks, onCompleteMainT
     ? subtasks 
     : subtasks.filter(st => !st.completed);
 
-  if (!isOpen) return null;
-
+  // FULL PAGE VIEW
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-      <div 
-        className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex-1">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                {task?.title}
-              </h2>
-              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                <span className="font-medium">
-                  {progress.completed}/{progress.total} complete
-                </span>
-                <span>•</span>
-                <span>{progress.percentage}%</span>
-              </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="max-w-4xl mx-auto p-4 pt-8">
+        {/* Header with Back Button */}
+        <div className="mb-6 flex items-center gap-4">
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors"
+            title="Back to tasks (Esc)"
+          >
+            <svg className="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+          </button>
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              {task?.title}
+            </h1>
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mt-1">
+              <span className="font-medium">
+                {progress.completed}/{progress.total} complete
+              </span>
+              <span>•</span>
+              <span>{progress.percentage}%</span>
             </div>
-            <button
-              onClick={onClose}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              title="Close (Esc)"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-
-          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
-            <div 
-              className="bg-green-500 h-2.5 rounded-full transition-all duration-300"
-              style={{ width: `${progress.percentage}%` }}
-            />
           </div>
         </div>
 
-        {/* Subtasks List */}
-        <div className="flex-1 overflow-y-auto p-6">
-          {visibleSubtasks.length === 0 ? (
-            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-              <p className="text-4xl mb-2">📝</p>
-              <p>{showCompleted ? 'No subtasks yet' : 'No pending subtasks'}</p>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {visibleSubtasks.map((subtask, index) => (
-                <SubtaskItem
-                  key={subtask.id}
-                  subtask={subtask}
-                  isEditing={editingId === subtask.id}
-                  editingTitle={editingTitle}
-                  editingNotes={editingNotes}
-                  onToggleComplete={handleToggleComplete}
-                  onDelete={handleDelete}
-                  onStartEdit={handleStartEdit}
-                  onSaveEdit={handleSaveEdit}
-                  onCancelEdit={handleCancelEdit}
-                  onTitleChange={setEditingTitle}
-                  onNotesChange={setEditingNotes}
-                  onReorder={(dropIndex) => handleReorder(index, dropIndex)}
-                  index={index}
-                />
-              ))}
-            </div>
-          )}
+        {/* Progress Bar */}
+        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden mb-6">
+          <div 
+            className="bg-green-500 h-3 rounded-full transition-all duration-300"
+            style={{ width: `${progress.percentage}%` }}
+          />
         </div>
 
-        {/* Footer */}
-        <div className="p-6 border-t border-gray-200 dark:border-gray-700 space-y-3">
+        {/* Add New Subtask */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 mb-6">
           <div className="flex gap-2">
             <input
               ref={inputRef}
@@ -501,38 +465,69 @@ function SubtaskModal({ isOpen, onClose, task, onUpdateSubtasks, onCompleteMainT
               onChange={(e) => setNewSubtaskTitle(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Add a subtask... (Press Enter)"
-              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg 
+              className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg 
                        bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                        focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <button
               onClick={handleAddSubtask}
               disabled={!newSubtaskTitle.trim()}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 
-                       disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 
+                       disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
             >
               Add
             </button>
           </div>
+        </div>
 
-          <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={showCompleted}
-                onChange={(e) => setShowCompleted(e.target.checked)}
-                className="rounded"
+        {/* Subtasks List */}
+        <div className="space-y-3 mb-6">
+          {visibleSubtasks.length === 0 ? (
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-12 text-center text-gray-500 dark:text-gray-400">
+              <p className="text-4xl mb-2">📝</p>
+              <p>{showCompleted ? 'No subtasks yet' : 'No pending subtasks'}</p>
+              <p className="text-sm mt-2">Start adding subtasks to break down this task</p>
+            </div>
+          ) : (
+            visibleSubtasks.map((subtask, index) => (
+              <SubtaskItem
+                key={subtask.id}
+                subtask={subtask}
+                isEditing={editingId === subtask.id}
+                editingTitle={editingTitle}
+                editingNotes={editingNotes}
+                onToggleComplete={handleToggleComplete}
+                onDelete={handleDelete}
+                onStartEdit={handleStartEdit}
+                onSaveEdit={handleSaveEdit}
+                onCancelEdit={handleCancelEdit}
+                onTitleChange={setEditingTitle}
+                onNotesChange={setEditingNotes}
+                onReorder={(dropIndex) => handleReorder(index, dropIndex)}
+                index={index}
               />
-              Show completed
-            </label>
+            ))
+          )}
+        </div>
 
-            <button
-              onClick={handleCompleteMainTask}
-              className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
-            >
-              Mark Main Task Complete
-            </button>
-          </div>
+        {/* Footer Actions */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 flex items-center justify-between">
+          <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={showCompleted}
+              onChange={(e) => setShowCompleted(e.target.checked)}
+              className="rounded"
+            />
+            Show completed
+          </label>
+
+          <button
+            onClick={handleCompleteMainTask}
+            className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium"
+          >
+            Mark Main Task Complete
+          </button>
         </div>
       </div>
     </div>
@@ -542,7 +537,7 @@ function SubtaskModal({ isOpen, onClose, task, onUpdateSubtasks, onCompleteMainT
 // ==================== CUSTOM HOOK ====================
 
 function useSubtasks({ task, onUpdateTask, githubConfig = null }) {
-  const [isModalOpen, setIsModalOpen] = useSubtaskState(false);
+  const [isPageOpen, setIsPageOpen] = useSubtaskState(false);
   const [isSyncing, setIsSyncing] = useSubtaskState(false);
   const [syncError, setSyncError] = useSubtaskState(null);
 
@@ -579,11 +574,11 @@ function useSubtasks({ task, onUpdateTask, githubConfig = null }) {
 
   return {
     subtasks: task.subtasks || [],
-    isModalOpen,
+    isPageOpen,
     isSyncing,
     syncError,
-    openModal: () => setIsModalOpen(true),
-    closeModal: () => setIsModalOpen(false),
+    openPage: () => setIsPageOpen(true),
+    closePage: () => setIsPageOpen(false),
     updateSubtasks
   };
 }
