@@ -461,7 +461,17 @@
       ],
       "dueDate": null,
       "created": "2025-11-11T17:14:56.114Z",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "subtask_1765058433351_mm1799p4d",
+          "title": "Inc11 - miniload brakes",
+          "completed": false,
+          "notes": "",
+          "order": 0,
+          "createdAt": "2025-12-06T22:00:33.351Z",
+          "completedAt": null
+        }
+      ]
     },
     {
       "id": 1762881323140,
