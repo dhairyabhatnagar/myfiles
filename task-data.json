@@ -644,7 +644,7 @@
     {
       "id": 1763153176609,
       "title": "Connected Tasks ",
-      "priority": "P1",
+      "priority": "P0",
       "completed": false,
       "completedAt": null,
       "project": "Task Assistant",
