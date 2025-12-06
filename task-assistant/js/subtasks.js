@@ -396,35 +396,6 @@ function SubtaskPageView({ task, onClose, onUpdateSubtasks }) {
     }
   };
 
-  // ========== SWIPE GESTURE FOR CLOSING ==========
-  const [touchStart, setTouchStart] = useSubtaskState(null);
-  const [touchEnd, setTouchEnd] = useSubtaskState(null);
-
-  const minSwipeDistance = 50;
-
-  const handleTouchStart = (e) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchMove = (e) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    
-    if (isLeftSwipe) {
-      onClose();
-    }
-    
-    setTouchStart(null);
-    setTouchEnd(null);
-  };
-
   const visibleSubtasks = showCompleted 
     ? subtasks 
     : subtasks.filter(st => !st.completed);
@@ -433,9 +404,6 @@ function SubtaskPageView({ task, onClose, onUpdateSubtasks }) {
   return (
     <div 
       className="fixed inset-0 bg-white dark:bg-gray-900 overflow-hidden z-50"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
     >
       <div className="h-full flex flex-col max-w-4xl mx-auto">
         {/* MINIMAL HEADER */}
