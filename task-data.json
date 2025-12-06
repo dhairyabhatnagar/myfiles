@@ -1044,6 +1044,18 @@
       "dueDate": null,
       "created": "2025-12-06T21:42:36.921Z",
       "subtasks": []
+    },
+    {
+      "id": 1765057939769,
+      "title": "check if task added based on context",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "Task Assistant",
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-12-06T21:52:19.769Z",
+      "subtasks": []
     }
   ],
   "recurringTasks": [
