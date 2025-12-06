@@ -436,20 +436,6 @@
       "subtasks": []
     },
     {
-      "id": 1762881287259,
-      "title": "Inc11 - miniload breaks",
-      "priority": "P1",
-      "completed": false,
-      "completedAt": null,
-      "project": "INC11",
-      "themes": [
-        "SKU optimization"
-      ],
-      "dueDate": null,
-      "created": "2025-11-11T17:14:47.259Z",
-      "subtasks": []
-    },
-    {
       "id": 1762881296114,
       "title": "inc11- manual inbound decant tote utilization",
       "priority": "P1",
