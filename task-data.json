@@ -492,20 +492,6 @@
       "subtasks": []
     },
     {
-      "id": 1762881398727,
-      "title": "inc11 - inbound cross dock splits reduction",
-      "priority": "P1",
-      "completed": false,
-      "completedAt": null,
-      "project": "INC11",
-      "themes": [
-        "SKU optimization"
-      ],
-      "dueDate": null,
-      "created": "2025-11-11T17:16:38.727Z",
-      "subtasks": []
-    },
-    {
       "id": 1763005055889,
       "title": "Beauty DT review for TW/KR",
       "priority": "P1",
