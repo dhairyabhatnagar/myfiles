@@ -1076,6 +1076,18 @@
       "dueDate": null,
       "created": "2025-12-06T22:08:51.688Z",
       "subtasks": []
+    },
+    {
+      "id": 1765058940951,
+      "title": "how to enable IBKR for investments",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "Personal",
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-12-06T22:09:00.951Z",
+      "subtasks": []
     }
   ],
   "recurringTasks": [
