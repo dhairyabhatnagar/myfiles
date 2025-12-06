@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { createSubtask, calculateSubtaskProgress } from '../../types/subtask.types';
+import { createSubtask, calculateSubtaskProgress } from '../../types/subtask.types.js';
 
 /**
  * SubtaskModal - Modal component for managing subtasks
