@@ -562,20 +562,6 @@
       "subtasks": []
     },
     {
-      "id": 1763094605440,
-      "title": "Review SKU Swap list again For INC11",
-      "priority": "P1",
-      "completed": false,
-      "completedAt": null,
-      "project": "INC11",
-      "themes": [
-        "SKU optimization"
-      ],
-      "dueDate": "2025-11-20T00:00:00.000Z",
-      "created": "2025-11-14T04:30:05.440Z",
-      "subtasks": []
-    },
-    {
       "id": 1763099954119,
       "title": "Buy a Mask for winters ( in case you get Cold)",
       "priority": "P1",
