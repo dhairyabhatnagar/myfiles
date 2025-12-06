@@ -165,3 +165,8 @@ const TaskOperations = {
         return recurringTasks.filter(t => t.project === projectFilter);
     }
 };
+
+// Export for ES6 modules
+if (typeof window !== 'undefined') {
+    window.TaskOperations = TaskOperations;
+}
