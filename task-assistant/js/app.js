@@ -816,17 +816,15 @@ function TaskItemWithSubtasks({
     setEditingThemes,
     celebrateTask
 }) {
-    // Initialize subtasks if not present
     if (!task.subtasks) {
         task.subtasks = [];
     }
 
-    // Use subtask hook
     const {
         subtasks,
-        isModalOpen,
-        openModal,
-        closeModal,
+        isPageOpen,        // ← Changed from isModalOpen
+        openPage,          // ← Changed from openModal
+        closePage,         // ← Changed from closeModal
         updateSubtasks
     } = useSubtasks({
         task,
@@ -834,11 +832,26 @@ function TaskItemWithSubtasks({
         githubConfig
     });
 
+    // NEW: If subtask page is open, show ONLY that page
+    if (isPageOpen) {
+        return (
+            <SubtaskPageView    // ← Changed from SubtaskModal
+                task={task}
+                onClose={closePage}
+                onUpdateSubtasks={updateSubtasks}
+                onCompleteMainTask={() => {
+                    onToggleComplete(task.id);
+                    closePage();
+                }}
+            />
+        );
+    }
+
+    // Otherwise show the normal task card (keep all your existing JSX below)
     return (
         <div 
-            key={task.id} 
             className={`bg-white rounded-lg p-4 shadow ${task.completed ? 'opacity-60' : ''} ${celebrateTask === task.id ? 'celebrate' : ''}`}
-            onDoubleClick={openModal}
+            onDoubleClick={openPage}  // ← Changed from openModal
         >
             <div className="flex items-start gap-3">
                 <input
@@ -907,13 +920,13 @@ function TaskItemWithSubtasks({
                             </button>
                         )}
 
-                        {/* SUBTASK INDICATOR - Shows if task has subtasks */}
+                        {/* SUBTASK INDICATOR */}
                         {subtasks.length > 0 && (
                             <SubtaskIndicator 
                                 subtasks={subtasks} 
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    openModal();
+                                    openPage();  // ← Changed from openModal
                                 }}
                             />
                         )}
@@ -960,18 +973,6 @@ function TaskItemWithSubtasks({
                     🗑️
                 </button>
             </div>
-
-            {/* SUBTASK MODAL */}
-            <SubtaskModal
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                task={task}
-                onUpdateSubtasks={updateSubtasks}
-                onCompleteMainTask={() => {
-                    onToggleComplete(task.id);
-                    closeModal();
-                }}
-            />
         </div>
     );
 }
