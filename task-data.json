@@ -469,20 +469,6 @@
       ]
     },
     {
-      "id": 1762881323140,
-      "title": "inc11- inbound tech product to suggest qty per Tote",
-      "priority": "P1",
-      "completed": false,
-      "completedAt": null,
-      "project": "INC11",
-      "themes": [
-        "SKU optimization"
-      ],
-      "dueDate": null,
-      "created": "2025-11-11T17:15:23.140Z",
-      "subtasks": []
-    },
-    {
       "id": 1762881362149,
       "title": "wholesale deal tw core - Expiry liquidation",
       "priority": "P1",
