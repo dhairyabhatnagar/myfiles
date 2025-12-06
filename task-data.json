@@ -260,6 +260,15 @@
           "order": 1,
           "createdAt": "2025-12-06T21:58:38.040Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765058336322_h4hjk20a7",
+          "title": "Query to know which SKUs are mapped currently to each zone",
+          "completed": false,
+          "notes": "",
+          "order": 2,
+          "createdAt": "2025-12-06T21:58:56.322Z",
+          "completedAt": null
         }
       ]
     },
