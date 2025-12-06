@@ -45,6 +45,15 @@
           "order": 1,
           "createdAt": "2025-12-06T21:56:37.401Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765058215125_2w2r2or12",
+          "title": "Get data on existing bin utilization",
+          "completed": false,
+          "notes": "",
+          "order": 2,
+          "createdAt": "2025-12-06T21:56:55.125Z",
+          "completedAt": null
         }
       ]
     },
