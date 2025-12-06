@@ -33,20 +33,28 @@ function App() {
     const [fileSha, setFileSha] = useState('');
     const [darkMode, setDarkMode] = useState(false);
     const [celebrateTask, setCelebrateTask] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     // ========== INITIALIZATION ==========
     useEffect(() => {
-        const savedToken = GitHubSync.getToken();
-        const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+        try {
+            const savedToken = GitHubSync.getToken();
+            const savedDarkMode = localStorage.getItem('darkMode') === 'true';
         
-        setDarkMode(savedDarkMode);
-        if (savedDarkMode) document.documentElement.classList.add('dark');
+            setDarkMode(savedDarkMode);
+            if (savedDarkMode) document.documentElement.classList.add('dark');
         
-        if (savedToken) {
-            setGithubToken(savedToken);
-            loadData(savedToken);
-        } else {
+            if (savedToken) {
+                setGithubToken(savedToken);
+                loadData(savedToken);
+            } else {
+                setShowTokenInput(true);
+                setIsLoading(false);
+            }
+        } catch (error) {
+            console.error('Initialization error:', error);
             setShowTokenInput(true);
+            setIsLoading(false);
         }
     }, []);
 
@@ -74,10 +82,12 @@ function App() {
                 setThemes(data.themes);
                 setFileSha(data.sha);
                 setSyncStatus('success');
+                setIsLoading(false);
                 setTimeout(() => setSyncStatus(''), 2000);
             },
             (error) => {
                 setSyncStatus('error');
+                setIsLoading(false);
                 setTimeout(() => setSyncStatus(''), 3000);
             }
         );
@@ -287,6 +297,18 @@ function App() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const todayStr = today.toISOString().split('T')[0];
+
+    // ========== LOADING SCREEN ==========
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="text-6xl mb-4">⏳</div>
+                    <div className="text-xl font-semibold text-gray-700">Loading...</div>
+                </div>
+            </div>
+        );
+    }
 
     // ========== TOKEN INPUT SCREEN ==========
     if (showTokenInput) {
@@ -816,15 +838,17 @@ function TaskItemWithSubtasks({
     setEditingThemes,
     celebrateTask
 }) {
+    // Initialize subtasks if not present
     if (!task.subtasks) {
         task.subtasks = [];
     }
 
+    // Use subtask hook
     const {
         subtasks,
-        isPageOpen,        // ← Changed from isModalOpen
-        openPage,          // ← Changed from openModal
-        closePage,         // ← Changed from closeModal
+        isPageOpen,        // ← CHANGED from isModalOpen
+        openPage,          // ← CHANGED from openModal
+        closePage,         // ← CHANGED from closeModal
         updateSubtasks
     } = useSubtasks({
         task,
@@ -832,10 +856,10 @@ function TaskItemWithSubtasks({
         githubConfig
     });
 
-    // NEW: If subtask page is open, show ONLY that page
+    // ← NEW: If subtask page is open, show ONLY that page
     if (isPageOpen) {
         return (
-            <SubtaskPageView    // ← Changed from SubtaskModal
+            <SubtaskPageView    // ← CHANGED from SubtaskModal
                 task={task}
                 onClose={closePage}
                 onUpdateSubtasks={updateSubtasks}
@@ -847,11 +871,12 @@ function TaskItemWithSubtasks({
         );
     }
 
-    // Otherwise show the normal task card (keep all your existing JSX below)
+    // Otherwise show the normal task card
     return (
         <div 
+            key={task.id} 
             className={`bg-white rounded-lg p-4 shadow ${task.completed ? 'opacity-60' : ''} ${celebrateTask === task.id ? 'celebrate' : ''}`}
-            onDoubleClick={openPage}  // ← Changed from openModal
+            onDoubleClick={openPage}    // ← CHANGED from openModal
         >
             <div className="flex items-start gap-3">
                 <input
@@ -926,7 +951,7 @@ function TaskItemWithSubtasks({
                                 subtasks={subtasks} 
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    openPage();  // ← Changed from openModal
+                                    openPage();    // ← CHANGED from openModal
                                 }}
                             />
                         )}
