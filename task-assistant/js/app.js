@@ -1,6 +1,7 @@
 // ==================== MAIN APP - NO POINTS IN TASKS ====================
 // Gamification only for Recurring Tasks
 
+// Subtask integration
 import { SubtaskIndicator } from './components/tasks/SubtaskIndicator.js';
 import { SubtaskModal } from './components/tasks/SubtaskModal.js';
 import { useSubtasks } from './hooks/useSubtasks.js';
@@ -120,6 +121,8 @@ function App() {
     const addTask = () => {
         if (!input.trim()) return;
         const task = TaskOperations.createTask(input, projects, themes);
+        // Add subtasks field to new tasks
+        task.subtasks = [];
         const newTasks = [...tasks, task];
         setTasks(newTasks);
         saveData(newTasks, null, null, null);
@@ -176,6 +179,21 @@ function App() {
         const newRecurring = TaskOperations.updateRecurringTask(recurringTasks, id, updates);
         setRecurringTasks(newRecurring);
         saveData(null, newRecurring, null, null);
+    };
+
+    // ========== SUBTASK OPERATIONS ==========
+    const handleUpdateTaskWithSubtasks = (updatedTask) => {
+        const newTasks = tasks.map(t => t.id === updatedTask.id ? updatedTask : t);
+        setTasks(newTasks);
+        saveData(newTasks, null, null, null);
+    };
+
+    // GitHub config for subtask sync
+    const githubConfig = {
+        enabled: true,
+        owner: CONFIG.GITHUB_USERNAME,
+        repo: CONFIG.GITHUB_REPO,
+        token: githubToken
     };
 
     // ========== PROJECT/THEME OPERATIONS ==========
@@ -493,7 +511,8 @@ function App() {
                             <p>• "Buy milk tomorrow #Personal"</p>
                             <p>• "Meeting p0 12/25 #Work"</p>
                             <p>• "Exercise today @Fitness"</p>
-                            <p className="mt-2"><strong>Project:</strong> Use #ProjectName</p>
+                            <p className="mt-2"><strong>Subtasks:</strong> Double-click task</p>
+                            <p><strong>Project:</strong> Use #ProjectName</p>
                             <p><strong>Theme:</strong> Use @ThemeName</p>
                         </div>
                     </div>
@@ -587,119 +606,26 @@ function App() {
                                     <p>No tasks</p>
                                 </div>
                             ) : (
-                                filtered.map(task => (
-                                    <div key={task.id} className={`bg-white rounded-lg p-4 shadow ${task.completed ? 'opacity-60' : ''} ${celebrateTask === task.id ? 'celebrate' : ''}`}>
-                                        <div className="flex items-start gap-3">
-                                            <input
-                                                type="checkbox"
-                                                checked={task.completed}
-                                                onChange={() => toggleComplete(task.id)}
-                                                className="mt-1 w-5 h-5"
-                                            />
-                                            <div className="flex-1 min-w-0">
-                                                <div className={`font-medium ${task.completed ? 'line-through text-gray-500' : ''}`}>
-                                                    {task.title}
-                                                </div>
-                                                <div className="flex flex-wrap gap-1 mt-2">
-                                                    {editingPriority === task.id ? (
-                                                        <div className="flex gap-1">
-                                                            <select value={task.priority} onChange={(e) => {
-                                                                updateTask(task.id, {priority: e.target.value});
-                                                                setEditingPriority(null);
-                                                            }}
-                                                                className="text-xs px-2 py-1 border rounded">
-                                                                <option value="P0">P0</option>
-                                                                <option value="P1">P1</option>
-                                                            </select>
-                                                        </div>
-                                                    ) : (
-                                                        <button onClick={() => setEditingPriority(task.id)}
-                                                            className={`text-xs px-2 py-1 rounded font-bold ${task.priority === 'P0' ? 'bg-red-500 text-white' : 'bg-yellow-500 text-white'}`}>
-                                                            {task.priority}
-                                                        </button>
-                                                    )}
-
-                                                    {editingProject === task.id ? (
-                                                        <div className="flex gap-1">
-                                                            <select value={task.project || ''} onChange={(e) => {
-                                                                updateTask(task.id, {project: e.target.value || null, themes: []});
-                                                                setEditingProject(null);
-                                                            }}
-                                                                className="text-xs px-2 py-1 border rounded">
-                                                                <option value="">None</option>
-                                                                {projects.map(p => <option key={p} value={p}>{p}</option>)}
-                                                            </select>
-                                                        </div>
-                                                    ) : (
-                                                        <button onClick={() => setEditingProject(task.id)}
-                                                            className="text-xs px-2 py-1 rounded bg-blue-100 text-blue-700">
-                                                            📁 {task.project || 'Set project'}
-                                                        </button>
-                                                    )}
-
-                                                    {editingDate === task.id ? (
-                                                        <div className="flex gap-1">
-                                                            <input
-                                                                type="date"
-                                                                value={task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : ''}
-                                                                onChange={(e) => {
-                                                                    updateTask(task.id, {dueDate: e.target.value ? new Date(e.target.value).toISOString() : null});
-                                                                    setEditingDate(null);
-                                                                }}
-                                                                className="text-xs px-2 py-1 border rounded"
-                                                            />
-                                                        </div>
-                                                    ) : (
-                                                        <button onClick={() => setEditingDate(task.id)}
-                                                            className="text-xs px-2 py-1 rounded bg-indigo-100 text-indigo-700">
-                                                            📅 {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Set date'}
-                                                        </button>
-                                                    )}
-                                                </div>
-
-                                                {editingThemes === task.id ? (
-                                                    <div className="mt-2 p-2 bg-gray-50 rounded">
-                                                        <div className="text-xs font-semibold mb-1">Themes:</div>
-                                                        <div className="flex flex-wrap gap-1">
-                                                            {task.project && (themes[task.project] || []).map(t => {
-                                                                const selected = (task.themes || []).includes(t);
-                                                                return (
-                                                                    <button key={t} onClick={() => {
-                                                                        const curr = task.themes || [];
-                                                                        const newThemes = selected ? curr.filter(x => x !== t) : [...curr, t];
-                                                                        updateTask(task.id, {themes: newThemes});
-                                                                    }}
-                                                                        className={`text-xs px-2 py-1 rounded-full ${selected ? 'bg-indigo-500 text-white' : 'bg-white border'}`}>
-                                                                        {t}
-                                                                    </button>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                        <button onClick={() => setEditingThemes(null)} className="mt-1 text-xs px-2 py-1 bg-gray-200 rounded">
-                                                            Done
-                                                        </button>
-                                                    </div>
-                                                ) : (
-                                                    <div className="mt-1 flex flex-wrap gap-1">
-                                                        {(task.themes || []).map(t => (
-                                                            <span key={t} className="text-xs px-2 py-1 bg-indigo-50 text-indigo-700 rounded-full">
-                                                                🏷️ {t}
-                                                            </span>
-                                                        ))}
-                                                        {task.project && (
-                                                            <button onClick={() => setEditingThemes(task.id)} className="text-xs text-gray-500">
-                                                                {(task.themes || []).length === 0 ? '+ themes' : 'edit'}
-                                                            </button>
-                                                        )}
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <button onClick={() => deleteTask(task.id)} className="text-red-500 text-sm">
-                                                🗑️
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))
+                                filtered.map(task => <TaskItemWithSubtasks 
+                                    key={task.id} 
+                                    task={task}
+                                    onToggleComplete={toggleComplete}
+                                    onDelete={deleteTask}
+                                    onUpdate={updateTask}
+                                    onUpdateWithSubtasks={handleUpdateTaskWithSubtasks}
+                                    projects={projects}
+                                    themes={themes}
+                                    githubConfig={githubConfig}
+                                    editingPriority={editingPriority}
+                                    setEditingPriority={setEditingPriority}
+                                    editingProject={editingProject}
+                                    setEditingProject={setEditingProject}
+                                    editingDate={editingDate}
+                                    setEditingDate={setEditingDate}
+                                    editingThemes={editingThemes}
+                                    setEditingThemes={setEditingThemes}
+                                    celebrateTask={celebrateTask}
+                                />)
                             )}
                         </div>
                     </>
@@ -870,6 +796,186 @@ function App() {
                     </>
                 )}
             </div>
+        </div>
+    );
+}
+
+// ========== TASK ITEM WITH SUBTASKS COMPONENT ==========
+function TaskItemWithSubtasks({ 
+    task, 
+    onToggleComplete, 
+    onDelete, 
+    onUpdate,
+    onUpdateWithSubtasks,
+    projects, 
+    themes,
+    githubConfig,
+    editingPriority,
+    setEditingPriority,
+    editingProject,
+    setEditingProject,
+    editingDate,
+    setEditingDate,
+    editingThemes,
+    setEditingThemes,
+    celebrateTask
+}) {
+    // Initialize subtasks if not present
+    if (!task.subtasks) {
+        task.subtasks = [];
+    }
+
+    // Use subtask hook
+    const {
+        subtasks,
+        isModalOpen,
+        openModal,
+        closeModal,
+        updateSubtasks
+    } = useSubtasks({
+        task,
+        onUpdateTask: onUpdateWithSubtasks,
+        githubConfig
+    });
+
+    return (
+        <div 
+            key={task.id} 
+            className={`bg-white rounded-lg p-4 shadow ${task.completed ? 'opacity-60' : ''} ${celebrateTask === task.id ? 'celebrate' : ''}`}
+            onDoubleClick={openModal}
+        >
+            <div className="flex items-start gap-3">
+                <input
+                    type="checkbox"
+                    checked={task.completed}
+                    onChange={() => onToggleComplete(task.id)}
+                    className="mt-1 w-5 h-5"
+                />
+                <div className="flex-1 min-w-0">
+                    <div className={`font-medium ${task.completed ? 'line-through text-gray-500' : ''}`}>
+                        {task.title}
+                    </div>
+                    <div className="flex flex-wrap gap-1 mt-2">
+                        {editingPriority === task.id ? (
+                            <div className="flex gap-1">
+                                <select value={task.priority} onChange={(e) => {
+                                    onUpdate(task.id, {priority: e.target.value});
+                                    setEditingPriority(null);
+                                }}
+                                    className="text-xs px-2 py-1 border rounded">
+                                    <option value="P0">P0</option>
+                                    <option value="P1">P1</option>
+                                </select>
+                            </div>
+                        ) : (
+                            <button onClick={() => setEditingPriority(task.id)}
+                                className={`text-xs px-2 py-1 rounded font-bold ${task.priority === 'P0' ? 'bg-red-500 text-white' : 'bg-yellow-500 text-white'}`}>
+                                {task.priority}
+                            </button>
+                        )}
+
+                        {editingProject === task.id ? (
+                            <div className="flex gap-1">
+                                <select value={task.project || ''} onChange={(e) => {
+                                    onUpdate(task.id, {project: e.target.value || null, themes: []});
+                                    setEditingProject(null);
+                                }}
+                                    className="text-xs px-2 py-1 border rounded">
+                                    <option value="">None</option>
+                                    {projects.map(p => <option key={p} value={p}>{p}</option>)}
+                                </select>
+                            </div>
+                        ) : (
+                            <button onClick={() => setEditingProject(task.id)}
+                                className="text-xs px-2 py-1 rounded bg-blue-100 text-blue-700">
+                                📁 {task.project || 'Set project'}
+                            </button>
+                        )}
+
+                        {editingDate === task.id ? (
+                            <div className="flex gap-1">
+                                <input
+                                    type="date"
+                                    value={task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : ''}
+                                    onChange={(e) => {
+                                        onUpdate(task.id, {dueDate: e.target.value ? new Date(e.target.value).toISOString() : null});
+                                        setEditingDate(null);
+                                    }}
+                                    className="text-xs px-2 py-1 border rounded"
+                                />
+                            </div>
+                        ) : (
+                            <button onClick={() => setEditingDate(task.id)}
+                                className="text-xs px-2 py-1 rounded bg-indigo-100 text-indigo-700">
+                                📅 {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Set date'}
+                            </button>
+                        )}
+
+                        {/* SUBTASK INDICATOR - Shows if task has subtasks */}
+                        {subtasks.length > 0 && (
+                            <SubtaskIndicator 
+                                subtasks={subtasks} 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    openModal();
+                                }}
+                            />
+                        )}
+                    </div>
+
+                    {editingThemes === task.id ? (
+                        <div className="mt-2 p-2 bg-gray-50 rounded">
+                            <div className="text-xs font-semibold mb-1">Themes:</div>
+                            <div className="flex flex-wrap gap-1">
+                                {task.project && (themes[task.project] || []).map(t => {
+                                    const selected = (task.themes || []).includes(t);
+                                    return (
+                                        <button key={t} onClick={() => {
+                                            const curr = task.themes || [];
+                                            const newThemes = selected ? curr.filter(x => x !== t) : [...curr, t];
+                                            onUpdate(task.id, {themes: newThemes});
+                                        }}
+                                            className={`text-xs px-2 py-1 rounded-full ${selected ? 'bg-indigo-500 text-white' : 'bg-white border'}`}>
+                                            {t}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                            <button onClick={() => setEditingThemes(null)} className="mt-1 text-xs px-2 py-1 bg-gray-200 rounded">
+                                Done
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="mt-1 flex flex-wrap gap-1">
+                            {(task.themes || []).map(t => (
+                                <span key={t} className="text-xs px-2 py-1 bg-indigo-50 text-indigo-700 rounded-full">
+                                    🏷️ {t}
+                                </span>
+                            ))}
+                            {task.project && (
+                                <button onClick={() => setEditingThemes(task.id)} className="text-xs text-gray-500">
+                                    {(task.themes || []).length === 0 ? '+ themes' : 'edit'}
+                                </button>
+                            )}
+                        </div>
+                    )}
+                </div>
+                <button onClick={() => onDelete(task.id)} className="text-red-500 text-sm">
+                    🗑️
+                </button>
+            </div>
+
+            {/* SUBTASK MODAL */}
+            <SubtaskModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                task={task}
+                onUpdateSubtasks={updateSubtasks}
+                onCompleteMainTask={() => {
+                    onToggleComplete(task.id);
+                    closeModal();
+                }}
+            />
         </div>
     );
 }
