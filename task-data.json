@@ -1056,18 +1056,6 @@
       "dueDate": null,
       "created": "2025-12-06T21:52:19.769Z",
       "subtasks": []
-    },
-    {
-      "id": 1765058037008,
-      "title": "task assistant, 10-Dec, Review list of features",
-      "priority": "P1",
-      "completed": false,
-      "completedAt": null,
-      "project": "Task Assistant",
-      "themes": [],
-      "dueDate": null,
-      "created": "2025-12-06T21:53:57.008Z",
-      "subtasks": []
     }
   ],
   "recurringTasks": [
