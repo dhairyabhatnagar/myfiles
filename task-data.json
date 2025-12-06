@@ -251,6 +251,15 @@
           "order": 0,
           "createdAt": "2025-12-06T21:58:22.950Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765058318040_33vqavnco",
+          "title": "Operationalise SKU mapping list review",
+          "completed": false,
+          "notes": "",
+          "order": 1,
+          "createdAt": "2025-12-06T21:58:38.040Z",
+          "completedAt": null
         }
       ]
     },
