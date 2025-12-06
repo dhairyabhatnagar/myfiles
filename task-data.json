@@ -15,20 +15,6 @@
       "subtasks": []
     },
     {
-      "id": 1762700776722,
-      "title": "Provide Estimate of CBM and Conveyor capacity for 6th floor to 4th floor",
-      "priority": "P0",
-      "completed": false,
-      "completedAt": null,
-      "project": "INC11",
-      "themes": [
-        "SKU expansion"
-      ],
-      "dueDate": "2025-11-12T00:00:00.000Z",
-      "created": "2025-11-09T15:06:16.722Z",
-      "subtasks": []
-    },
-    {
       "id": 1762700826365,
       "title": "Finalize overall plan and timeline for FD project work",
       "priority": "P1",
