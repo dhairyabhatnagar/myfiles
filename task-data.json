@@ -716,11 +716,11 @@
         {
           "id": "subtask_1765054201261_s3nisc7c5",
           "title": "create first Draft",
-          "completed": false,
+          "completed": true,
           "notes": "",
           "order": 0,
           "createdAt": "2025-12-06T20:50:01.261Z",
-          "completedAt": null
+          "completedAt": "2025-12-06T21:22:30.345Z"
         },
         {
           "id": "subtask_1765054215513_1tfb73zoq",
