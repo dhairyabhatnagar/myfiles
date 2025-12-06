@@ -319,20 +319,6 @@
       ]
     },
     {
-      "id": 1762764746834,
-      "title": "Slotting algorithm deepdive - set meeting with Xiufang",
-      "priority": "P1",
-      "completed": false,
-      "completedAt": null,
-      "project": "INC11",
-      "themes": [
-        "SKU optimization"
-      ],
-      "dueDate": "2025-11-11T00:00:00.000Z",
-      "created": "2025-11-10T08:52:26.834Z",
-      "subtasks": []
-    },
-    {
       "id": 1762880491330,
       "title": "customer fraud policy review ARCs",
       "priority": "P1",
