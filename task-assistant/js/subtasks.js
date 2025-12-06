@@ -414,13 +414,48 @@ function SubtaskPageView({ task, onClose, onUpdateSubtasks, onCompleteMainTask }
     }
   };
 
+  // ========== SWIPE GESTURE FOR CLOSING ==========
+  const [touchStart, setTouchStart] = useSubtaskState(null);
+  const [touchEnd, setTouchEnd] = useSubtaskState(null);
+
+  const minSwipeDistance = 50;
+
+  const handleTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    
+    // Left swipe closes subtask page
+    if (isLeftSwipe) {
+      onClose();
+    }
+    
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
   const visibleSubtasks = showCompleted 
     ? subtasks 
     : subtasks.filter(st => !st.completed);
 
   // FULL PAGE VIEW
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+    <div 
+      className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       <div className="max-w-4xl mx-auto p-4 pt-8">
         {/* Header with Back Button */}
         <div className="mb-6 flex items-center gap-4">
@@ -443,6 +478,10 @@ function SubtaskPageView({ task, onClose, onUpdateSubtasks, onCompleteMainTask }
               </span>
               <span>•</span>
               <span>{progress.percentage}%</span>
+              <span className="hidden sm:inline">•</span>
+              <span className="hidden sm:inline text-xs">Press Esc to go back</span>
+              <span className="sm:hidden">•</span>
+              <span className="sm:hidden text-xs">👈 Swipe left to go back</span>
             </div>
           </div>
         </div>
