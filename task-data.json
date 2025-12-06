@@ -465,6 +465,15 @@
           "order": 1,
           "createdAt": "2025-12-06T22:00:54.810Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765058493079_4xa6q2ilt",
+          "title": "inc11 - inbound cross dock splits reduction",
+          "completed": false,
+          "notes": "",
+          "order": 2,
+          "createdAt": "2025-12-06T22:01:33.079Z",
+          "completedAt": null
         }
       ]
     },
