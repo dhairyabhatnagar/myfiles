@@ -1,5 +1,5 @@
 import React from 'react';
-import { calculateSubtaskProgress } from '../../types/subtask.types';
+import { calculateSubtaskProgress } from '../../types/subtask.types.js';
 
 /**
  * SubtaskIndicator - Badge component showing subtask progress on task card
