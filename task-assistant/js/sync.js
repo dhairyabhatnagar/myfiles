@@ -101,7 +101,3 @@ const GitHubSync = {
     }
 };
 
-// Export for ES6 modules
-if (typeof window !== 'undefined') {
-    window.GitHubSync = GitHubSync;
-}
