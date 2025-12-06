@@ -1088,6 +1088,18 @@
       "dueDate": null,
       "created": "2025-12-06T22:09:00.951Z",
       "subtasks": []
+    },
+    {
+      "id": 1765059147756,
+      "title": "Remove the green plus button next to mic",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "Task Assistant",
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-12-06T22:12:27.756Z",
+      "subtasks": []
     }
   ],
   "recurringTasks": [
