@@ -1032,18 +1032,6 @@
       "dueDate": null,
       "created": "2025-12-03T16:33:23.269Z",
       "subtasks": []
-    },
-    {
-      "id": 1765057303980,
-      "title": "check task auto add to project feature",
-      "priority": "P1",
-      "completed": false,
-      "completedAt": null,
-      "project": null,
-      "themes": [],
-      "dueDate": null,
-      "created": "2025-12-06T21:41:43.980Z",
-      "subtasks": []
     }
   ],
   "recurringTasks": [
