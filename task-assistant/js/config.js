@@ -22,8 +22,3 @@ const CONFIG = {
         RED: 0        // < 60% = red
     }
 };
-
-// Export for ES6 modules
-if (typeof window !== 'undefined') {
-    window.CONFIG = CONFIG;
-}
