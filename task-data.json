@@ -4,8 +4,8 @@
       "id": 1762700491067,
       "title": "Complete OB HTP analysis for INC11",
       "priority": "P0",
-      "completed": false,
-      "completedAt": null,
+      "completed": true,
+      "completedAt": "2025-12-06T21:55:57.502Z",
       "project": "INC11",
       "themes": [
         "HTP improvement"
