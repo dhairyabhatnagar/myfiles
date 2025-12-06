@@ -24,6 +24,8 @@ function App() {
     const [editingThemes, setEditingThemes] = useState(null);
     const [editingPriority, setEditingPriority] = useState(null);
     const [editingDate, setEditingDate] = useState(null);
+    const [editingTitle, setEditingTitle] = useState(null);
+    const [editingTitleText, setEditingTitleText] = useState('');
     const [newTheme, setNewTheme] = useState('');
     const [addingThemeTo, setAddingThemeTo] = useState(null);
     const [deleteConfirm, setDeleteConfirm] = useState(null);
@@ -129,6 +131,13 @@ function App() {
         const task = TaskOperations.createTask(input, projects, themes);
         // Add subtasks field to new tasks
         task.subtasks = [];
+        
+        // Auto-inherit project if filter is active
+        if (projectFilter && projectFilter !== 'all') {
+            task.project = projectFilter;
+            task.themes = task.themes || [];
+        }
+        
         const newTasks = [...tasks, task];
         setTasks(newTasks);
         saveData(newTasks, null, null, null);
@@ -642,6 +651,10 @@ function App() {
                                     setEditingDate={setEditingDate}
                                     editingThemes={editingThemes}
                                     setEditingThemes={setEditingThemes}
+                                    editingTitle={editingTitle}
+                                    setEditingTitle={setEditingTitle}
+                                    editingTitleText={editingTitleText}
+                                    setEditingTitleText={setEditingTitleText}
                                     celebrateTask={celebrateTask}
                                 />)
                             )}
@@ -836,6 +849,10 @@ function TaskItemWithSubtasks({
     setEditingDate,
     editingThemes,
     setEditingThemes,
+    editingTitle,
+    setEditingTitle,
+    editingTitleText,
+    setEditingTitleText,
     celebrateTask
 }) {
     // Initialize subtasks if not present
@@ -918,9 +935,42 @@ function TaskItemWithSubtasks({
                     className="mt-1 w-5 h-5"
                 />
                 <div className="flex-1 min-w-0">
-                    <div className={`font-medium ${task.completed ? 'line-through text-gray-500' : ''}`}>
-                        {task.title}
-                    </div>
+                    {editingTitle === task.id ? (
+                        <input
+                            type="text"
+                            value={editingTitleText}
+                            onChange={(e) => setEditingTitleText(e.target.value)}
+                            onBlur={() => {
+                                if (editingTitleText.trim()) {
+                                    onUpdate(task.id, {title: editingTitleText.trim()});
+                                }
+                                setEditingTitle(null);
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    if (editingTitleText.trim()) {
+                                        onUpdate(task.id, {title: editingTitleText.trim()});
+                                    }
+                                    setEditingTitle(null);
+                                } else if (e.key === 'Escape') {
+                                    setEditingTitle(null);
+                                }
+                            }}
+                            className="w-full px-2 py-1 border rounded font-medium"
+                            autoFocus
+                        />
+                    ) : (
+                        <div 
+                            className={`font-medium cursor-pointer hover:bg-gray-50 px-2 py-1 rounded ${task.completed ? 'line-through text-gray-500' : ''}`}
+                            onClick={() => {
+                                setEditingTitle(task.id);
+                                setEditingTitleText(task.title);
+                            }}
+                            title="Click to edit title"
+                        >
+                            {task.title}
+                        </div>
+                    )}
                     <div className="flex flex-wrap gap-1 mt-2">
                         {editingPriority === task.id ? (
                             <div className="flex gap-1">
