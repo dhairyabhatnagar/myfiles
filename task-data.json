@@ -310,20 +310,6 @@
       ]
     },
     {
-      "id": 1762744416050,
-      "title": "Slotting logic for miniload vs shuttle",
-      "priority": "P1",
-      "completed": false,
-      "completedAt": null,
-      "project": "INC11",
-      "themes": [
-        "HTP improvement"
-      ],
-      "dueDate": "2025-11-11T00:00:00.000Z",
-      "created": "2025-11-10T03:13:36.050Z",
-      "subtasks": []
-    },
-    {
       "id": 1762764746834,
       "title": "Slotting algorithm deepdive - set meeting with Xiufang",
       "priority": "P1",
