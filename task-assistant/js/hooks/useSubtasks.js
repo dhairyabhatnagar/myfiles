@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
-import { createSubtask, calculateSubtaskProgress } from '../types/subtask.types';
-import { syncSubtasksToGitHub } from '../services/sync/githubSubtaskSync';
+import { createSubtask, calculateSubtaskProgress } from '../types/subtask.types.js';
+import { syncSubtasksToGitHub } from '../services/sync/githubSubtaskSync.js';
 
 /**
  * Custom hook for managing subtasks
