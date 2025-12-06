@@ -85,7 +85,3 @@ function parseNaturalLanguage(text, projects, themes) {
     return parsedTask;
 }
 
-// Export for ES6 modules
-if (typeof window !== 'undefined') {
-    window.parseNaturalLanguage = parseNaturalLanguage;
-}
