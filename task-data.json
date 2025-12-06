@@ -868,18 +868,6 @@
       "subtasks": []
     },
     {
-      "id": 1763342737352,
-      "title": "Review SKU mapping sheet shared by Julie - 17-Nov",
-      "priority": "P1",
-      "completed": false,
-      "completedAt": null,
-      "project": "INC11",
-      "themes": [],
-      "dueDate": "2025-11-18T00:00:00.000Z",
-      "created": "2025-11-17T01:25:37.352Z",
-      "subtasks": []
-    },
-    {
       "id": 1763364240447,
       "title": "Repair Vendor - Revised Return Reason ( For Failed Repair) ",
       "priority": "P1",
