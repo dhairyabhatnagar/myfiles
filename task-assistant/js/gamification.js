@@ -87,3 +87,10 @@ function getLast7Days() {
     }
     return days;
 }
+
+// Export for ES6 modules
+if (typeof window !== 'undefined') {
+    window.calculateRecurringStats = calculateRecurringStats;
+    window.getCompletionScore = getCompletionScore;
+    window.getLast7Days = getLast7Days;
+}
