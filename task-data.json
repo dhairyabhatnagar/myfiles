@@ -131,6 +131,15 @@
           "order": 3,
           "createdAt": "2025-12-06T22:04:27.362Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765058693346_1sgv7p9sg",
+          "title": "Slotting algorithm deepdive - set meeting with Xiufang",
+          "completed": false,
+          "notes": "",
+          "order": 4,
+          "createdAt": "2025-12-06T22:04:53.346Z",
+          "completedAt": null
         }
       ]
     },
