@@ -95,7 +95,17 @@
       ],
       "dueDate": "2025-11-18T00:00:00.000Z",
       "created": "2025-11-09T15:09:07.087Z",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "subtask_1765058575925_m7l3jhinu",
+          "title": "Rebin pilot for SD cutoff mail Jake marking Sharath",
+          "completed": false,
+          "notes": "",
+          "order": 0,
+          "createdAt": "2025-12-06T22:02:55.925Z",
+          "completedAt": null
+        }
+      ]
     },
     {
       "id": 1762701694991,
