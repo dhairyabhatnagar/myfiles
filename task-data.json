@@ -242,7 +242,17 @@
       ],
       "dueDate": "2025-11-11T00:00:00.000Z",
       "created": "2025-11-10T02:10:09.228Z",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "subtask_1765058302950_gnf6fnm1n",
+          "title": "Deepdive why even after SKU mapping leakage happening currently",
+          "completed": false,
+          "notes": "",
+          "order": 0,
+          "createdAt": "2025-12-06T21:58:22.950Z",
+          "completedAt": null
+        }
+      ]
     },
     {
       "id": 1762744416050,
