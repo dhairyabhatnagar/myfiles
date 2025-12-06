@@ -84,3 +84,8 @@ function parseNaturalLanguage(text, projects, themes) {
     parsedTask.title = text.trim();
     return parsedTask;
 }
+
+// Export for ES6 modules
+if (typeof window !== 'undefined') {
+    window.parseNaturalLanguage = parseNaturalLanguage;
+}
