@@ -1,10 +1,6 @@
 // ==================== MAIN APP - NO POINTS IN TASKS ====================
 // Gamification only for Recurring Tasks
 
-// Subtask integration
-import { SubtaskIndicator } from './components/tasks/SubtaskIndicator.js';
-import { SubtaskModal } from './components/tasks/SubtaskModal.js';
-import { useSubtasks } from './hooks/useSubtasks.js';
 
 const { useState, useEffect } = React;
 
