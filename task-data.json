@@ -113,6 +113,15 @@
           "order": 1,
           "createdAt": "2025-12-06T22:03:21.661Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765058639550_andprpflz",
+          "title": "Slotting logic for miniload vs shuttle to maximize miniload HTP",
+          "completed": false,
+          "notes": "",
+          "order": 2,
+          "createdAt": "2025-12-06T22:03:59.550Z",
+          "completedAt": null
         }
       ]
     },
