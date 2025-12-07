@@ -1309,6 +1309,15 @@
           "order": 0,
           "createdAt": "2025-12-07T17:05:02.379Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765127111387_vnttb16ro",
+          "title": "Check with tech for inventory pending and stuck",
+          "completed": false,
+          "notes": "",
+          "order": 1,
+          "createdAt": "2025-12-07T17:05:11.387Z",
+          "completedAt": null
         }
       ]
     },
