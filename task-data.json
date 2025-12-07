@@ -730,6 +730,15 @@
           "order": 2,
           "createdAt": "2025-12-07T18:28:31.825Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765132120524_b9pag424k",
+          "title": "Seller consent program",
+          "completed": false,
+          "notes": "",
+          "order": 3,
+          "createdAt": "2025-12-07T18:28:40.524Z",
+          "completedAt": null
         }
       ]
     },
