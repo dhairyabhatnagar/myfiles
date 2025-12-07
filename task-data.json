@@ -384,6 +384,15 @@
           "order": 2,
           "createdAt": "2025-12-07T18:22:11.232Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765131742640_ifblnvr6n",
+          "title": "How do we review Aging in Liquidation and Scrap bucket",
+          "completed": false,
+          "notes": "",
+          "order": 3,
+          "createdAt": "2025-12-07T18:22:22.640Z",
+          "completedAt": null
         }
       ]
     },
