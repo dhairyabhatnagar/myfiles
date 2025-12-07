@@ -703,7 +703,17 @@
       ],
       "dueDate": "2025-11-17T00:00:00.000Z",
       "created": "2025-11-14T07:00:10.793Z",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "subtask_1765132086556_iv6j08su4",
+          "title": "Identify Machines required at Current scale",
+          "completed": false,
+          "notes": "",
+          "order": 0,
+          "createdAt": "2025-12-07T18:28:06.556Z",
+          "completedAt": null
+        }
+      ]
     },
     {
       "id": 1763104315296,
