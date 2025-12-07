@@ -1475,6 +1475,15 @@
           "order": 1,
           "createdAt": "2025-12-07T18:17:54.849Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765131981537_4ntpos2vp",
+          "title": "Rollout WH Deal for FCs ( Include - Used Like new)",
+          "completed": false,
+          "notes": "",
+          "order": 2,
+          "createdAt": "2025-12-07T18:26:21.537Z",
+          "completedAt": null
         }
       ]
     }
