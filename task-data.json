@@ -706,7 +706,7 @@
       "subtasks": [
         {
           "id": "subtask_1765132086556_iv6j08su4",
-          "title": "Identify Machines required at Current scale",
+          "title": "Identify # of machines required at Current scale",
           "completed": false,
           "notes": "",
           "order": 0,
