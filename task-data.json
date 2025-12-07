@@ -920,6 +920,15 @@
           "order": 1,
           "createdAt": "2025-12-07T16:56:48.814Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765126631733_x0ctkwg33",
+          "title": "Complete upload of SKU2 image",
+          "completed": false,
+          "notes": "",
+          "order": 2,
+          "createdAt": "2025-12-07T16:57:11.733Z",
+          "completedAt": null
         }
       ]
     },
