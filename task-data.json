@@ -1279,18 +1279,6 @@
       ]
     },
     {
-      "id": 1764310173104,
-      "title": "Power cut issue due to load management in KR ARCs",
-      "priority": "P1",
-      "completed": false,
-      "completedAt": null,
-      "project": "KR ARC",
-      "themes": [],
-      "dueDate": null,
-      "created": "2025-11-28T06:09:33.104Z",
-      "subtasks": []
-    },
-    {
       "id": 1764779603269,
       "title": "learn about how to run Gemini in Google docs",
       "priority": "P1",
