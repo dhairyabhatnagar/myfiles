@@ -535,7 +535,17 @@
       ],
       "dueDate": "2025-11-26T00:00:00.000Z",
       "created": "2025-11-13T03:37:51.936Z",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "subtask_1765125549510_qjyfs2a7x",
+          "title": "standardize the reporting across KR and TW",
+          "completed": false,
+          "notes": "",
+          "order": 0,
+          "createdAt": "2025-12-07T16:39:09.510Z",
+          "completedAt": null
+        }
+      ]
     },
     {
       "id": 1763005105023,
