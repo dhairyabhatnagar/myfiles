@@ -1263,7 +1263,9 @@
       "completed": false,
       "completedAt": null,
       "project": "TW ARC",
-      "themes": [],
+      "themes": [
+        "Tech"
+      ],
       "dueDate": "2025-12-10T00:00:00.000Z",
       "created": "2025-12-07T17:00:16.674Z",
       "subtasks": []
