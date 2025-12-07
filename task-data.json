@@ -1547,7 +1547,8 @@
       "Damages",
       "ARC",
       "Expiry",
-      "Liquidation"
+      "Liquidation",
+      "Operational Metrics"
     ],
     "Task Assistant": [
       "Ideas",
