@@ -592,7 +592,17 @@
       ],
       "dueDate": "2025-11-13T00:00:00.000Z",
       "created": "2025-11-13T03:38:36.969Z",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "subtask_1765131511277_64v8qxunj",
+          "title": "Automate Josh's report aggregation",
+          "completed": false,
+          "notes": "",
+          "order": 0,
+          "createdAt": "2025-12-07T18:18:31.277Z",
+          "completedAt": null
+        }
+      ]
     },
     {
       "id": 1763005997099,
