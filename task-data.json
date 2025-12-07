@@ -1189,7 +1189,17 @@
       "themes": [],
       "dueDate": null,
       "created": "2025-12-07T16:42:51.131Z",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "subtask_1765125802555_rbq8amih0",
+          "title": "Review Audit 2.0 Product and See what can be done manually",
+          "completed": false,
+          "notes": "",
+          "order": 0,
+          "createdAt": "2025-12-07T16:43:22.555Z",
+          "completedAt": null
+        }
+      ]
     }
   ],
   "recurringTasks": [
