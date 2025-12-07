@@ -1300,7 +1300,17 @@
       ],
       "dueDate": "2025-12-10T00:00:00.000Z",
       "created": "2025-12-07T17:00:16.674Z",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "subtask_1765127102379_9kdkvszae",
+          "title": "Check with tech for Query - Stranded_inventory_no_viid",
+          "completed": false,
+          "notes": "",
+          "order": 0,
+          "createdAt": "2025-12-07T17:05:02.379Z",
+          "completedAt": null
+        }
+      ]
     },
     {
       "id": 1765126883975,
