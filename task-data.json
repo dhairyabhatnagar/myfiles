@@ -1195,7 +1195,9 @@
       "completed": false,
       "completedAt": null,
       "project": "TW ARC",
-      "themes": [],
+      "themes": [
+        "CX"
+      ],
       "dueDate": null,
       "created": "2025-11-25T04:51:24.088Z",
       "subtasks": [
