@@ -1401,6 +1401,15 @@
           "order": 0,
           "createdAt": "2025-12-07T18:17:36.497Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765131474849_lw70j3y8z",
+          "title": "Deepdive on source of generation of damages",
+          "completed": false,
+          "notes": "",
+          "order": 1,
+          "createdAt": "2025-12-07T18:17:54.849Z",
+          "completedAt": null
         }
       ]
     }
