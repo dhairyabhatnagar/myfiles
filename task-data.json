@@ -721,6 +721,15 @@
           "order": 1,
           "createdAt": "2025-12-07T18:28:13.389Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765132111825_q1587m7rj",
+          "title": "Alignment from legal for using chemicals on RG and 1P inventory and using NEW grade",
+          "completed": false,
+          "notes": "",
+          "order": 2,
+          "createdAt": "2025-12-07T18:28:31.825Z",
+          "completedAt": null
         }
       ]
     },
