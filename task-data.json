@@ -1267,6 +1267,18 @@
       "dueDate": "2025-12-10T00:00:00.000Z",
       "created": "2025-12-07T17:00:16.674Z",
       "subtasks": []
+    },
+    {
+      "id": 1765126883975,
+      "title": "filter by theme, also themes should be allowed to be tag to subtasks",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "Task Assistant",
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-12-07T17:01:23.975Z",
+      "subtasks": []
     }
   ],
   "recurringTasks": [
