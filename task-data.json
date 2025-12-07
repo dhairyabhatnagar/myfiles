@@ -739,6 +739,15 @@
           "order": 3,
           "createdAt": "2025-12-07T18:28:40.524Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765132175282_197po0wv9",
+          "title": "Registering as a laundry business to do refinishing for RG",
+          "completed": false,
+          "notes": "",
+          "order": 4,
+          "createdAt": "2025-12-07T18:29:35.282Z",
+          "completedAt": null
         }
       ]
     },
