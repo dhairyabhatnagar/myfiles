@@ -1027,7 +1027,17 @@
       "themes": [],
       "dueDate": null,
       "created": "2025-11-25T04:51:24.088Z",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "subtask_1765125319005_3zdfjja5c",
+          "title": "Shortlisting all ARC items and categories to be regraded",
+          "completed": false,
+          "notes": "",
+          "order": 0,
+          "createdAt": "2025-12-07T16:35:19.005Z",
+          "completedAt": null
+        }
+      ]
     },
     {
       "id": 1764310173104,
