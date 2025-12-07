@@ -1546,6 +1546,15 @@
           "order": 0,
           "createdAt": "2025-12-07T18:32:21.266Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765132372057_mj0evsdq3",
+          "title": "Detail out capabilities, phasing, and operating plan for Inhouse movement",
+          "completed": false,
+          "notes": "",
+          "order": 1,
+          "createdAt": "2025-12-07T18:32:52.057Z",
+          "completedAt": null
         }
       ]
     }
