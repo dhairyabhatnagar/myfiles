@@ -1255,6 +1255,18 @@
           "completedAt": null
         }
       ]
+    },
+    {
+      "id": 1765126816674,
+      "title": "Box Damage exposure issue for TW / KR - Need Query and Need ETA",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "TW ARC",
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-12-07T17:00:16.674Z",
+      "subtasks": []
     }
   ],
   "recurringTasks": [
