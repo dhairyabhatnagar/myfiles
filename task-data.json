@@ -1285,6 +1285,15 @@
           "order": 2,
           "createdAt": "2025-12-07T16:44:37.705Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765127127973_pmypjddad",
+          "title": "How to track how much inventory is stuck in Audit flow",
+          "completed": false,
+          "notes": "",
+          "order": 3,
+          "createdAt": "2025-12-07T17:05:27.973Z",
+          "completedAt": null
         }
       ]
     },
