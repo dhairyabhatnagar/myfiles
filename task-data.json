@@ -1603,6 +1603,18 @@
       "dueDate": null,
       "created": "2025-12-07T20:20:30.792Z",
       "subtasks": []
+    },
+    {
+      "id": 1765138853254,
+      "title": "Create a workplan  view for any project",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "Task Assistant",
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-12-07T20:20:53.254Z",
+      "subtasks": []
     }
   ],
   "recurringTasks": [
