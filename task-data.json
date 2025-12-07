@@ -1408,7 +1408,17 @@
       "themes": [],
       "dueDate": null,
       "created": "2025-12-07T18:17:05.906Z",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "subtask_1765131569619_lvadzm4l4",
+          "title": "Rollout Weighing in all facilities before handover",
+          "completed": false,
+          "notes": "",
+          "order": 0,
+          "createdAt": "2025-12-07T18:19:29.619Z",
+          "completedAt": null
+        }
+      ]
     },
     {
       "id": 1765131445969,
