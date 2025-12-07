@@ -610,6 +610,15 @@
           "order": 1,
           "createdAt": "2025-12-07T18:18:52.335Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765131542244_qx1trhnur",
+          "title": "Review how yield is to be improved",
+          "completed": false,
+          "notes": "",
+          "order": 2,
+          "createdAt": "2025-12-07T18:19:02.244Z",
+          "completedAt": null
         }
       ]
     },
