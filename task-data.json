@@ -902,7 +902,17 @@
       "themes": [],
       "dueDate": "2025-11-25T00:00:00.000Z",
       "created": "2025-11-17T01:18:13.118Z",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "subtask_1765125940204_5k6zo6s11",
+          "title": "Share SKU list with Morteza for collecting pictures",
+          "completed": false,
+          "notes": "",
+          "order": 0,
+          "createdAt": "2025-12-07T16:45:40.204Z",
+          "completedAt": null
+        }
+      ]
     },
     {
       "id": 1763364240447,
