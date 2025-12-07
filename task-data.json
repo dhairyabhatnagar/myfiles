@@ -1294,6 +1294,15 @@
           "order": 3,
           "createdAt": "2025-12-07T17:05:27.973Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765127219734_mxzg5mf1d",
+          "title": "How to track Sample size",
+          "completed": false,
+          "notes": "",
+          "order": 4,
+          "createdAt": "2025-12-07T17:06:59.734Z",
+          "completedAt": null
         }
       ]
     },
