@@ -544,6 +544,15 @@
           "order": 0,
           "createdAt": "2025-12-07T16:39:09.510Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765125582776_iapgh6za4",
+          "title": "Deep-dive on TW query shared by CX team",
+          "completed": false,
+          "notes": "",
+          "order": 1,
+          "createdAt": "2025-12-07T16:39:42.776Z",
+          "completedAt": null
         }
       ]
     },
