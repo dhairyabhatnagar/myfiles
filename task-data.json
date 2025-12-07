@@ -1207,6 +1207,15 @@
           "order": 1,
           "createdAt": "2025-12-07T16:44:24.224Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765125877705_i937l6vpc",
+          "title": "Corrective Action plan",
+          "completed": false,
+          "notes": "",
+          "order": 2,
+          "createdAt": "2025-12-07T16:44:37.705Z",
+          "completedAt": null
         }
       ]
     }
