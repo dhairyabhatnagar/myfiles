@@ -353,7 +353,6 @@
       "completedAt": null,
       "project": "TW Inv Losses",
       "themes": [
-        "Damages",
         "Operational Metrics"
       ],
       "dueDate": "2025-11-25T00:00:00.000Z",
@@ -366,6 +365,15 @@
           "notes": "check with Akhilesh",
           "order": 0,
           "createdAt": "2025-12-07T18:16:16.422Z",
+          "completedAt": null
+        },
+        {
+          "id": "subtask_1765131696663_69gnddedq",
+          "title": "RCA Template to be finalised",
+          "completed": false,
+          "notes": "",
+          "order": 1,
+          "createdAt": "2025-12-07T18:21:36.663Z",
           "completedAt": null
         }
       ]
