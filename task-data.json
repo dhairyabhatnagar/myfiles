@@ -1020,7 +1020,17 @@
       "themes": [],
       "dueDate": null,
       "created": "2025-11-25T03:59:40.683Z",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "subtask_1765125675013_5methnqa2",
+          "title": "Return API Rollout",
+          "completed": false,
+          "notes": "",
+          "order": 0,
+          "createdAt": "2025-12-07T16:41:15.013Z",
+          "completedAt": null
+        }
+      ]
     },
     {
       "id": 1764043186382,
