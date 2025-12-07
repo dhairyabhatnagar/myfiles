@@ -357,7 +357,17 @@
       ],
       "dueDate": "2025-11-25T00:00:00.000Z",
       "created": "2025-11-11T17:10:00.136Z",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "subtask_1765131376422_y2nz48js8",
+          "title": "Start updating the weekly template finalised for inventory loss review",
+          "completed": false,
+          "notes": "",
+          "order": 0,
+          "createdAt": "2025-12-07T18:16:16.422Z",
+          "completedAt": null
+        }
+      ]
     },
     {
       "id": 1762881057660,
