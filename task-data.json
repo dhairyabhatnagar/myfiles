@@ -353,7 +353,8 @@
       "completedAt": null,
       "project": "TW Inv Losses",
       "themes": [
-        "Damages"
+        "Damages",
+        "Operational Metrics"
       ],
       "dueDate": "2025-11-25T00:00:00.000Z",
       "created": "2025-11-11T17:10:00.136Z",
