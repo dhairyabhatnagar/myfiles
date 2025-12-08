@@ -402,6 +402,15 @@
           "order": 4,
           "createdAt": "2025-12-08T06:27:14.763Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765175241384_v6drof5nl",
+          "title": "Current system expiry date configuration for inventory stuck in non-storage / non-disuse bins",
+          "completed": false,
+          "notes": "",
+          "order": 5,
+          "createdAt": "2025-12-08T06:27:21.384Z",
+          "completedAt": null
         }
       ]
     },
