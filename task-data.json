@@ -393,6 +393,15 @@
           "order": 3,
           "createdAt": "2025-12-07T18:22:22.640Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1765175234763_laceuzzpt",
+          "title": "Inventory where Pullout request was generated but Expiry was extended ( But the new expiry entered is unrealistic given the inbound date and total usable shelf life of products",
+          "completed": false,
+          "notes": "",
+          "order": 4,
+          "createdAt": "2025-12-08T06:27:14.763Z",
+          "completedAt": null
         }
       ]
     },
