@@ -1645,6 +1645,18 @@
       "dueDate": null,
       "created": "2025-12-16T15:24:09.586Z",
       "subtasks": []
+    },
+    {
+      "id": 1765898681977,
+      "title": "buy powerbank for daily use / travel",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "Personal",
+      "themes": [],
+      "dueDate": null,
+      "created": "2025-12-16T15:24:41.977Z",
+      "subtasks": []
     }
   ],
   "recurringTasks": [
