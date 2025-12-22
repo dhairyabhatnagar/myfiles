@@ -1,11 +1,15 @@
 // ==================== NATURAL LANGUAGE PARSER ====================
+// Updated to support:
+//   # for tags (new)
+//   @ for projects (changed from themes)
+//   Themes selected via UI (no symbol)
 
 /**
  * Parse natural language input to extract task properties
  * Examples:
- *   "Buy milk tomorrow #Personal"
- *   "Meeting p0 12/25 #Work @Goals"
- *   "Exercise today @Fitness"
+ *   "Buy milk tomorrow @Personal #urgent"
+ *   "Meeting p0 12/25 @Work #client-alpha #followup"
+ *   "Exercise today @Health #important"
  */
 function parseNaturalLanguage(text, projects, themes) {
     let parsedTask = {
@@ -13,6 +17,7 @@ function parseNaturalLanguage(text, projects, themes) {
         priority: 'P1',
         project: null,
         themes: [],
+        tags: [],      // NEW: tags array
         dueDate: null
     };
 
@@ -23,8 +28,24 @@ function parseNaturalLanguage(text, projects, themes) {
         text = text.replace(priorityMatch[0], '').trim();
     }
 
-    // Extract project (#ProjectName)
-    const projectMatch = text.match(/#(\w+)/);
+    // Extract tags (#tagname) - NEW
+    // Must come BEFORE project extraction since we changed project to @
+    const tagMatches = text.match(/#([a-zA-Z0-9_-]+)/g);
+    if (tagMatches) {
+        tagMatches.forEach(match => {
+            const tagName = match.substring(1).toLowerCase().trim();
+            if (tagName && !parsedTask.tags.includes(tagName)) {
+                // Limit to 3 tags max
+                if (parsedTask.tags.length < 3) {
+                    parsedTask.tags.push(tagName);
+                }
+            }
+            text = text.replace(match, '').trim();
+        });
+    }
+
+    // Extract project (@ProjectName) - CHANGED from # to @
+    const projectMatch = text.match(/@([a-zA-Z0-9_-]+)/);
     if (projectMatch) {
         const projectName = projectMatch[1];
         const matchedProject = projects.find(p => 
@@ -36,23 +57,9 @@ function parseNaturalLanguage(text, projects, themes) {
         text = text.replace(projectMatch[0], '').trim();
     }
 
-    // Extract themes (@ThemeName)
-    const themeMatches = text.match(/@(\w+)/g);
-    if (themeMatches && parsedTask.project) {
-        const projectThemes = themes[parsedTask.project] || [];
-        themeMatches.forEach(match => {
-            const themeName = match.substring(1);
-            const matchedTheme = projectThemes.find(t => 
-                t.toLowerCase().includes(themeName.toLowerCase())
-            );
-            if (matchedTheme && !parsedTask.themes.includes(matchedTheme)) {
-                parsedTask.themes.push(matchedTheme);
-            }
-        });
-        themeMatches.forEach(match => {
-            text = text.replace(match, '').trim();
-        });
-    }
+    // Note: Themes are now selected via UI only, no symbol parsing
+    // The old @ThemeName syntax for themes is removed
+    // Themes are associated with a project and selected after project is set
 
     // Extract dates
     const today = new Date();
@@ -81,7 +88,38 @@ function parseNaturalLanguage(text, projects, themes) {
         }
     }
 
-    parsedTask.title = text.trim();
+    // Clean up extra whitespace
+    parsedTask.title = text.replace(/\s+/g, ' ').trim();
+    
     return parsedTask;
 }
 
+/**
+ * Extract tags from existing task title (for migration)
+ * Useful if users had informal tags in titles like "urgent:" or "[urgent]"
+ */
+function extractInformalTags(title) {
+    const tags = [];
+    
+    // Match [tag] pattern
+    const bracketMatches = title.match(/\[([a-zA-Z0-9_-]+)\]/g);
+    if (bracketMatches) {
+        bracketMatches.forEach(match => {
+            const tag = match.slice(1, -1).toLowerCase();
+            if (tag && !tags.includes(tag) && tags.length < 3) {
+                tags.push(tag);
+            }
+        });
+    }
+    
+    // Match tag: pattern at start
+    const colonMatch = title.match(/^([a-zA-Z0-9_-]+):\s*/);
+    if (colonMatch) {
+        const tag = colonMatch[1].toLowerCase();
+        if (tag && !tags.includes(tag) && tags.length < 3) {
+            tags.push(tag);
+        }
+    }
+    
+    return tags;
+}
