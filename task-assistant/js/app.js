@@ -1,8 +1,8 @@
-// ==================== MAIN APP - NO POINTS IN TASKS ====================
+// ==================== MAIN APP - WITH TAGS SYSTEM ====================
 // Gamification only for Recurring Tasks
+// Tags for global cross-cutting filters
 
-
-const { useState, useEffect } = React;
+const { useState, useEffect, useMemo } = React;
 
 function App() {
     // ========== STATE ==========
@@ -26,6 +26,7 @@ function App() {
     const [editingDate, setEditingDate] = useState(null);
     const [editingTitle, setEditingTitle] = useState(null);
     const [editingTitleText, setEditingTitleText] = useState('');
+    const [editingTags, setEditingTags] = useState(null);
     const [newTheme, setNewTheme] = useState('');
     const [addingThemeTo, setAddingThemeTo] = useState(null);
     const [deleteConfirm, setDeleteConfirm] = useState(null);
@@ -36,6 +37,13 @@ function App() {
     const [darkMode, setDarkMode] = useState(false);
     const [celebrateTask, setCelebrateTask] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    
+    // Tag filter state
+    const [activeTagFilters, setActiveTagFilters] = useState([]);
+    const [showTagLibrary, setShowTagLibrary] = useState(false);
+
+    // Tag registry (computed from tasks)
+    const tagRegistry = useMemo(() => buildTagRegistry(tasks), [tasks]);
 
     // ========== INITIALIZATION ==========
     useEffect(() => {
@@ -78,7 +86,12 @@ function App() {
         GitHubSync.load(
             token,
             (data) => {
-                setTasks(data.tasks);
+                const tasksWithTags = (data.tasks || []).map(t => ({
+                    ...t,
+                    tags: t.tags || [],
+                    subtasks: t.subtasks || []
+                }));
+                setTasks(tasksWithTags);
                 setRecurringTasks(data.recurringTasks);
                 setProjects(data.projects);
                 setThemes(data.themes);
@@ -129,10 +142,8 @@ function App() {
     const addTask = () => {
         if (!input.trim()) return;
         const task = TaskOperations.createTask(input, projects, themes);
-        // Add subtasks field to new tasks
         task.subtasks = [];
         
-        // Auto-inherit project if filter is active
         if (projectFilter && projectFilter !== 'all') {
             task.project = projectFilter;
             task.themes = task.themes || [];
@@ -196,6 +207,39 @@ function App() {
         saveData(null, newRecurring, null, null);
     };
 
+    // ========== TAG OPERATIONS ==========
+    const handleToggleTagFilter = (tagName) => {
+        setActiveTagFilters(prev => {
+            if (prev.includes(tagName)) {
+                return prev.filter(t => t !== tagName);
+            } else {
+                return [...prev, tagName];
+            }
+        });
+    };
+
+    const handleClearTagFilters = () => {
+        setActiveTagFilters([]);
+    };
+
+    const handleRenameTag = (oldName, newName) => {
+        const newTasks = renameTagInTasks(tasks, oldName, newName);
+        setTasks(newTasks);
+        saveData(newTasks, null, null, null);
+        setActiveTagFilters(prev => 
+            prev.map(t => normalizeTagName(t) === normalizeTagName(oldName) ? newName : t)
+        );
+    };
+
+    const handleDeleteTag = (tagName) => {
+        const newTasks = deleteTagFromTasks(tasks, tagName);
+        setTasks(newTasks);
+        saveData(newTasks, null, null, null);
+        setActiveTagFilters(prev => 
+            prev.filter(t => normalizeTagName(t) !== normalizeTagName(tagName))
+        );
+    };
+
     // ========== SUBTASK OPERATIONS ==========
     const handleUpdateTaskWithSubtasks = (updatedTask) => {
         const newTasks = tasks.map(t => t.id === updatedTask.id ? updatedTask : t);
@@ -203,11 +247,10 @@ function App() {
         saveData(newTasks, null, null, null);
     };
 
-    // GitHub config for subtask sync
     const githubConfig = {
         enabled: true,
         owner: CONFIG.GITHUB_USERNAME,
-        repo: CONFIG.GITHUB_REPO,
+        repo: CONFIG.REPO_NAME,
         token: githubToken
     };
 
@@ -301,11 +344,17 @@ function App() {
 
     // ========== COMPUTED VALUES ==========
     const recurringStats = calculateRecurringStats(recurringTasks);
-    const filtered = TaskOperations.filterTasks(tasks, view, showCompleted, priorityFilter, projectFilter);
+    
+    let filtered = TaskOperations.filterTasks(tasks, view, showCompleted, priorityFilter, projectFilter);
+    filtered = filterTasksByTags(filtered, activeTagFilters);
+    
     const recurringFiltered = TaskOperations.filterRecurringTasks(recurringTasks, recurringProjectFilter);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const todayStr = today.toISOString().split('T')[0];
+    
+    const totalTaskCount = tasks.filter(t => showCompleted || !t.completed).length;
+    const filteredTaskCount = filtered.length;
 
     // ========== LOADING SCREEN ==========
     if (isLoading) {
@@ -346,15 +395,6 @@ function App() {
                         className="w-full px-4 py-3 bg-indigo-500 text-white rounded-lg font-medium">
                         Connect to GitHub
                     </button>
-                    <div className="mt-4 p-3 bg-yellow-50 rounded-lg text-sm">
-                        <p className="font-semibold mb-1">⚠️ First time setup:</p>
-                        <p className="text-gray-600">Make sure you've:</p>
-                        <ol className="list-decimal ml-4 mt-2 space-y-1 text-gray-600">
-                            <li>Updated GITHUB_USERNAME in config.js</li>
-                            <li>Created task-data.json in your repo</li>
-                            <li>Generated a GitHub token with 'repo' access</li>
-                        </ol>
-                    </div>
                 </div>
             </div>
         );
@@ -363,7 +403,6 @@ function App() {
     // ========== MAIN APP UI ==========
     return (
         <div className={`min-h-screen ${darkMode ? 'dark bg-gradient' : 'bg-gradient-to-br from-blue-50 to-indigo-100'}`}>
-            {/* Sync Status */}
             {syncStatus && (
                 <div className={`fixed top-4 right-4 z-50 px-4 py-2 rounded-lg shadow-lg ${
                     syncStatus === 'syncing' ? 'bg-blue-500 text-white' :
@@ -376,7 +415,6 @@ function App() {
                 </div>
             )}
 
-            {/* Recurring Tasks Gamification Score Bar - Only show when on recurring tab */}
             {mainView === 'recurring' && recurringTasks.length > 0 && (
                 <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-40 bg-white rounded-full px-6 py-3 shadow-lg flex items-center gap-4">
                     <div className="flex items-center gap-2">
@@ -406,7 +444,6 @@ function App() {
                 </div>
             )}
 
-            {/* Delete Confirm Modal */}
             {deleteConfirm && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
@@ -419,18 +456,21 @@ function App() {
                             {deleteConfirm.type === 'project' && ' All tasks in this project will be unassigned.'}
                         </p>
                         <div className="flex gap-3">
-                            <button onClick={() => setDeleteConfirm(null)} className="flex-1 px-4 py-3 bg-gray-200 rounded-lg font-medium">
-                                Cancel
-                            </button>
-                            <button onClick={deleteConfirm.action} className="flex-1 px-4 py-3 bg-red-500 text-white rounded-lg font-medium">
-                                Delete
-                            </button>
+                            <button onClick={() => setDeleteConfirm(null)} className="flex-1 px-4 py-3 bg-gray-200 rounded-lg font-medium">Cancel</button>
+                            <button onClick={deleteConfirm.action} className="flex-1 px-4 py-3 bg-red-500 text-white rounded-lg font-medium">Delete</button>
                         </div>
                     </div>
                 </div>
             )}
 
-            {/* Sidebar */}
+            <TagLibraryModal
+                isOpen={showTagLibrary}
+                onClose={() => setShowTagLibrary(false)}
+                tagRegistry={tagRegistry}
+                onRenameTag={handleRenameTag}
+                onDeleteTag={handleDeleteTag}
+            />
+
             <div className={`fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-2xl transform transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} overflow-y-auto`}>
                 <div className="p-4">
                     <div className="flex justify-between items-center mb-4">
@@ -465,6 +505,13 @@ function App() {
                             <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition-transform ${darkMode ? 'translate-x-6' : 'translate-x-0.5'}`}></div>
                         </button>
                     </div>
+
+                    <button 
+                        onClick={() => { setShowTagLibrary(true); setSidebarOpen(false); }}
+                        className="w-full px-4 py-2 mb-2 bg-purple-100 text-purple-700 rounded-lg text-left flex items-center gap-2">
+                        🏷️ Manage Tags
+                        <span className="ml-auto text-xs bg-purple-200 px-2 py-0.5 rounded">{Object.keys(tagRegistry).length}</span>
+                    </button>
 
                     <button 
                         onClick={() => loadData(githubToken)} 
@@ -502,14 +549,10 @@ function App() {
                                                     placeholder="Theme..."
                                                     className="flex-1 px-2 py-1 text-xs border rounded"
                                                 />
-                                                <button onClick={() => addThemeToProject(proj, newTheme)} className="px-2 py-1 bg-indigo-500 text-white rounded text-xs">
-                                                    Add
-                                                </button>
+                                                <button onClick={() => addThemeToProject(proj, newTheme)} className="px-2 py-1 bg-indigo-500 text-white rounded text-xs">Add</button>
                                             </div>
                                         ) : (
-                                            <button onClick={() => setAddingThemeTo(proj)} className="pl-4 mt-1 text-xs text-indigo-600">
-                                                + Add theme
-                                            </button>
+                                            <button onClick={() => setAddingThemeTo(proj)} className="pl-4 mt-1 text-xs text-indigo-600">+ Add theme</button>
                                         )}
                                     </div>
                                 )}
@@ -535,12 +578,13 @@ function App() {
                         <h3 className="font-bold mb-2">💡 Quick Tips</h3>
                         <div className="text-xs text-gray-600 space-y-2">
                             <p><strong>Natural Language:</strong></p>
-                            <p>• "Buy milk tomorrow #Personal"</p>
-                            <p>• "Meeting p0 12/25 #Work"</p>
-                            <p>• "Exercise today @Fitness"</p>
-                            <p className="mt-2"><strong>Subtasks:</strong> Double-click task</p>
-                            <p><strong>Project:</strong> Use #ProjectName</p>
-                            <p><strong>Theme:</strong> Use @ThemeName</p>
+                            <p>• "Buy milk tomorrow @Personal #urgent"</p>
+                            <p>• "Meeting p0 12/25 @Work #client"</p>
+                            <p className="mt-2"><strong>Symbols:</strong></p>
+                            <p>• <code className="bg-gray-100 px-1 rounded">@</code> = Project</p>
+                            <p>• <code className="bg-gray-100 px-1 rounded">#</code> = Tag (max 3)</p>
+                            <p className="mt-2"><strong>Shortcuts:</strong></p>
+                            <p>• Press <code className="bg-gray-100 px-1 rounded">F</code> to filter by tags</p>
                         </div>
                     </div>
                 </div>
@@ -548,7 +592,6 @@ function App() {
 
             {sidebarOpen && <div className="fixed inset-0 bg-black bg-opacity-30 z-40" onClick={() => setSidebarOpen(false)} />}
 
-            {/* Main Content */}
             <div className={`p-4 max-w-4xl mx-auto ${mainView === 'recurring' && recurringTasks.length > 0 ? 'pt-24' : 'pt-8'}`}>
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
@@ -558,36 +601,33 @@ function App() {
                 </div>
 
                 <div className="flex gap-2 mb-4">
-                    <button
-                        onClick={() => setMainView('tasks')}
-                        className={`flex-1 px-4 py-3 rounded-lg font-medium ${mainView === 'tasks' ? 'bg-indigo-500 text-white' : 'bg-white'}`}>
-                        📋 Tasks
-                    </button>
-                    <button
-                        onClick={() => setMainView('recurring')}
-                        className={`flex-1 px-4 py-3 rounded-lg font-medium ${mainView === 'recurring' ? 'bg-indigo-500 text-white' : 'bg-white'}`}>
-                        🔄 Recurring
-                    </button>
+                    <button onClick={() => setMainView('tasks')} className={`flex-1 px-4 py-3 rounded-lg font-medium ${mainView === 'tasks' ? 'bg-indigo-500 text-white' : 'bg-white'}`}>📋 Tasks</button>
+                    <button onClick={() => setMainView('recurring')} className={`flex-1 px-4 py-3 rounded-lg font-medium ${mainView === 'recurring' ? 'bg-indigo-500 text-white' : 'bg-white'}`}>🔄 Recurring</button>
                 </div>
 
                 {mainView === 'tasks' ? (
                     <>
-                        <div className="flex gap-2 mb-4">
-                            <select value={projectFilter} onChange={(e) => setProjectFilter(e.target.value)} 
-                                className="px-3 py-2 bg-white rounded-lg border text-sm">
+                        <div className="flex gap-2 mb-4 flex-wrap">
+                            <select value={projectFilter} onChange={(e) => setProjectFilter(e.target.value)} className="px-3 py-2 bg-white rounded-lg border text-sm">
                                 <option value="all">All Projects</option>
                                 {projects.map(p => <option key={p} value={p}>{p}</option>)}
                             </select>
-                            <select value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value)} 
-                                className="px-3 py-2 bg-white rounded-lg border text-sm">
+                            <select value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value)} className="px-3 py-2 bg-white rounded-lg border text-sm">
                                 <option value="all">All Priority</option>
                                 <option value="P0">P0</option>
                                 <option value="P1">P1</option>
                             </select>
-                            <button onClick={() => setShowCompleted(!showCompleted)}
-                                className={`px-3 py-2 rounded-lg text-sm font-medium ${showCompleted ? 'bg-indigo-500 text-white' : 'bg-white'}`}>
+                            <button onClick={() => setShowCompleted(!showCompleted)} className={`px-3 py-2 rounded-lg text-sm font-medium ${showCompleted ? 'bg-indigo-500 text-white' : 'bg-white'}`}>
                                 {showCompleted ? '👁️ All' : '📋 Open'}
                             </button>
+                            <TagFilterButton
+                                tagRegistry={tagRegistry}
+                                activeFilters={activeTagFilters}
+                                onToggleFilter={handleToggleTagFilter}
+                                onClearFilters={handleClearTagFilters}
+                                totalTaskCount={totalTaskCount}
+                                filteredTaskCount={filteredTaskCount}
+                            />
                         </div>
 
                         <div className="bg-white rounded-xl shadow-lg p-4 mb-4">
@@ -597,32 +637,17 @@ function App() {
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
                                     onKeyPress={(e) => e.key === 'Enter' && addTask()}
-                                    placeholder="Add task: 'Buy milk tomorrow #Personal'"
+                                    placeholder="Add task: 'Buy milk tomorrow @Personal #urgent'"
                                     className="flex-1 px-4 py-3 border rounded-lg"
                                 />
-                                <button onClick={startVoice} className={`px-4 py-3 rounded-lg text-white ${isRecording ? 'bg-red-500 animate-pulse' : 'bg-indigo-500'}`}>
-                                    🎤
-                                </button>
-                                <button onClick={addTask} className="px-6 py-3 bg-green-500 text-white rounded-lg font-medium">
-                                    +
-                                </button>
+                                <button onClick={startVoice} className={`px-4 py-3 rounded-lg text-white ${isRecording ? 'bg-red-500 animate-pulse' : 'bg-indigo-500'}`}>🎤</button>
+                                <button onClick={addTask} className="px-6 py-3 bg-green-500 text-white rounded-lg font-medium">+</button>
                             </div>
                         </div>
 
                         <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
-                            {[
-                                ['all', '📋 All'],
-                                ['today', '📅 Today'],
-                                ['update-eta', '⏰ Update ETA'],
-                                ['unassigned', '📥 Unassigned'],
-                                ['summary', '📊 Summary']
-                            ].map(([v, label]) => (
-                                <button
-                                    key={v}
-                                    onClick={() => setView(v)}
-                                    className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap ${view === v ? 'bg-indigo-500 text-white' : 'bg-white'}`}>
-                                    {label}
-                                </button>
+                            {[['all', '📋 All'], ['today', '📅 Today'], ['update-eta', '⏰ Update ETA'], ['unassigned', '📥 Unassigned'], ['summary', '📊 Summary']].map(([v, label]) => (
+                                <button key={v} onClick={() => setView(v)} className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap ${view === v ? 'bg-indigo-500 text-white' : 'bg-white'}`}>{label}</button>
                             ))}
                         </div>
 
@@ -631,6 +656,9 @@ function App() {
                                 <div className="bg-white rounded-xl p-8 text-center text-gray-500">
                                     <p className="text-4xl mb-2">📭</p>
                                     <p>No tasks</p>
+                                    {activeTagFilters.length > 0 && (
+                                        <button onClick={handleClearTagFilters} className="mt-2 text-sm text-indigo-600 hover:text-indigo-700">Clear tag filters</button>
+                                    )}
                                 </div>
                             ) : (
                                 filtered.map(task => <TaskItemWithSubtasks 
@@ -642,6 +670,7 @@ function App() {
                                     onUpdateWithSubtasks={handleUpdateTaskWithSubtasks}
                                     projects={projects}
                                     themes={themes}
+                                    tagRegistry={tagRegistry}
                                     githubConfig={githubConfig}
                                     editingPriority={editingPriority}
                                     setEditingPriority={setEditingPriority}
@@ -655,6 +684,8 @@ function App() {
                                     setEditingTitle={setEditingTitle}
                                     editingTitleText={editingTitleText}
                                     setEditingTitleText={setEditingTitleText}
+                                    editingTags={editingTags}
+                                    setEditingTags={setEditingTags}
                                     celebrateTask={celebrateTask}
                                 />)
                             )}
@@ -663,8 +694,7 @@ function App() {
                 ) : (
                     <>
                         <div className="flex gap-2 mb-4">
-                            <select value={recurringProjectFilter} onChange={(e) => setRecurringProjectFilter(e.target.value)} 
-                                className="flex-1 px-3 py-2 bg-white rounded-lg border text-sm">
+                            <select value={recurringProjectFilter} onChange={(e) => setRecurringProjectFilter(e.target.value)} className="flex-1 px-3 py-2 bg-white rounded-lg border text-sm">
                                 <option value="all">All Projects</option>
                                 {projects.map(p => <option key={p} value={p}>{p}</option>)}
                             </select>
@@ -680,12 +710,8 @@ function App() {
                                     placeholder="Add a recurring task..."
                                     className="flex-1 px-4 py-3 border rounded-lg"
                                 />
-                                <button onClick={startVoice} className={`px-4 py-3 rounded-lg text-white ${isRecording ? 'bg-red-500 animate-pulse' : 'bg-indigo-500'}`}>
-                                    🎤
-                                </button>
-                                <button onClick={addRecurringTask} className="px-6 py-3 bg-green-500 text-white rounded-lg font-medium">
-                                    +
-                                </button>
+                                <button onClick={startVoice} className={`px-4 py-3 rounded-lg text-white ${isRecording ? 'bg-red-500 animate-pulse' : 'bg-indigo-500'}`}>🎤</button>
+                                <button onClick={addRecurringTask} className="px-6 py-3 bg-green-500 text-white rounded-lg font-medium">+</button>
                             </div>
                         </div>
 
@@ -707,77 +733,42 @@ function App() {
                                     return (
                                         <div key={task.id} className="bg-white rounded-lg p-4 shadow">
                                             <div className="flex items-start gap-3">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={todayCompleted}
-                                                    onChange={() => toggleRecurringComplete(task.id)}
-                                                    className="mt-1 w-5 h-5"
-                                                />
+                                                <input type="checkbox" checked={todayCompleted} onChange={() => toggleRecurringComplete(task.id)} className="mt-1 w-5 h-5" />
                                                 <div className="flex-1 min-w-0">
                                                     <div className="font-medium mb-2">{task.title}</div>
-                                                    
                                                     <div className="flex flex-wrap gap-1 mb-2">
                                                         {editingProject === task.id ? (
                                                             <div className="flex gap-1 flex-wrap">
-                                                                <select value={task.project || ''} onChange={(e) => {
-                                                                    updateRecurringTask(task.id, {project: e.target.value || null});
-                                                                }}
-                                                                    className="text-xs px-2 py-1 border rounded">
+                                                                <select value={task.project || ''} onChange={(e) => updateRecurringTask(task.id, {project: e.target.value || null})} className="text-xs px-2 py-1 border rounded">
                                                                     <option value="">None</option>
                                                                     {projects.map(p => <option key={p} value={p}>{p}</option>)}
                                                                 </select>
-                                                                <select value={frequency} onChange={(e) => {
-                                                                    updateRecurringTask(task.id, {frequency: e.target.value});
-                                                                }}
-                                                                    className="text-xs px-2 py-1 border rounded">
+                                                                <select value={frequency} onChange={(e) => updateRecurringTask(task.id, {frequency: e.target.value})} className="text-xs px-2 py-1 border rounded">
                                                                     <option value="daily">Daily</option>
                                                                     <option value="weekly">Weekly</option>
                                                                 </select>
-                                                                <button onClick={() => setEditingProject(null)} className="text-xs px-2 py-1 bg-gray-200 rounded">
-                                                                    Done
-                                                                </button>
+                                                                <button onClick={() => setEditingProject(null)} className="text-xs px-2 py-1 bg-gray-200 rounded">Done</button>
                                                             </div>
                                                         ) : (
                                                             <>
-                                                                <button onClick={() => setEditingProject(task.id)}
-                                                                    className="text-xs px-2 py-1 rounded bg-blue-100 text-blue-700">
-                                                                    📁 {task.project || 'Set project'}
-                                                                </button>
-                                                                <button onClick={() => setEditingProject(task.id)}
-                                                                    className={`text-xs px-2 py-1 rounded ${frequency === 'daily' ? 'bg-purple-100 text-purple-700' : 'bg-teal-100 text-teal-700'}`}>
-                                                                    {frequency === 'daily' ? '📅 Daily' : '📆 Weekly'}
-                                                                </button>
+                                                                <button onClick={() => setEditingProject(task.id)} className="text-xs px-2 py-1 rounded bg-blue-100 text-blue-700">📁 {task.project || 'Set project'}</button>
+                                                                <button onClick={() => setEditingProject(task.id)} className={`text-xs px-2 py-1 rounded ${frequency === 'daily' ? 'bg-purple-100 text-purple-700' : 'bg-teal-100 text-teal-700'}`}>{frequency === 'daily' ? '📅 Daily' : '📆 Weekly'}</button>
                                                             </>
                                                         )}
                                                     </div>
-
                                                     <div className="flex items-center gap-2 mb-2">
-                                                        <span className="text-xs font-semibold">
-                                                            {frequency === 'daily' ? '7-Day Score:' : '4-Week Score:'}
-                                                        </span>
-                                                        <span className={`text-sm font-bold px-2 py-1 rounded ${
-                                                            score >= maxScore * 0.7 ? 'bg-green-100 text-green-700' :
-                                                            score >= maxScore * 0.4 ? 'bg-yellow-100 text-yellow-700' :
-                                                            'bg-red-100 text-red-700'
-                                                        }`}>
-                                                            {score}/{maxScore}
-                                                        </span>
+                                                        <span className="text-xs font-semibold">{frequency === 'daily' ? '7-Day Score:' : '4-Week Score:'}</span>
+                                                        <span className={`text-sm font-bold px-2 py-1 rounded ${score >= maxScore * 0.7 ? 'bg-green-100 text-green-700' : score >= maxScore * 0.4 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>{score}/{maxScore}</span>
                                                     </div>
-
                                                     {frequency === 'daily' ? (
                                                         <div className="flex gap-1">
                                                             {last7Days.map(day => {
                                                                 const isCompleted = completions.includes(day);
                                                                 const dayName = new Date(day).toLocaleDateString('en-US', {weekday: 'short'});
                                                                 const isToday = day === todayStr;
-                                                                
                                                                 return (
                                                                     <div key={day} className="flex flex-col items-center">
-                                                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs ${
-                                                                            isCompleted ? 'bg-green-500 text-white' : 'bg-gray-200'
-                                                                        } ${isToday ? 'ring-2 ring-indigo-500' : ''}`}>
-                                                                            {isCompleted ? '✓' : '·'}
-                                                                        </div>
+                                                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs ${isCompleted ? 'bg-green-500 text-white' : 'bg-gray-200'} ${isToday ? 'ring-2 ring-indigo-500' : ''}`}>{isCompleted ? '✓' : '·'}</div>
                                                                         <span className="text-xs mt-1">{dayName}</span>
                                                                     </div>
                                                                 );
@@ -789,25 +780,17 @@ function App() {
                                                                 const startOfWeek = new Date();
                                                                 startOfWeek.setDate(startOfWeek.getDate() - (7 * weekIndex) - startOfWeek.getDay());
                                                                 startOfWeek.setHours(0, 0, 0, 0);
-                                                                
                                                                 const endOfWeek = new Date(startOfWeek);
                                                                 endOfWeek.setDate(endOfWeek.getDate() + 6);
-                                                                
                                                                 const weekCompleted = completions.some(date => {
                                                                     const d = new Date(date);
                                                                     return d >= startOfWeek && d <= endOfWeek;
                                                                 });
-                                                                
                                                                 const isCurrentWeek = weekIndex === 0;
                                                                 const weekLabel = `W${4 - weekIndex}`;
-                                                                
                                                                 return (
                                                                     <div key={weekIndex} className="flex flex-col items-center flex-1">
-                                                                        <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-xs font-bold ${
-                                                                            weekCompleted ? 'bg-green-500 text-white' : 'bg-gray-200'
-                                                                        } ${isCurrentWeek ? 'ring-2 ring-indigo-500' : ''}`}>
-                                                                            {weekCompleted ? '✓' : '·'}
-                                                                        </div>
+                                                                        <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-xs font-bold ${weekCompleted ? 'bg-green-500 text-white' : 'bg-gray-200'} ${isCurrentWeek ? 'ring-2 ring-indigo-500' : ''}`}>{weekCompleted ? '✓' : '·'}</div>
                                                                         <span className="text-xs mt-1">{weekLabel}</span>
                                                                     </div>
                                                                 );
@@ -815,9 +798,7 @@ function App() {
                                                         </div>
                                                     )}
                                                 </div>
-                                                <button onClick={() => deleteRecurringTask(task.id)} className="text-red-500 text-sm">
-                                                    🗑️
-                                                </button>
+                                                <button onClick={() => deleteRecurringTask(task.id)} className="text-red-500 text-sm">🗑️</button>
                                             </div>
                                         </div>
                                     );
@@ -832,212 +813,85 @@ function App() {
 }
 
 // ========== TASK ITEM WITH SUBTASKS COMPONENT ==========
-function TaskItemWithSubtasks({ 
-    task, 
-    onToggleComplete, 
-    onDelete, 
-    onUpdate,
-    onUpdateWithSubtasks,
-    projects, 
-    themes,
-    githubConfig,
-    editingPriority,
-    setEditingPriority,
-    editingProject,
-    setEditingProject,
-    editingDate,
-    setEditingDate,
-    editingThemes,
-    setEditingThemes,
-    editingTitle,
-    setEditingTitle,
-    editingTitleText,
-    setEditingTitleText,
-    celebrateTask
-}) {
-    // Initialize subtasks if not present
-    if (!task.subtasks) {
-        task.subtasks = [];
-    }
+function TaskItemWithSubtasks({ task, onToggleComplete, onDelete, onUpdate, onUpdateWithSubtasks, projects, themes, tagRegistry, githubConfig, editingPriority, setEditingPriority, editingProject, setEditingProject, editingDate, setEditingDate, editingThemes, setEditingThemes, editingTitle, setEditingTitle, editingTitleText, setEditingTitleText, editingTags, setEditingTags, celebrateTask }) {
+    if (!task.subtasks) task.subtasks = [];
 
-    // Use subtask hook
-    const {
-        subtasks,
-        isPageOpen,        // ← CHANGED from isModalOpen
-        openPage,          // ← CHANGED from openModal
-        closePage,         // ← CHANGED from closeModal
-        updateSubtasks
-    } = useSubtasks({
+    const { subtasks, isPageOpen, openPage, closePage, updateSubtasks } = useSubtasks({
         task,
         onUpdateTask: onUpdateWithSubtasks,
         githubConfig
     });
 
-    // ========== SWIPE GESTURE HANDLING ==========
     const [touchStart, setTouchStart] = useState(null);
     const [touchEnd, setTouchEnd] = useState(null);
-
-    // Minimum swipe distance (in px)
     const minSwipeDistance = 50;
 
-    const onTouchStart = (e) => {
-        setTouchEnd(null); // Reset
-        setTouchStart(e.targetTouches[0].clientX);
-    };
-
-    const onTouchMove = (e) => {
-        setTouchEnd(e.targetTouches[0].clientX);
-    };
-
+    const onTouchStart = (e) => { setTouchEnd(null); setTouchStart(e.targetTouches[0].clientX); };
+    const onTouchMove = (e) => { setTouchEnd(e.targetTouches[0].clientX); };
     const onTouchEnd = () => {
         if (!touchStart || !touchEnd) return;
-        
         const distance = touchStart - touchEnd;
-        const isLeftSwipe = distance > minSwipeDistance;
-        const isRightSwipe = distance < -minSwipeDistance;
-        
-        // Right swipe opens subtasks
-        if (isRightSwipe) {
-            openPage();
-        }
-        
-        // Reset
+        if (distance < -minSwipeDistance) openPage();
         setTouchStart(null);
         setTouchEnd(null);
     };
 
-    // ← NEW: If subtask page is open, show ONLY that page
+    const handleUpdateTags = (newTags) => onUpdate(task.id, { tags: newTags });
+
     if (isPageOpen) {
-        return (
-            <SubtaskPageView
-                task={task}
-                onClose={closePage}
-                onUpdateSubtasks={updateSubtasks}
-            />
-        );
+        return <SubtaskPageView task={task} onClose={closePage} onUpdateSubtasks={updateSubtasks} />;
     }
 
-    // Otherwise show the normal task card
     return (
-        <div 
-            key={task.id} 
-            className={`bg-white rounded-lg p-4 shadow ${task.completed ? 'opacity-60' : ''} ${celebrateTask === task.id ? 'celebrate' : ''}`}
-            onDoubleClick={openPage}           // Desktop: double-click
-            onTouchStart={onTouchStart}        // Mobile: swipe right
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
-        >
+        <div className={`bg-white rounded-lg p-4 shadow ${task.completed ? 'opacity-60' : ''} ${celebrateTask === task.id ? 'celebrate' : ''}`}
+            onDoubleClick={openPage} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
             <div className="flex items-start gap-3">
-                <input
-                    type="checkbox"
-                    checked={task.completed}
-                    onChange={() => onToggleComplete(task.id)}
-                    className="mt-1 w-5 h-5"
-                />
+                <input type="checkbox" checked={task.completed} onChange={() => onToggleComplete(task.id)} className="mt-1 w-5 h-5" />
                 <div className="flex-1 min-w-0">
                     {editingTitle === task.id ? (
-                        <input
-                            type="text"
-                            value={editingTitleText}
-                            onChange={(e) => setEditingTitleText(e.target.value)}
-                            onBlur={() => {
-                                if (editingTitleText.trim()) {
-                                    onUpdate(task.id, {title: editingTitleText.trim()});
-                                }
-                                setEditingTitle(null);
-                            }}
+                        <input type="text" value={editingTitleText} onChange={(e) => setEditingTitleText(e.target.value)}
+                            onBlur={() => { if (editingTitleText.trim()) onUpdate(task.id, {title: editingTitleText.trim()}); setEditingTitle(null); }}
                             onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    if (editingTitleText.trim()) {
-                                        onUpdate(task.id, {title: editingTitleText.trim()});
-                                    }
-                                    setEditingTitle(null);
-                                } else if (e.key === 'Escape') {
-                                    setEditingTitle(null);
-                                }
+                                if (e.key === 'Enter') { if (editingTitleText.trim()) onUpdate(task.id, {title: editingTitleText.trim()}); setEditingTitle(null); }
+                                else if (e.key === 'Escape') setEditingTitle(null);
                             }}
-                            className="w-full px-2 py-1 border rounded font-medium"
-                            autoFocus
-                        />
+                            className="w-full px-2 py-1 border rounded font-medium" autoFocus />
                     ) : (
-                        <div 
-                            className={`font-medium cursor-pointer hover:bg-gray-50 px-2 py-1 rounded ${task.completed ? 'line-through text-gray-500' : ''}`}
-                            onClick={() => {
-                                setEditingTitle(task.id);
-                                setEditingTitleText(task.title);
-                            }}
-                            title="Click to edit title"
-                        >
+                        <div className={`font-medium cursor-pointer hover:bg-gray-50 px-2 py-1 rounded ${task.completed ? 'line-through text-gray-500' : ''}`}
+                            onClick={() => { setEditingTitle(task.id); setEditingTitleText(task.title); }} title="Click to edit title">
                             {task.title}
                         </div>
                     )}
                     <div className="flex flex-wrap gap-1 mt-2">
                         {editingPriority === task.id ? (
-                            <div className="flex gap-1">
-                                <select value={task.priority} onChange={(e) => {
-                                    onUpdate(task.id, {priority: e.target.value});
-                                    setEditingPriority(null);
-                                }}
-                                    className="text-xs px-2 py-1 border rounded">
-                                    <option value="P0">P0</option>
-                                    <option value="P1">P1</option>
-                                </select>
-                            </div>
+                            <select value={task.priority} onChange={(e) => { onUpdate(task.id, {priority: e.target.value}); setEditingPriority(null); }} className="text-xs px-2 py-1 border rounded">
+                                <option value="P0">P0</option><option value="P1">P1</option>
+                            </select>
                         ) : (
-                            <button onClick={() => setEditingPriority(task.id)}
-                                className={`text-xs px-2 py-1 rounded font-bold ${task.priority === 'P0' ? 'bg-red-500 text-white' : 'bg-yellow-500 text-white'}`}>
-                                {task.priority}
-                            </button>
+                            <button onClick={() => setEditingPriority(task.id)} className={`text-xs px-2 py-1 rounded font-bold ${task.priority === 'P0' ? 'bg-red-500 text-white' : 'bg-yellow-500 text-white'}`}>{task.priority}</button>
                         )}
 
                         {editingProject === task.id ? (
-                            <div className="flex gap-1">
-                                <select value={task.project || ''} onChange={(e) => {
-                                    onUpdate(task.id, {project: e.target.value || null, themes: []});
-                                    setEditingProject(null);
-                                }}
-                                    className="text-xs px-2 py-1 border rounded">
-                                    <option value="">None</option>
-                                    {projects.map(p => <option key={p} value={p}>{p}</option>)}
-                                </select>
-                            </div>
+                            <select value={task.project || ''} onChange={(e) => { onUpdate(task.id, {project: e.target.value || null, themes: []}); setEditingProject(null); }} className="text-xs px-2 py-1 border rounded">
+                                <option value="">None</option>
+                                {projects.map(p => <option key={p} value={p}>{p}</option>)}
+                            </select>
                         ) : (
-                            <button onClick={() => setEditingProject(task.id)}
-                                className="text-xs px-2 py-1 rounded bg-blue-100 text-blue-700">
-                                📁 {task.project || 'Set project'}
-                            </button>
+                            <button onClick={() => setEditingProject(task.id)} className="text-xs px-2 py-1 rounded bg-blue-100 text-blue-700">📁 {task.project || 'Set project'}</button>
                         )}
 
                         {editingDate === task.id ? (
-                            <div className="flex gap-1">
-                                <input
-                                    type="date"
-                                    value={task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : ''}
-                                    onChange={(e) => {
-                                        onUpdate(task.id, {dueDate: e.target.value ? new Date(e.target.value).toISOString() : null});
-                                        setEditingDate(null);
-                                    }}
-                                    className="text-xs px-2 py-1 border rounded"
-                                />
-                            </div>
+                            <input type="date" value={task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : ''}
+                                onChange={(e) => { onUpdate(task.id, {dueDate: e.target.value ? new Date(e.target.value).toISOString() : null}); setEditingDate(null); }}
+                                className="text-xs px-2 py-1 border rounded" />
                         ) : (
-                            <button onClick={() => setEditingDate(task.id)}
-                                className="text-xs px-2 py-1 rounded bg-indigo-100 text-indigo-700">
-                                📅 {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Set date'}
-                            </button>
+                            <button onClick={() => setEditingDate(task.id)} className="text-xs px-2 py-1 rounded bg-indigo-100 text-indigo-700">📅 {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Set date'}</button>
                         )}
 
-                        {/* SUBTASK INDICATOR */}
-                        {subtasks.length > 0 && (
-                            <SubtaskIndicator 
-                                subtasks={subtasks} 
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    openPage();    // ← CHANGED from openModal
-                                }}
-                            />
-                        )}
+                        {subtasks.length > 0 && <SubtaskIndicator subtasks={subtasks} onClick={(e) => { e.stopPropagation(); openPage(); }} />}
                     </div>
+
+                    <TaskTagEditor task={task} tagRegistry={tagRegistry} onUpdateTags={handleUpdateTags} isEditing={editingTags === task.id} onStartEdit={() => setEditingTags(task.id)} onStopEdit={() => setEditingTags(null)} />
 
                     {editingThemes === task.id ? (
                         <div className="mt-2 p-2 bg-gray-50 rounded">
@@ -1045,44 +899,26 @@ function TaskItemWithSubtasks({
                             <div className="flex flex-wrap gap-1">
                                 {task.project && (themes[task.project] || []).map(t => {
                                     const selected = (task.themes || []).includes(t);
-                                    return (
-                                        <button key={t} onClick={() => {
-                                            const curr = task.themes || [];
-                                            const newThemes = selected ? curr.filter(x => x !== t) : [...curr, t];
-                                            onUpdate(task.id, {themes: newThemes});
-                                        }}
-                                            className={`text-xs px-2 py-1 rounded-full ${selected ? 'bg-indigo-500 text-white' : 'bg-white border'}`}>
-                                            {t}
-                                        </button>
-                                    );
+                                    return <button key={t} onClick={() => {
+                                        const curr = task.themes || [];
+                                        const newThemes = selected ? curr.filter(x => x !== t) : [...curr, t];
+                                        onUpdate(task.id, {themes: newThemes});
+                                    }} className={`text-xs px-2 py-1 rounded-full ${selected ? 'bg-indigo-500 text-white' : 'bg-white border'}`}>{t}</button>;
                                 })}
                             </div>
-                            <button onClick={() => setEditingThemes(null)} className="mt-1 text-xs px-2 py-1 bg-gray-200 rounded">
-                                Done
-                            </button>
+                            <button onClick={() => setEditingThemes(null)} className="mt-1 text-xs px-2 py-1 bg-gray-200 rounded">Done</button>
                         </div>
                     ) : (
                         <div className="mt-1 flex flex-wrap gap-1">
-                            {(task.themes || []).map(t => (
-                                <span key={t} className="text-xs px-2 py-1 bg-indigo-50 text-indigo-700 rounded-full">
-                                    🏷️ {t}
-                                </span>
-                            ))}
-                            {task.project && (
-                                <button onClick={() => setEditingThemes(task.id)} className="text-xs text-gray-500">
-                                    {(task.themes || []).length === 0 ? '+ themes' : 'edit'}
-                                </button>
-                            )}
+                            {(task.themes || []).map(t => <span key={t} className="text-xs px-2 py-1 bg-indigo-50 text-indigo-700 rounded-full">{t}</span>)}
+                            {task.project && <button onClick={() => setEditingThemes(task.id)} className="text-xs text-gray-500">{(task.themes || []).length === 0 ? '+ themes' : 'edit'}</button>}
                         </div>
                     )}
                 </div>
-                <button onClick={() => onDelete(task.id)} className="text-red-500 text-sm">
-                    🗑️
-                </button>
+                <button onClick={() => onDelete(task.id)} className="text-red-500 text-sm">🗑️</button>
             </div>
         </div>
     );
 }
 
-// Render the app
 ReactDOM.render(<App />, document.getElementById('root'));
