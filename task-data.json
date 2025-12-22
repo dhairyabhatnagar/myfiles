@@ -371,6 +371,15 @@
           "order": 1,
           "createdAt": "2025-12-22T15:15:51.775Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1766416612390_c5uvsdl4a",
+          "title": "Reach out to Clare K Kim, Samuel Yi [ Fraud Operations] for further action",
+          "completed": false,
+          "notes": "",
+          "order": 2,
+          "createdAt": "2025-12-22T15:16:52.391Z",
+          "completedAt": null
         }
       ],
       "tags": []
