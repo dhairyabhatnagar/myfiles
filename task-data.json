@@ -674,6 +674,15 @@
           "order": 0,
           "createdAt": "2025-12-22T15:25:13.490Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1766417216023_5913t8zoa",
+          "title": "setup metrics - How to monitor health of Seal check in KR",
+          "completed": false,
+          "notes": "",
+          "order": 1,
+          "createdAt": "2025-12-22T15:26:56.023Z",
+          "completedAt": null
         }
       ],
       "tags": []
