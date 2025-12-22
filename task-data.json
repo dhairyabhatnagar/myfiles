@@ -362,6 +362,15 @@
           "order": 0,
           "createdAt": "2025-12-22T15:15:34.957Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1766416551774_ydc5ext66",
+          "title": "Understand if these signals are already consumed by Fraud Team - yes / no",
+          "completed": false,
+          "notes": "",
+          "order": 1,
+          "createdAt": "2025-12-22T15:15:51.775Z",
+          "completedAt": null
         }
       ],
       "tags": []
