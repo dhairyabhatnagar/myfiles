@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Task Assistant v7</title>
+    <title>Task Assistant v8 - Tags</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -19,9 +19,7 @@
         .celebrate { animation: celebrate 0.3s ease-in-out; }
         
         /* Dark mode styles */
-        .dark {
-            color-scheme: dark;
-        }
+        .dark { color-scheme: dark; }
         .dark .bg-gradient { background: linear-gradient(to br, #1e293b, #0f172a); }
         .dark .bg-white { background: #1e293b; color: #f1f5f9; }
         .dark .text-gray-800 { color: #f1f5f9; }
@@ -35,85 +33,27 @@
         }
         .dark .bg-gray-50 { background: #0f172a; }
         .dark .bg-gray-200 { background: #334155; }
-        
-        /* Debug info */
-        #debug-info {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: white;
-            border: 2px solid #333;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 12px;
-            z-index: 9999;
-            max-width: 300px;
-        }
     </style>
 </head>
 <body>
-    <div id="debug-info">Loading...</div>
     <div id="root"></div>
     
-    <script>
-        // Debug logger
-        function log(msg) {
-            console.log(msg);
-            const debug = document.getElementById('debug-info');
-            debug.innerHTML += '<br>' + msg;
-        }
-        
-        log('✓ HTML loaded');
-        log('✓ React: ' + (typeof React !== 'undefined' ? 'OK' : 'MISSING'));
-        log('✓ ReactDOM: ' + (typeof ReactDOM !== 'undefined' ? 'OK' : 'MISSING'));
-        
-        // Global error handler
-        window.addEventListener('error', function(e) {
-            log('❌ ERROR: ' + e.message);
-            console.error('Full error:', e);
-        });
-    </script>
+    <!-- Load config first -->
+    <script src="js/config.js"></script>
     
-    <!-- Load existing base files -->
-    <script src="js/config.js" onload="log('✓ config.js loaded')" onerror="log('❌ config.js FAILED')"></script>
-    <script src="js/parser.js" onload="log('✓ parser.js loaded')" onerror="log('❌ parser.js FAILED')"></script>
-    <script src="js/gamification.js" onload="log('✓ gamification.js loaded')" onerror="log('❌ gamification.js FAILED')"></script>
-    <script src="js/sync.js" onload="log('✓ sync.js loaded')" onerror="log('❌ sync.js FAILED')"></script>
-    <script src="js/task-operations.js" onload="log('✓ task-operations.js loaded')" onerror="log('❌ task-operations.js FAILED')"></script>
+    <!-- Load utilities -->
+    <script src="js/parser.js"></script>
+    <script src="js/gamification.js"></script>
+    <script src="js/sync.js"></script>
+    <script src="js/task-operations.js"></script>
     
-    <script>
-        log('Checking globals...');
-        log('CONFIG: ' + (typeof CONFIG !== 'undefined' ? 'OK' : 'MISSING'));
-        log('GitHubSync: ' + (typeof GitHubSync !== 'undefined' ? 'OK' : 'MISSING'));
-        log('TaskOperations: ' + (typeof TaskOperations !== 'undefined' ? 'OK' : 'MISSING'));
-    </script>
+    <!-- Load tags system (JSX) -->
+    <script type="text/babel" src="js/tags.js"></script>
     
-    <!-- Load single combined subtask file -->
-    <script type="text/babel" src="js/subtasks.js" onload="log('✓ subtasks.js loaded')" onerror="log('❌ subtasks.js FAILED')"></script>
+    <!-- Load subtasks (JSX) -->
+    <script type="text/babel" src="js/subtasks.js"></script>
     
-    <script type="text/babel">
-        log('Checking subtask functions...');
-        log('createSubtask: ' + (typeof createSubtask !== 'undefined' ? 'OK' : 'MISSING'));
-        log('SubtaskModal: ' + (typeof SubtaskModal !== 'undefined' ? 'OK' : 'MISSING'));
-        log('useSubtasks: ' + (typeof useSubtasks !== 'undefined' ? 'OK' : 'MISSING'));
-    </script>
-    
-    <!-- Load main app -->
-    <script type="text/babel" src="js/app.js" onload="log('✓ app.js loaded - App should render now')" onerror="log('❌ app.js FAILED')"></script>
-    
-    <script type="text/babel">
-        setTimeout(() => {
-            const root = document.getElementById('root');
-            if (root.innerHTML.trim() === '') {
-                log('⚠️ Root is empty - App did not render!');
-            } else {
-                log('✓ App rendered successfully!');
-                // Hide debug after 3 seconds if successful
-                setTimeout(() => {
-                    document.getElementById('debug-info').style.display = 'none';
-                }, 3000);
-            }
-        }, 1000);
-    </script>
+    <!-- Load main app (JSX) -->
+    <script type="text/babel" src="js/app.js"></script>
 </body>
 </html>
