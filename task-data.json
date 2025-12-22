@@ -665,7 +665,17 @@
       ],
       "dueDate": null,
       "created": "2025-11-13T03:37:35.889Z",
-      "subtasks": [],
+      "subtasks": [
+        {
+          "id": "subtask_1766417113490_n9zqj111w",
+          "title": "initiate image capture for TW Top beauty SKUs",
+          "completed": false,
+          "notes": "",
+          "order": 0,
+          "createdAt": "2025-12-22T15:25:13.490Z",
+          "completedAt": null
+        }
+      ],
       "tags": []
     },
     {
