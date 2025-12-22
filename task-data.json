@@ -831,8 +831,8 @@
       "id": 1763101816741,
       "title": "Photos and Seal time for Beauty -SKU list to IQCA",
       "priority": "P1",
-      "completed": false,
-      "completedAt": null,
+      "completed": true,
+      "completedAt": "2025-12-22T15:27:41.560Z",
       "project": "KR ARC",
       "themes": [
         "CX"
