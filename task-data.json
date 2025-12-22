@@ -683,6 +683,15 @@
           "order": 1,
           "createdAt": "2025-12-22T15:26:56.023Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1766417226585_mwaqbr4yv",
+          "title": "Feature upgrades to improve SOP",
+          "completed": false,
+          "notes": "",
+          "order": 2,
+          "createdAt": "2025-12-22T15:27:06.585Z",
+          "completedAt": null
         }
       ],
       "tags": []
