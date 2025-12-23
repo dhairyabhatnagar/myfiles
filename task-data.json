@@ -1821,6 +1821,19 @@
       "created": "2025-12-16T15:24:41.977Z",
       "subtasks": [],
       "tags": []
+    },
+    {
+      "id": 1766507045537,
+      "title": "sign up on JP Morgan - Stocks portal",
+      "priority": "P1",
+      "completed": false,
+      "completedAt": null,
+      "project": "Personal",
+      "themes": [],
+      "tags": [],
+      "dueDate": null,
+      "created": "2025-12-23T16:24:05.537Z",
+      "subtasks": []
     }
   ],
   "recurringTasks": [
