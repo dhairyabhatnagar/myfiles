@@ -1182,6 +1182,15 @@
           "order": 0,
           "createdAt": "2025-12-24T07:03:26.470Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1766559814050_hwcga8k6m",
+          "title": "Understand Inqury data for KR",
+          "completed": false,
+          "notes": "",
+          "order": 1,
+          "createdAt": "2025-12-24T07:03:34.050Z",
+          "completedAt": null
         }
       ],
       "tags": []
