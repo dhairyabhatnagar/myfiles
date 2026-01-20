@@ -1865,7 +1865,17 @@
       "tags": [],
       "dueDate": null,
       "created": "2026-01-19T07:56:59.256Z",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "subtask_1768877353441_zm1hgo6lj",
+          "title": "Get mapping from Julie, plan remapping ( make sure no bottleneck for positional HC/ Shuttle)",
+          "completed": false,
+          "notes": "",
+          "order": 0,
+          "createdAt": "2026-01-20T02:49:13.441Z",
+          "completedAt": null
+        }
+      ]
     }
   ],
   "recurringTasks": [
