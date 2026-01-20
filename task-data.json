@@ -1883,6 +1883,15 @@
           "order": 1,
           "createdAt": "2026-01-20T02:49:36.278Z",
           "completedAt": null
+        },
+        {
+          "id": "subtask_1768877393060_per2dk9kf",
+          "title": "Understand deployment from Jake, plan redeployment",
+          "completed": false,
+          "notes": "",
+          "order": 2,
+          "createdAt": "2026-01-20T02:49:53.060Z",
+          "completedAt": null
         }
       ]
     }
