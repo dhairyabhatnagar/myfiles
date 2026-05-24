@@ -178,7 +178,7 @@ function habitScore(log) {
     !!log.healthyEating, !!log.water,
     (log.sleepHours||0)>=GOALS.sleepHours
   ].filter(Boolean).length;
-}
+} 
 function showToast(msg, isErr=false) {
   state.toast = {msg, isErr};
   render();
