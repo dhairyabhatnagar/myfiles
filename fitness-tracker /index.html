@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DB × Anky — Fitness Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #080812; color: #f1f5f9; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+    #app { max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; }
+
+    /* Colors */
+    .db-color  { color: #ff6b35; }
+    .anky-color { color: #00d4aa; }
+
+    /* Setup */
+    .setup-screen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
+    .setup-logo { font-size: 3rem; margin-bottom: 0.75rem; }
+    .setup-title { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; }
+    .setup-sub { color: #475569; margin-top: 0.4rem; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; }
+    .setup-card { width: 100%; max-width: 360px; background: #0d0d1f; border-radius: 20px; padding: 1.75rem; border: 1px solid #1e1e40; margin-top: 2rem; }
+    .setup-desc { font-size: 0.82rem; color: #64748b; line-height: 1.7; margin-bottom: 1.25rem; }
+    .setup-desc code { background: #131326; padding: 2px 6px; border-radius: 4px; color: #7c7cff; font-size: 0.78rem; }
+    .setup-note { font-size: 0.72rem; color: #334155; text-align: center; margin-top: 1rem; line-height: 1.6; }
+    .setup-note code { background: #131326; padding: 1px 5px; border-radius: 3px; color: #7c7cff; }
+
+    /* Header */
+    .header { position: sticky; top: 0; z-index: 50; background: rgba(8,8,18,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid #131326; padding: 0.8rem 1rem; display: flex; align-items: center; justify-content: space-between; }
+    .header-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.01em; }
+    .header-x { color: #1e1e40; margin: 0 7px; }
+    .user-switcher { display: flex; gap: 6px; }
+    .user-btn { padding: 0.35rem 0.9rem; border-radius: 8px; cursor: pointer; border: 1.5px solid #1e1e3a; background: transparent; color: #334155; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 0.8rem; transition: all 0.15s; }
+
+    /* Toast */
+    .toast { position: fixed; top: 68px; left: 50%; transform: translateX(-50%); color: #fff; padding: 0.6rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.85rem; z-index: 100; white-space: nowrap; pointer-events: none; }
+
+    /* Nav */
+    .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: #0a0a18; border-top: 1px solid #131326; display: flex; padding-bottom: env(safe-area-inset-bottom, 0); }
+    .nav-btn { flex: 1; background: none; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0.55rem 0; color: #2a2a50; transition: color 0.15s; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .nav-icon { font-size: 1.25rem; }
+    .nav-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+
+    /* Main */
+    .main-content { padding-bottom: 80px; }
+    .view-content { padding: 1rem; }
+    .view-header { margin-bottom: 1.25rem; }
+    .view-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; letter-spacing: -0.02em; }
+    .view-sub { color: #475569; font-size: 0.82rem; margin-top: 0.3rem; font-weight: 600; }
+    .view-sub.mono { font-family: monospace; font-size: 0.78rem; }
+
+    /* Cards */
+    .card { background: #0d0d1f; border-radius: 16px; padding: 1.25rem; border: 1px solid #1a1a35; margin-bottom: 0.9rem; }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .user-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem; }
+    .streak { font-size: 0.78rem; color: #f59e0b; margin-left: 8px; font-weight: 600; }
+    .score-badge { border-radius: 10px; padding: 0.3rem 0.85rem; font-size: 0.9rem; font-weight: 800; letter-spacing: -0.02em; }
+    .score-denom { font-size: 0.7rem; font-weight: 600; opacity: 0.6; }
+
+    /* Metrics grid */
+    .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .metric-cell { background: #080812; border-radius: 10px; padding: 0.65rem 0.8rem; border: 1px solid #1a1a35; }
+    .metric-label { font-size: 0.68rem; color: #475569; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+    .metric-val { font-size: 1.15rem; font-weight: 800; margin-top: 0.2rem; letter-spacing: -0.02em; }
+    .metric-sub { font-size: 0.68rem; font-weight: 500; color: #334155; }
+    .not-logged { text-align: center; padding: 1.5rem 1rem; color: #2a2a50; font-size: 0.85rem; font-weight: 600; border: 1px dashed #1a1a35; border-radius: 10px; }
+
+    /* Form fields */
+    .field { margin-bottom: 1rem; }
+    .field:last-of-type { margin-bottom: 1.25rem; }
+    .field-label { font-size: 0.72rem; color: #64748b; margin-bottom: 0.4rem; display: block; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+    .field-goal { color: #334155; font-weight: 500; }
+
+    /* Input */
+    .input { width: 100%; padding: 0.75rem 0.9rem; border-radius: 10px; background: #080812; border: 1px solid #1e1e3a; color: #f1f5f9; font-size: 1rem; font-family: 'Plus Jakarta Sans', sans-serif; outline: none; transition: border-color 0.15s; -moz-appearance: textfield; }
+    .input:focus { border-color: #2a2a5a; }
+    .input::-webkit-inner-spin-button { opacity: 0.4; }
+
+    /* Button */
+    .btn { width: 100%; padding: 0.95rem; border-radius: 12px; border: none; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1rem; cursor: pointer; transition: opacity 0.15s; letter-spacing: -0.01em; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary { background: linear-gradient(135deg, #ff6b35, #ff4000); }
+    .btn-ghost { background: #131326; color: #64748b; margin-top: 0.75rem; }
+
+    /* Toggle */
+    .toggle-group { display: flex; gap: 8px; }
+    .toggle-btn { padding: 0.55rem 1.4rem; border-radius: 8px; border: none; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 0.9rem; background: #131326; color: #475569; transition: all 0.15s; }
+    .yes-active { background: #16a34a !important; color: #fff !important; }
+    .no-active  { background: #dc2626 !important; color: #fff !important; }
+
+    /* Weekly partner */
+    .partner-label { font-size: 0.75rem; color: #475569; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
+    .weekly-partner-grid { display: flex; gap: 0.5rem; }
+
+    /* Trends */
+    .chart-title { font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
+    .legend { display: flex; gap: 16px; margin-bottom: 0.85rem; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; color: #64748b; font-weight: 700; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    /* Error */
+    .error-text { color: #f87171; font-size: 0.82rem; margin-top: 0.5rem; margin-bottom: 0.75rem; }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const REPO      = 'dhairyabhatnagar/myfiles';
+const FILE_PATH = 'fitness-tracker/fitness-data.json';
+const COLORS    = { DB: '#ff6b35', Anky: '#00d4aa' };
+const GOALS     = { steps: 8000, activeMinutes: 30, sleepHours: 7 };
+
+let charts = {};
+const state = {
+  pat: '', sha: null,
+  data: { daily: {}, weekly: {} },
+  activeUser: 'DB', view: 'dashboard',
+  saving: false, toast: null,
+  dailyForm:  { steps:'', activeMinutes:'', healthyEating:null, water:null, sleepHours:'', logged:false },
+  weeklyForm: { weight:'', fatPercent:'', restingHR:'' }
+};
+
+// ── Date helpers ──────────────────────────────────────────────────────────────
+function getToday() {
+  const n = new Date();
+  return `${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}`;
+}
+function pad(n){ return String(n).padStart(2,'0'); }
+function getWeekKey() {
+  const date = new Date();
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const day = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - day);
+  const y1 = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+  const wk = Math.ceil((((d-y1)/86400000)+1)/7);
+  return `${date.getFullYear()}-W${pad(wk)}`;
+}
+
+// ── GitHub API ────────────────────────────────────────────────────────────────
+async function ghLoad(pat) {
+  const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`,
+    { headers: { Authorization: `Bearer ${pat}`, Accept: 'application/vnd.github.v3+json' } });
+  if (res.status === 404) return { data: { daily:{}, weekly:{} }, sha: null };
+  if (!res.ok) { const e = await res.json(); throw new Error(e.message || `HTTP ${res.status}`); }
+  const j = await res.json();
+  return { data: JSON.parse(atob(j.content.replace(/\n/g,''))), sha: j.sha };
+}
+async function ghSave(pat, sha, data) {
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))));
+  const body = { message:`fitness: update ${getToday()}`, content };
+  if (sha) body.sha = sha;
+  const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
+    method:'PUT',
+    headers:{ Authorization:`Bearer ${pat}`, 'Content-Type':'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.message || 'Save failed'); }
+  return (await res.json()).content.sha;
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function calcStreak(user) {
+  let s = 0; const base = new Date();
+  for (let i=0;i<365;i++){
+    const d = new Date(base); d.setDate(d.getDate()-i);
+    const k = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    if (!state.data.daily?.[k]?.[user]?.logged) break;
+    s++;
+  }
+  return s;
+}
+function habitScore(log) {
+  if (!log?.logged) return 0;
+  return [
+    (log.steps||0)>=GOALS.steps,
+    (log.activeMinutes||0)>=GOALS.activeMinutes,
+    !!log.healthyEating, !!log.water,
+    (log.sleepHours||0)>=GOALS.sleepHours
+  ].filter(Boolean).length;
+}
+function showToast(msg, isErr=false) {
+  state.toast = {msg, isErr};
+  render();
+  setTimeout(()=>{ state.toast=null; render(); }, 2800);
+}
+function emptyDaily()  { return {steps:'',activeMinutes:'',healthyEating:null,water:null,sleepHours:'',logged:false}; }
+function emptyWeekly() { return {weight:'',fatPercent:'',restingHR:''}; }
+
+// ── HTML builders ─────────────────────────────────────────────────────────────
+function H(tag, attrs, ...children) {
+  const a = Object.entries(attrs||{}).map(([k,v])=>` ${k}="${v}"`).join('');
+  return `<${tag}${a}>${children.join('')}</${tag}>`;
+}
+
+function renderSetup() {
+  return `
+  <div class="setup-screen">
+    <div class="setup-logo">🏋️‍♂️</div>
+    <h1 class="setup-title"><span class="db-color">DB</span> × <span class="anky-color">Anky</span></h1>
+    <p class="setup-sub">Fitness Tracker</p>
+    <div class="setup-card">
+      <p class="setup-desc">Enter your GitHub PAT to sync data to <code>dhairyabhatnagar/myfiles</code></p>
+      <input id="pat-input" type="password" class="input" placeholder="ghp_xxxxxxxxxxxx" style="margin-bottom:0.75rem">
+      <div id="connect-error" class="error-text" style="display:none"></div>
+      <button class="btn btn-primary" onclick="handleConnect()">Connect to GitHub →</button>
+      <p class="setup-note">Token held in memory only — never stored. Needs <code>repo</code> scope.</p>
+    </div>
+  </div>`;
+}
+
+function renderHeader() {
+  const c = COLORS[state.activeUser];
+  const btns = ['DB','Anky'].map(u => {
+    const active = state.activeUser === u;
+    const style = active ? `border-color:${COLORS[u]};color:${COLORS[u]};background:${COLORS[u]}22` : '';
+    return `<button class="user-btn" style="${style}" onclick="switchUser('${u}')">${u}</button>`;
+  }).join('');
+  return `
+  <div class="header">
+    <span class="header-title"><span class="db-color">DB</span><span class="header-x">×</span><span class="anky-color">Anky</span></span>
+    <div class="user-switcher">${btns}</div>
+  </div>`;
+}
+
+function renderNav() {
+  const items = [{id:'dashboard',icon:'🏠',label:'Home'},{id:'log',icon:'✏️',label:'Log'},{id:'weekly',icon:'📊',label:'Weekly'},{id:'trends',icon:'📈',label:'Trends'}];
+  const c = COLORS[state.activeUser];
+  return `<div class="bottom-nav">
+    ${items.map(({id,icon,label})=>{
+      const active = state.view===id;
+      return `<button class="nav-btn" style="${active?`color:${c}`:''}" onclick="setView('${id}')"><span class="nav-icon">${icon}</span><span class="nav-label">${label}</span></button>`;
+    }).join('')}
+  </div>`;
+}
+
+function renderToast() {
+  if (!state.toast) return '';
+  const bg = state.toast.isErr ? '#dc2626' : '#16a34a';
+  const shadow = state.toast.isErr ? '#dc262644' : '#16a34a44';
+  return `<div class="toast" style="background:${bg};box-shadow:0 4px 24px ${shadow}">${state.toast.msg}</div>`;
+}
+
+function renderDashboard() {
+  const today = getToday();
+  const weekKey = getWeekKey();
+  const fmt = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+
+  function userCard(user) {
+    const log = state.data.daily?.[today]?.[user];
+    const streak = calcStreak(user);
+    const score = habitScore(log);
+    const c = COLORS[user];
+    const wk = state.data.weekly?.[weekKey]?.[user];
+
+    const metrics = [
+      {label:'Steps',    val: log?.steps ? Number(log.steps).toLocaleString() : '—', sub:`/${GOALS.steps.toLocaleString()}`, met:(log?.steps||0)>=GOALS.steps},
+      {label:'Active',   val: log?.activeMinutes||'—', sub:`/${GOALS.activeMinutes}m`, met:(log?.activeMinutes||0)>=GOALS.activeMinutes},
+      {label:'Eating',   val: log?.healthyEating===true?'✓':log?.healthyEating===false?'✗':'—', sub:'', met:!!log?.healthyEating},
+      {label:'Water',    val: log?.water===true?'✓':log?.water===false?'✗':'—', sub:'2L', met:!!log?.water},
+      {label:'Sleep',    val: log?.sleepHours?`${log.sleepHours}h`:'—', sub:`/${GOALS.sleepHours}h`, met:(log?.sleepHours||0)>=GOALS.sleepHours},
+    ];
+
+    const grid = log?.logged
+      ? `<div class="metrics-grid">
+          ${metrics.map(({label,val,sub,met})=>`
+            <div class="metric-cell" style="border-color:${met?c+'44':'#1a1a35'}">
+              <div class="metric-label">${label}</div>
+              <div class="metric-val" style="color:${met?c:'#334155'}">${val}<span class="metric-sub">${sub}</span></div>
+            </div>`).join('')}
+          ${wk?.weight?`<div class="metric-cell"><div class="metric-label">Weight</div><div class="metric-val" style="color:#64748b">${wk.weight}<span class="metric-sub"> kg</span></div></div>`:''}
+        </div>`
+      : `<div class="not-logged">Not logged yet today</div>`;
+
+    return `
+    <div class="card" style="border-color:${c}44">
+      <div class="card-header">
+        <div>
+          <span class="user-name" style="color:${c}">${user}</span>
+          ${streak>0?`<span class="streak">🔥 ${streak} day streak</span>`:''}
+        </div>
+        <div class="score-badge" style="background:${c}22;color:${c}">${score}<span class="score-denom">/5</span></div>
+      </div>
+      ${grid}
+    </div>`;
+  }
+
+  return `<div class="view-content">
+    <div class="view-header">
+      <h2 class="view-title">Today</h2>
+      <p class="view-sub">${fmt}</p>
+    </div>
+    ${userCard('DB')}${userCard('Anky')}
+  </div>`;
+}
+
+function renderLog() {
+  const c = COLORS[state.activeUser];
+  const f = state.dailyForm;
+
+  function tog(field, val) {
+    return `<div class="toggle-group">
+      <button class="toggle-btn ${val===true?'yes-active':''}" onclick="setDailyBool('${field}',true)">Yes</button>
+      <button class="toggle-btn ${val===false?'no-active':''}" onclick="setDailyBool('${field}',false)">No</button>
+    </div>`;
+  }
+
+  return `<div class="view-content">
+    <h2 class="view-title" style="color:${c};margin-bottom:1rem">Log Today — ${state.activeUser}</h2>
+    <div class="card">
+      <div class="field">
+        <label class="field-label">Steps <span class="field-goal">/ goal ${GOALS.steps.toLocaleString()}</span></label>
+        <input type="number" class="input" placeholder="e.g. 9500" value="${f.steps||''}" oninput="state.dailyForm.steps=this.value">
+      </div>
+      <div class="field">
+        <label class="field-label">Active Minutes <span class="field-goal">/ goal ${GOALS.activeMinutes} min</span></label>
+        <input type="number" class="input" placeholder="e.g. 45" value="${f.activeMinutes||''}" oninput="state.dailyForm.activeMinutes=this.value">
+      </div>
+      <div class="field">
+        <label class="field-label">Healthy Eating</label>
+        ${tog('healthyEating', f.healthyEating)}
+      </div>
+      <div class="field">
+        <label class="field-label">Water 2L</label>
+        ${tog('water', f.water)}
+      </div>
+      <div class="field">
+        <label class="field-label">Sleep Hours <span class="field-goal">/ goal ${GOALS.sleepHours}h</span></label>
+        <input type="number" step="0.5" class="input" placeholder="e.g. 7.5" value="${f.sleepHours||''}" oninput="state.dailyForm.sleepHours=this.value">
+      </div>
+      <button class="btn btn-primary" style="background:linear-gradient(135deg,${c},${c}bb)" onclick="saveDaily()" ${state.saving?'disabled':''}>
+        ${state.saving ? 'Saving to GitHub…' : `Save ${state.activeUser}'s Log →`}
+      </button>
+    </div>
+  </div>`;
+}
+
+function renderWeekly() {
+  const c = COLORS[state.activeUser];
+  const f = state.weeklyForm;
+  const weekKey = getWeekKey();
+  const other = state.activeUser==='DB'?'Anky':'DB';
+  const oc = COLORS[other];
+  const od = state.data.weekly?.[weekKey]?.[other];
+
+  const partnerCard = (od?.weight||od?.fatPercent||od?.restingHR) ? `
+    <div class="card" style="border-color:${oc}33">
+      <p class="partner-label">${other} this week</p>
+      <div class="weekly-partner-grid">
+        ${od?.weight    ? `<div class="metric-cell" style="border-color:${oc}33;flex:1"><div class="metric-label">Weight</div><div class="metric-val" style="color:${oc}">${od.weight}<span class="metric-sub"> kg</span></div></div>`:'' }
+        ${od?.fatPercent? `<div class="metric-cell" style="border-color:${oc}33;flex:1"><div class="metric-label">Fat %</div><div class="metric-val" style="color:${oc}">${od.fatPercent}<span class="metric-sub">%</span></div></div>`:'' }
+        ${od?.restingHR ? `<div class="metric-cell" style="border-color:${oc}33;flex:1"><div class="metric-label">RHR</div><div class="metric-val" style="color:${oc}">${od.restingHR}<span class="metric-sub"> bpm</span></div></div>`:'' }
+      </div>
+    </div>` : '';
+
+  return `<div class="view-content">
+    <div class="view-header">
+      <h2 class="view-title" style="color:${c}">Weekly Check-in — ${state.activeUser}</h2>
+      <p class="view-sub mono">${weekKey}</p>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label class="field-label">Weight <span class="field-goal">(kg)</span></label>
+        <input type="number" step="0.1" class="input" placeholder="e.g. 72.5" value="${f.weight||''}" oninput="state.weeklyForm.weight=this.value">
+      </div>
+      <div class="field">
+        <label class="field-label">Body Fat <span class="field-goal">(%)</span></label>
+        <input type="number" step="0.1" class="input" placeholder="e.g. 18.0" value="${f.fatPercent||''}" oninput="state.weeklyForm.fatPercent=this.value">
+      </div>
+      <div class="field">
+        <label class="field-label">Resting Heart Rate <span class="field-goal">(bpm)</span></label>
+        <input type="number" class="input" placeholder="e.g. 62" value="${f.restingHR||''}" oninput="state.weeklyForm.restingHR=this.value">
+      </div>
+      <button class="btn btn-primary" style="background:linear-gradient(135deg,${c},${c}bb)" onclick="saveWeekly()" ${state.saving?'disabled':''}>
+        ${state.saving ? 'Saving…' : `Save ${state.activeUser}'s Weekly Metrics →`}
+      </button>
+    </div>
+    ${partnerCard}
+  </div>`;
+}
+
+function renderTrends() {
+  const leg = ['DB','Anky'].map(u=>`<div class="legend-item"><div class="legend-dot" style="background:${COLORS[u]}"></div><span>${u}</span></div>`).join('');
+  return `<div class="view-content">
+    <h2 class="view-title" style="margin-bottom:1rem">Trends</h2>
+    <div class="card"><p class="chart-title">Weight (kg)</p><div class="legend">${leg}</div><canvas id="chart-weight" height="150"></canvas></div>
+    <div class="card"><p class="chart-title">Daily Steps — Last 14 Days</p><div class="legend">${leg}</div><canvas id="chart-steps" height="150"></canvas></div>
+    <div class="card"><p class="chart-title">Body Fat %</p><div class="legend">${leg}</div><canvas id="chart-fat" height="150"></canvas></div>
+  </div>`;
+}
+
+function initCharts() {
+  const opts = {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false}, tooltip:{backgroundColor:'#0d0d1f',borderColor:'#1a1a35',borderWidth:1,titleColor:'#94a3b8',bodyColor:'#f1f5f9',padding:10,cornerRadius:8} },
+    scales:{
+      x:{ grid:{color:'#131326',drawBorder:false}, ticks:{color:'#334155',font:{size:10,family:'Plus Jakarta Sans'}}, border:{display:false} },
+      y:{ grid:{color:'#131326',drawBorder:false}, ticks:{color:'#334155',font:{size:10,family:'Plus Jakarta Sans'}}, border:{display:false} }
+    },
+    elements:{ point:{radius:4,hoverRadius:6}, line:{tension:0.35,borderWidth:2.5} }
+  };
+
+  const wkEntries = Object.entries(state.data.weekly||{}).sort(([a],[b])=>a.localeCompare(b));
+  const dyEntries = Object.entries(state.data.daily||{}).sort(([a],[b])=>a.localeCompare(b)).slice(-14);
+
+  function mkChart(id, labels, datasets, extraOpts) {
+    if (charts[id]) charts[id].destroy();
+    const el = document.getElementById(id);
+    if (!el) return;
+    charts[id] = new Chart(el, { type:'line', data:{labels, datasets}, options:{...opts,...extraOpts} });
+  }
+
+  mkChart('chart-weight',
+    wkEntries.map(([w])=>w.replace(/\d{4}-/,'')),
+    [
+      {label:'DB',   data:wkEntries.map(([,v])=>parseFloat(v?.DB?.weight)||null),   borderColor:COLORS.DB,   backgroundColor:COLORS.DB+'20',   fill:false, spanGaps:true},
+      {label:'Anky', data:wkEntries.map(([,v])=>parseFloat(v?.Anky?.weight)||null), borderColor:COLORS.Anky, backgroundColor:COLORS.Anky+'20', fill:false, spanGaps:true}
+    ]
+  );
+  mkChart('chart-steps',
+    dyEntries.map(([d])=>d.slice(5)),
+    [
+      {label:'DB',   data:dyEntries.map(([,v])=>parseInt(v?.DB?.steps)||0),   borderColor:COLORS.DB,   fill:false, pointRadius:0},
+      {label:'Anky', data:dyEntries.map(([,v])=>parseInt(v?.Anky?.steps)||0), borderColor:COLORS.Anky, fill:false, pointRadius:0}
+    ],
+    {elements:{...opts.elements, point:{radius:0}}}
+  );
+  mkChart('chart-fat',
+    wkEntries.map(([w])=>w.replace(/\d{4}-/,'')),
+    [
+      {label:'DB',   data:wkEntries.map(([,v])=>parseFloat(v?.DB?.fatPercent)||null),   borderColor:COLORS.DB,   fill:false, spanGaps:true},
+      {label:'Anky', data:wkEntries.map(([,v])=>parseFloat(v?.Anky?.fatPercent)||null), borderColor:COLORS.Anky, fill:false, spanGaps:true}
+    ]
+  );
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function render() {
+  const app = document.getElementById('app');
+  if (!state.pat) { app.innerHTML = renderSetup(); return; }
+  let content = '';
+  if (state.view==='dashboard') content = renderDashboard();
+  else if (state.view==='log')   content = renderLog();
+  else if (state.view==='weekly') content = renderWeekly();
+  else if (state.view==='trends') content = renderTrends();
+  app.innerHTML = renderHeader() + renderToast() + `<div class="main-content">${content}</div>` + renderNav();
+  if (state.view==='trends') setTimeout(initCharts, 60);
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────────
+async function handleConnect() {
+  const token = document.getElementById('pat-input')?.value?.trim();
+  const errEl  = document.getElementById('connect-error');
+  if (!token) return;
+  if (errEl) errEl.style.display = 'none';
+  try {
+    const {data, sha} = await ghLoad(token);
+    state.pat = token; state.sha = sha; state.data = data;
+    const today = getToday(); const wk = getWeekKey();
+    state.dailyForm  = data.daily?.[today]?.DB  ? {...data.daily[today].DB}  : emptyDaily();
+    state.weeklyForm = data.weekly?.[wk]?.DB     ? {...data.weekly[wk].DB}   : emptyWeekly();
+    render();
+  } catch(e) {
+    if (errEl) { errEl.textContent = e.message; errEl.style.display='block'; }
+  }
+}
+
+function switchUser(user) {
+  state.activeUser = user;
+  const today = getToday(); const wk = getWeekKey();
+  state.dailyForm  = state.data.daily?.[today]?.[user]  ? {...state.data.daily[today][user]}  : emptyDaily();
+  state.weeklyForm = state.data.weekly?.[wk]?.[user]    ? {...state.data.weekly[wk][user]}    : emptyWeekly();
+  render();
+}
+
+function setView(v) { state.view = v; render(); }
+
+function setDailyBool(field, val) {
+  state.dailyForm[field] = val;
+  render();
+  // Restore number inputs after toggle re-render
+}
+
+async function saveDaily() {
+  state.saving = true; render();
+  try {
+    const today = getToday();
+    // Re-read number inputs in case state wasn't synced
+    const steps  = document.querySelector('input[placeholder*="9500"]')?.value || state.dailyForm.steps;
+    const active = document.querySelector('input[placeholder*="45"]')?.value   || state.dailyForm.activeMinutes;
+    const sleep  = document.querySelector('input[placeholder*="7.5"]')?.value  || state.dailyForm.sleepHours;
+    const log = { ...state.dailyForm, steps, activeMinutes: active, sleepHours: sleep, logged: true };
+    const newData = { ...state.data, daily: { ...state.data.daily, [today]: { ...(state.data.daily[today]||{}), [state.activeUser]: log } } };
+    state.sha = await ghSave(state.pat, state.sha, newData);
+    state.data = newData; state.dailyForm = {...log};
+    state.saving = false; showToast('Saved to GitHub ✓');
+  } catch(e) { state.saving = false; showToast(e.message, true); render(); }
+}
+
+async function saveWeekly() {
+  state.saving = true; render();
+  try {
+    const wk = getWeekKey();
+    const w = document.querySelector('input[placeholder*="72.5"]')?.value  || state.weeklyForm.weight;
+    const f = document.querySelector('input[placeholder*="18.0"]')?.value  || state.weeklyForm.fatPercent;
+    const r = document.querySelector('input[placeholder*="62"]')?.value    || state.weeklyForm.restingHR;
+    const metrics = { weight:w, fatPercent:f, restingHR:r };
+    const newData = { ...state.data, weekly: { ...state.data.weekly, [wk]: { ...(state.data.weekly[wk]||{}), [state.activeUser]: metrics } } };
+    state.sha = await ghSave(state.pat, state.sha, newData);
+    state.data = newData; state.weeklyForm = {...metrics};
+    state.saving = false; showToast('Saved to GitHub ✓');
+  } catch(e) { state.saving = false; showToast(e.message, true); render(); }
+}
+
+render();
+</script>
+</body>
+</html>
