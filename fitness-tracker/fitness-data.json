@@ -1,0 +1,15 @@
+{
+  "daily": {
+    "2026-05-25": {
+      "DB": {
+        "steps": "10000",
+        "activeMinutes": "30",
+        "healthyEating": true,
+        "water": true,
+        "sleepHours": "6",
+        "logged": true
+      }
+    }
+  },
+  "weekly": {}
+}
