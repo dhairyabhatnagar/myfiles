@@ -8,6 +8,14 @@
         "water": true,
         "sleepHours": "6",
         "logged": true
+      },
+      "Anky": {
+        "steps": "10000",
+        "activeMinutes": "40",
+        "healthyEating": false,
+        "water": false,
+        "sleepHours": "6",
+        "logged": true
       }
     }
   },
